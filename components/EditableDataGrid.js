@@ -57,6 +57,7 @@ function EditToolbar({
           Add record
         </Button>
       )}
+      <Box></Box>
       <GridToolbarQuickFilter />
     </GridToolbarContainer>
   );
@@ -69,7 +70,9 @@ const EditableDataGrid = ({
   uniqueField,
   alertText,
   showAddRecord,
-  hiddenField,
+  showActions,
+  hideFooter,
+  disableColumnMenu,
 }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -82,6 +85,10 @@ const EditableDataGrid = ({
     editable: item.editable,
     minWidth: item.width,
     flex: item.flex,
+    sortable: item.sortable,
+    hide: item.hide,
+    hideable: item.hideable,
+    type: item.type,
   }));
 
   // Generate the initialRows array based on users and the dynamically generated columns
@@ -95,48 +102,50 @@ const EditableDataGrid = ({
     return row;
   });
 
-  columns.push({
-    field: "actions",
-    type: "actions",
-    headerName: "Actions",
-    width: 100,
-    cellClassName: "actions",
-    getActions: ({ id }) => {
-      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+  if (showActions) {
+    columns.push({
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-      if (isInEditMode) {
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              color="primary"
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+            />,
+          ];
+        }
+
         return [
           <GridActionsCellItem
-            icon={<SaveIcon />}
-            label="Save"
-            color="primary"
-            onClick={handleSaveClick(id)}
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
           />,
           <GridActionsCellItem
-            icon={<CancelIcon />}
-            label="Cancel"
-            className="textPrimary"
-            onClick={handleCancelClick(id)}
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="error"
           />,
         ];
-      }
-
-      return [
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          className="textPrimary"
-          onClick={handleEditClick(id)}
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={handleDeleteClick(id)}
-          color="error"
-        />,
-      ];
-    },
-  });
+      },
+    });
+  }
 
   const [rows, setRows] = useState(initialRows);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -249,6 +258,10 @@ const EditableDataGrid = ({
     setAlert({ text: `Error updating ${alertText}`, severity: "error" });
   }, []);
 
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    id: false,
+  });
+
   return (
     <Box
       sx={{
@@ -292,9 +305,9 @@ const EditableDataGrid = ({
       <DataGrid
         rows={rows}
         columns={columns}
-        disableColumnFilter
-        disableColumnSelector
+        disableColumnMenu={disableColumnMenu}
         disableDensitySelector
+        hideFooter={hideFooter}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
         editMode="row"
@@ -302,6 +315,9 @@ const EditableDataGrid = ({
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         slots={{ toolbar: EditToolbar }}
+        onColumnVisibilityModelChange={(newModel) =>
+          setColumnVisibilityModel(newModel)
+        }
         slotProps={{
           toolbar: {
             rows,
@@ -311,9 +327,7 @@ const EditableDataGrid = ({
             showAddRecord,
           },
         }}
-        columnVisibilityModel={{
-          [hiddenField]: false,
-        }}
+        columnVisibilityModel={columnVisibilityModel}
       />
       <AlertMsg alert={alert} />
     </Box>
