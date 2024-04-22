@@ -20,21 +20,17 @@ export default async function LeaderboardTable() {
     {
       field: "place",
       headerName: "Loc",
-      width: 100,
-      flex: 1,
+      width: 80,
     },
     {
       field: "name",
       headerName: "Nume",
-      width: 150,
-      flex: 1,
+      width: 200,
     },
     {
       field: "points",
       headerName: "Puncte",
-      width: 150,
-      flex: 1,
-      type: "number",
+      width: 100,
     },
   ];
 
@@ -42,18 +38,14 @@ export default async function LeaderboardTable() {
     <Paper
       elevation={24}
       className={styles.card}
-      sx={{ width: "100%", textAlign: "center" }}
+      sx={{ width: "100%", textAlign: "center", marginBottom: "3rem" }}
     >
       <Typography variant="h2">Leaderboard</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         data={filteredLeaderboard}
-        apiURL={"leaderboard"}
-        uniqueField={"id"}
-        alertText={"user"}
         showAddRecord={false}
         showActions={false}
-        hideFooter={true}
         disableColumnMenu={true}
       />
     </Paper>

@@ -71,7 +71,6 @@ const EditableDataGrid = ({
   alertText,
   showAddRecord,
   showActions,
-  hideFooter,
   disableColumnMenu,
 }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
@@ -307,7 +306,6 @@ const EditableDataGrid = ({
         columns={columns}
         disableColumnMenu={disableColumnMenu}
         disableDensitySelector
-        hideFooter={hideFooter}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
         editMode="row"
@@ -327,6 +325,14 @@ const EditableDataGrid = ({
             showAddRecord,
           },
         }}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
+            },
+          },
+        }}
+        pageSizeOptions={[10, 25, 50]}
         columnVisibilityModel={columnVisibilityModel}
       />
       <AlertMsg alert={alert} />
