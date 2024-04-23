@@ -72,6 +72,10 @@ const EditableDataGrid = ({
   showAddRecord,
   showActions,
   disableColumnMenu,
+  columnGroupingModel,
+  pageSize,
+  density,
+  hideFooter,
 }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -82,7 +86,7 @@ const EditableDataGrid = ({
     field: item.field,
     headerName: item.headerName,
     editable: item.editable,
-    minWidth: item.width,
+    width: item.width,
     flex: item.flex,
     sortable: item.sortable,
     hide: item.hide,
@@ -328,12 +332,15 @@ const EditableDataGrid = ({
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 10,
+              pageSize: pageSize,
             },
           },
+          density: density,
         }}
         pageSizeOptions={[10, 25, 50]}
         columnVisibilityModel={columnVisibilityModel}
+        columnGroupingModel={columnGroupingModel}
+        hideFooter={hideFooter}
       />
       <AlertMsg alert={alert} />
     </Box>

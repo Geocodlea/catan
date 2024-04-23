@@ -47,6 +47,7 @@ export default async function LeaderboardTable() {
         showAddRecord={false}
         showActions={false}
         disableColumnMenu={true}
+        pageSize={10}
       />
     </Paper>
   );
