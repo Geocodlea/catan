@@ -17,7 +17,6 @@
     "@mui/lab": "^5.0.0-alpha.148",
     "@mui/material": "^5.14.12",
     "@mui/x-data-grid": "^7.3.0",
-    "@mui/x-data-grid-generator": "^6.18.0",
     "encoding": "^0.1.13",
     "formik": "^2.4.5",
     "fs-extra": "^11.1.1",

@@ -89,9 +89,11 @@ const EditableDataGrid = ({
     width: item.width,
     flex: item.flex,
     sortable: item.sortable,
-    hide: item.hide,
-    hideable: item.hideable,
     type: item.type,
+    headerClassName: item.headerClassName,
+    cellClassName: item.cellClassName,
+    headerAlign: item.headerAlign,
+    align: item.align,
   }));
 
   // Generate the initialRows array based on users and the dynamically generated columns
@@ -276,6 +278,12 @@ const EditableDataGrid = ({
         "& .textPrimary": {
           color: "text.primary",
         },
+        "& .table--highlight": {
+          backgroundColor: "rgb(153 241 132 / 50%)",
+        },
+        "& .table--striped": {
+          backgroundColor: "grey.200",
+        },
       }}
     >
       <Dialog
@@ -341,6 +349,10 @@ const EditableDataGrid = ({
         columnVisibilityModel={columnVisibilityModel}
         columnGroupingModel={columnGroupingModel}
         hideFooter={hideFooter}
+        getRowClassName={(params) => {
+          if (params.indexRelativeToCurrentPage % 2 === 0)
+            return "table--striped";
+        }}
       />
       <AlertMsg alert={alert} />
     </Box>

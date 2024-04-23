@@ -9,10 +9,12 @@ import styles from "../../page.module.css";
 const columnGroupingModel = [
   {
     groupId: "Masa",
+    headerAlign: "center",
     children: [{ field: "masar1" }, { field: "masar2" }, { field: "masar3" }],
   },
   {
     groupId: "Puncte",
+    headerAlign: "center",
     children: [
       { field: "puncter1" },
       { field: "puncter2" },
@@ -22,18 +24,22 @@ const columnGroupingModel = [
   },
   {
     groupId: "Scor R1",
+    headerAlign: "center",
     children: [{ field: "scorjocr1" }, { field: "scortotalr1" }],
   },
   {
     groupId: "Scor R2",
+    headerAlign: "center",
     children: [{ field: "scorjocr2" }, { field: "scortotalr2" }],
   },
   {
     groupId: "Scor R3",
+    headerAlign: "center",
     children: [{ field: "scorjocr3" }, { field: "scortotalr3" }],
   },
   {
     groupId: "Scor",
+    headerAlign: "center",
     children: [{ field: "scorjocuri" }, { field: "scortotal" }],
   },
 ];
@@ -97,8 +103,6 @@ export default async function OldEventTable({ params }) {
     procent: user.procent,
   }));
 
-  console.log(filteredOldEvent);
-
   const columnsData = [
     {
       field: "loc",
@@ -144,6 +148,8 @@ export default async function OldEventTable({ params }) {
       field: "punctetotal",
       headerName: "Total",
       width: 60,
+      headerClassName: "table--highlight",
+      cellClassName: "table--highlight",
     },
     {
       field: "scorjocr1",
@@ -179,15 +185,21 @@ export default async function OldEventTable({ params }) {
       field: "scorjocuri",
       headerName: "Jocuri",
       width: 60,
+      headerClassName: "table--highlight",
+      cellClassName: "table--highlight",
     },
     {
       field: "scortotal",
       headerName: "Total",
       width: 60,
+      headerClassName: "table--highlight",
+      cellClassName: "table--highlight",
     },
     {
       field: "procent",
       headerName: "Procent",
+      headerClassName: "table--highlight",
+      cellClassName: "table--highlight",
     },
   ];
 
