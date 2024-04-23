@@ -64,7 +64,7 @@ export default function DeleteAccount() {
           Delete Account
         </Button>
       </Box>
-      <Dialog disableScrollLock={true} open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Delete Account?</DialogTitle>
         <DialogContent dividers>
           <DialogContentText>

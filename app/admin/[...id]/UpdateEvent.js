@@ -124,7 +124,6 @@ const UpdateEvent = ({ params }) => {
               { value: "seminar", label: "Seminar" },
               { value: "workshop", label: "Workshop" },
             ]}
-            inputProps={{ MenuProps: { disableScrollLock: true } }}
           />
 
           <Box

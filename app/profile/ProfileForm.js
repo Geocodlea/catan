@@ -58,11 +58,11 @@ const ProfileForm = () => {
         // Check for non-successful HTTP status codes
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      setAlert({ text: "Event updated successfully", severity: "success" });
+      setAlert({ text: "Account updated successfully", severity: "success" });
       update();
     } catch (error) {
       // Handle any errors that occurred during the fetch operation
-      setAlert({ text: "Error updating event", severity: "error" });
+      setAlert({ text: "Error updating account", severity: "error" });
     }
   };
 

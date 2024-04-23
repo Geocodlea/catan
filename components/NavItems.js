@@ -40,13 +40,25 @@ const NavItems = ({
 }) => {
   const { data: session, status } = useSession();
 
-  if (item === "home") return <NavItem key={item} name={item} link="/" />;
-  else if (item === "login") {
-    if (status === "loading") return "Login";
+  let link;
+  let name;
+  switch (item) {
+    case "home":
+      link = "/";
+      name = item;
+      break;
+    case "login":
+      if (status === "loading") return "Login";
+      link = !session ? "/api/auth/signin" : null;
+      name = !session ? item : null;
+      break;
+    default:
+      link = `/${item}`;
+      name = item;
+  }
 
-    if (!session)
-      return <NavItem key={item} name={item} link="/api/auth/signin" />;
-
+  if (link) return <NavItem key={item} name={name} link={link} />;
+  else
     return (
       <ListItem key={item} disablePadding>
         <ListItemButton
@@ -61,7 +73,6 @@ const NavItems = ({
           />
         </ListItemButton>
         <Menu
-          disableScrollLock={true}
           anchorEl={anchorEl}
           open={openMenu}
           onClose={handleCloseMenu}
@@ -86,7 +97,6 @@ const NavItems = ({
         </Menu>
       </ListItem>
     );
-  } else return <NavItem key={item} name={item} link={`/${item}`} />;
 };
 
 export default NavItems;

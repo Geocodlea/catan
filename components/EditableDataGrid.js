@@ -289,7 +289,6 @@ const EditableDataGrid = ({
       }}
     >
       <Dialog
-        disableScrollLock={true}
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
       >
