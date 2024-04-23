@@ -43,7 +43,7 @@ export default async function LeaderboardTable() {
       <Typography variant="h2">Leaderboard</Typography>
       <EditableDataGrid
         columnsData={columnsData}
-        data={filteredLeaderboard}
+        rowsData={filteredLeaderboard}
         showAddRecord={false}
         showActions={false}
         disableColumnMenu={true}

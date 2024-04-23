@@ -24,6 +24,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 
 import AlertMsg from "./AlertMsg";
+import ReactNodeCell from "./ReactNodeCell";
 
 function EditToolbar({
   rows,
@@ -65,7 +66,7 @@ function EditToolbar({
 
 const EditableDataGrid = ({
   columnsData,
-  data,
+  rowsData,
   apiURL,
   uniqueField,
   alertText,
@@ -94,10 +95,11 @@ const EditableDataGrid = ({
     cellClassName: item.cellClassName,
     headerAlign: item.headerAlign,
     align: item.align,
+    renderCell: ReactNodeCell,
   }));
 
   // Generate the initialRows array based on users and the dynamically generated columns
-  const initialRows = data.map((item, index) => {
+  const initialRows = rowsData.map((item, index) => {
     const row = { id: index };
 
     columns.map((col) => {
@@ -354,6 +356,7 @@ const EditableDataGrid = ({
             return "table--striped";
         }}
       />
+
       <AlertMsg alert={alert} />
     </Box>
   );

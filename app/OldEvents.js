@@ -1,26 +1,10 @@
-"use client";
-
 import styles from "./page.module.css";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Paper, Typography } from "@mui/material";
 
-import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
-import { Box, Paper, Typography } from "@mui/material";
-
-function QuickSearchToolbar() {
-  return (
-    <Box
-      sx={{
-        p: 0.5,
-        pb: 0,
-        ml: "auto",
-      }}
-    >
-      <GridToolbarQuickFilter />
-    </Box>
-  );
-}
+import EditableDataGrid from "@/components/EditableDataGrid";
+import dbConnect from "/utils/dbConnect";
+import OldEvents from "/models/OldEvents";
 
 function findGame(item) {
   const games = {
@@ -37,41 +21,54 @@ function findGame(item) {
   return "Unknown Game"; // Directly handle unknown game case here
 }
 
-const OldEventsTable = () => {
-  const [rows, setRows] = useState([]);
+const OldEventsTable = async () => {
+  await dbConnect();
+  const oldEvents = await OldEvents.aggregate([
+    {
+      $match: {
+        name: { $regex: /^clasament_/ }, // Filter documents that start with 'clasament_'
+      },
+    },
+    {
+      $addFields: {
+        nameSplit: { $split: ["$name", "_"] }, // Split the 'name' field by '_'
+      },
+    },
+    {
+      $addFields: {
+        dateStr: { $arrayElemAt: ["$nameSplit", -1] }, // Extract the date string
+      },
+    },
+    {
+      $addFields: {
+        date: {
+          $dateFromString: {
+            dateString: "$dateStr",
+            format: "%d.%m.%Y",
+          },
+        },
+      },
+    },
+    {
+      $sort: { date: -1 }, // Sort by the extracted date
+    },
+  ]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch(`/api/old`);
-      const data = await result.json();
+  const filteredOldEvents = oldEvents.map((event, i) => {
+    const isOnline = event.name.includes("online");
+    const isLive = event.name.includes("live");
+    const mode = isOnline ? "online" : isLive ? "live" : "Campionat Național";
 
-      setRows(
-        data.map((event, i) => {
-          const isOnline = event.name.includes("online");
-          const isLive = event.name.includes("live");
-          const mode = isOnline
-            ? "online"
-            : isLive
-            ? "live"
-            : "Campionat Național";
+    const game = findGame(event.name);
 
-          const game = findGame(event.name);
-
-          return {
-            id: event._id,
-            no: i + 1,
-            name: `${game} - ${mode}`,
-            link: `/oldevents/${event.name}`,
-            event: `Clasament ${event.name.slice(-10)}`,
-          };
-        })
-      );
+    return {
+      no: i + 1,
+      name: `${game} - ${mode}`,
+      link: `/oldevents/${event.name}`,
     };
+  });
 
-    fetchData();
-  }, []);
-
-  const columns = [
+  const columnsData = [
     {
       field: "no",
       headerName: "Nr",
@@ -84,19 +81,8 @@ const OldEventsTable = () => {
     },
     {
       field: "link",
-      headerName: "Eveniment",
+      headerName: "Clasament",
       width: 200,
-
-      renderCell: (params) => (
-        <Link
-          href={params.value}
-          style={{
-            color: "blue",
-          }}
-        >
-          {params.row.event}
-        </Link>
-      ),
     },
   ];
 
@@ -104,41 +90,17 @@ const OldEventsTable = () => {
     <Paper
       elevation={24}
       className={styles.card}
-      sx={{ width: "100%", textAlign: "center" }}
+      sx={{ width: "100%", textAlign: "center", marginBottom: "3rem" }}
     >
       <Typography variant="h2">Evenimente Anterioare</Typography>
-      <Box
-        sx={{
-          marginTop: "2rem",
-          height: 500,
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
-        }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          disableColumnFilter
-          disableColumnSelector
-          disableColumnSorting
-          disableDensitySelector
-          disableColumnMenu
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-          }}
-          pageSizeOptions={[10, 25, 50]}
-          slots={{ toolbar: QuickSearchToolbar }}
-        />
-      </Box>
+      <EditableDataGrid
+        columnsData={columnsData}
+        rowsData={filteredOldEvents}
+        showAddRecord={false}
+        showActions={false}
+        disableColumnMenu={true}
+        pageSize={10}
+      />
     </Paper>
   );
 };

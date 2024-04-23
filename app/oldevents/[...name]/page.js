@@ -212,7 +212,7 @@ export default async function OldEventTable({ params }) {
       <Typography variant="h2">Clasament</Typography>
       <EditableDataGrid
         columnsData={columnsData}
-        data={filteredOldEvent}
+        rowsData={filteredOldEvent}
         showAddRecord={false}
         showActions={false}
         disableColumnMenu={true}
