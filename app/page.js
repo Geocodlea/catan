@@ -4,7 +4,7 @@ import Events from "./Events";
 import Leaderboard from "./Leaderboard";
 import OldEvents from "./OldEvents";
 
-export default async function Home({ searchParams }) {
+const Home = ({ searchParams }) => {
   return (
     <>
       <h1 className={styles.title}>EVENIMENTE</h1>
@@ -13,8 +13,10 @@ export default async function Home({ searchParams }) {
         LIVE ȘI ONLINE, LA CELE MAI POPULARE BOARD GAMES.
       </p>
       {/* <Events searchParams={searchParams} /> */}
-      <Leaderboard />
+      {/* <Leaderboard /> */}
       <OldEvents />
     </>
   );
-}
+};
+
+export default Home;

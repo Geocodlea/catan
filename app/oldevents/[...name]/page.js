@@ -43,7 +43,7 @@ const columnGroupingModel = [
   },
 ];
 
-export default async function OldEventTable({ params }) {
+const OldEventTable = async ({ params }) => {
   await dbConnect();
 
   const oldevent = await OldEvents.aggregate([
@@ -218,4 +218,6 @@ export default async function OldEventTable({ params }) {
       />
     </>
   );
-}
+};
+
+export default OldEventTable;

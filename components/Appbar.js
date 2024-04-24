@@ -12,7 +12,6 @@ import {
   IconButton,
   List,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -41,11 +40,11 @@ function DrawerAppBar({ windowAppBar }) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography sx={{ fontSize: 0 }}>
+      <Box sx={{ fontSize: 0 }}>
         <Link href="/">
           <Image src="/next.svg" alt="Logo" width={70} height={70} />
         </Link>
-      </Typography>
+      </Box>
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -97,8 +96,7 @@ function DrawerAppBar({ windowAppBar }) {
     <Box sx={{ display: "flex" }}>
       <AppBar id="appBar" component="nav" style={appBarStyle}>
         <Toolbar>
-          <Typography
-            component="div"
+          <Box
             sx={{
               flexGrow: 1,
               display: { xs: "none", sm: "block" },
@@ -114,7 +112,7 @@ function DrawerAppBar({ windowAppBar }) {
                 priority
               />
             </Link>
-          </Typography>
+          </Box>
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },

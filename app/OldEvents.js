@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-
 import EditableDataGrid from "@/components/EditableDataGrid";
+
 import dbConnect from "/utils/dbConnect";
 import OldEvents from "/models/OldEvents";
 

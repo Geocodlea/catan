@@ -5,7 +5,7 @@ import Leaderboard from "/models/Leaderboard";
 
 import { Box, Typography } from "@mui/material";
 
-export default async function LeaderboardTable() {
+const LeaderboardTable = async () => {
   await dbConnect();
   const leaderboard = await Leaderboard.find({}).sort({ puncte: -1 });
 
@@ -47,4 +47,6 @@ export default async function LeaderboardTable() {
       />
     </Box>
   );
-}
+};
+
+export default LeaderboardTable;
