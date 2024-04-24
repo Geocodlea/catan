@@ -17,6 +17,7 @@ import {
 } from "@mui/x-data-grid";
 
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -88,6 +89,7 @@ const EditableDataGrid = ({
     headerName: item.headerName,
     editable: item.editable,
     width: item.width,
+    minWidth: item.minWidth,
     flex: item.flex,
     sortable: item.sortable,
     type: item.type,
@@ -270,10 +272,12 @@ const EditableDataGrid = ({
   });
 
   return (
-    <Box
+    <Paper
+      elevation={24}
       sx={{
         height: 500,
         width: "100%",
+        marginTop: "1rem",
         "& .actions": {
           color: "text.secondary",
         },
@@ -357,7 +361,7 @@ const EditableDataGrid = ({
       />
 
       <AlertMsg alert={alert} />
-    </Box>
+    </Paper>
   );
 };
 

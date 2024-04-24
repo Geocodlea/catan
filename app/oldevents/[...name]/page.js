@@ -3,8 +3,7 @@ import EditableDataGrid from "@/components/EditableDataGrid";
 import dbConnect from "/utils/dbConnect";
 import OldEvents from "/models/OldEvents";
 
-import { Paper, Typography } from "@mui/material";
-import styles from "../../page.module.css";
+import { Typography } from "@mui/material";
 
 const columnGroupingModel = [
   {
@@ -112,7 +111,8 @@ export default async function OldEventTable({ params }) {
     {
       field: "nume",
       headerName: "Nume",
-      width: 150,
+      minWidth: 150,
+      flex: 1,
     },
     {
       field: "masar1",
@@ -204,12 +204,8 @@ export default async function OldEventTable({ params }) {
   ];
 
   return (
-    <Paper
-      elevation={24}
-      className={styles.card}
-      sx={{ width: "100%", textAlign: "center", marginBottom: "3rem" }}
-    >
-      <Typography variant="h2">Clasament</Typography>
+    <>
+      <Typography variant="h3">Clasament</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvent}
@@ -217,10 +213,9 @@ export default async function OldEventTable({ params }) {
         showActions={false}
         disableColumnMenu={true}
         columnGroupingModel={columnGroupingModel}
-        pageSize={100}
+        pageSize={50}
         density={"compact"}
-        hideFooter={true}
       />
-    </Paper>
+    </>
   );
 }

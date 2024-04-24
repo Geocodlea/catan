@@ -1,6 +1,4 @@
-import styles from "./page.module.css";
-
-import { Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import EditableDataGrid from "@/components/EditableDataGrid";
 import dbConnect from "/utils/dbConnect";
@@ -72,27 +70,24 @@ const OldEventsTable = async () => {
     {
       field: "no",
       headerName: "Nr",
-      width: 80,
+      width: 50,
     },
     {
       field: "name",
       headerName: "Nume Joc",
-      width: 250,
+      minWidth: 250,
+      flex: 1,
     },
     {
       field: "link",
       headerName: "Clasament",
-      width: 200,
+      width: 150,
     },
   ];
 
   return (
-    <Paper
-      elevation={24}
-      className={styles.card}
-      sx={{ width: "100%", textAlign: "center", marginBottom: "3rem" }}
-    >
-      <Typography variant="h2">Evenimente Anterioare</Typography>
+    <Box sx={{ width: "100%", maxWidth: "800px" }}>
+      <Typography variant="h3">Evenimente Anterioare</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvents}
@@ -101,7 +96,7 @@ const OldEventsTable = async () => {
         disableColumnMenu={true}
         pageSize={10}
       />
-    </Paper>
+    </Box>
   );
 };
 

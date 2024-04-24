@@ -3,8 +3,7 @@ import EditableDataGrid from "@/components/EditableDataGrid";
 import dbConnect from "/utils/dbConnect";
 import Leaderboard from "/models/Leaderboard";
 
-import { Paper, Typography } from "@mui/material";
-import styles from "./page.module.css";
+import { Box, Typography } from "@mui/material";
 
 export default async function LeaderboardTable() {
   await dbConnect();
@@ -20,12 +19,13 @@ export default async function LeaderboardTable() {
     {
       field: "place",
       headerName: "Loc",
-      width: 80,
+      width: 50,
     },
     {
       field: "name",
       headerName: "Nume",
-      width: 200,
+      minWidth: 250,
+      flex: 1,
     },
     {
       field: "points",
@@ -35,12 +35,8 @@ export default async function LeaderboardTable() {
   ];
 
   return (
-    <Paper
-      elevation={24}
-      className={styles.card}
-      sx={{ width: "100%", textAlign: "center", marginBottom: "3rem" }}
-    >
-      <Typography variant="h2">Leaderboard</Typography>
+    <Box mb={8} sx={{ width: "100%", maxWidth: "800px" }}>
+      <Typography variant="h3">Leaderboard</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredLeaderboard}
@@ -49,6 +45,6 @@ export default async function LeaderboardTable() {
         disableColumnMenu={true}
         pageSize={10}
       />
-    </Paper>
+    </Box>
   );
 }
