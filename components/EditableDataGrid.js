@@ -280,10 +280,10 @@ const EditableDataGrid = ({
         "& .textPrimary": {
           color: "text.primary",
         },
-        "& .table--highlight": {
+        "& .table-highlight": {
           backgroundColor: "rgb(153 241 132 / 50%)",
         },
-        "& .table--striped": {
+        "& .table-striped": {
           backgroundColor: "grey.200",
         },
       }}
@@ -352,7 +352,7 @@ const EditableDataGrid = ({
         hideFooter={hideFooter}
         getRowClassName={(params) => {
           if (params.indexRelativeToCurrentPage % 2 === 0)
-            return "table--striped";
+            return "table-striped";
         }}
       />
 

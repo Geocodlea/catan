@@ -148,8 +148,8 @@ export default async function OldEventTable({ params }) {
       field: "punctetotal",
       headerName: "Total",
       width: 60,
-      headerClassName: "table--highlight",
-      cellClassName: "table--highlight",
+      headerClassName: "table-highlight",
+      cellClassName: "table-highlight",
     },
     {
       field: "scorjocr1",
@@ -185,21 +185,21 @@ export default async function OldEventTable({ params }) {
       field: "scorjocuri",
       headerName: "Jocuri",
       width: 60,
-      headerClassName: "table--highlight",
-      cellClassName: "table--highlight",
+      headerClassName: "table-highlight",
+      cellClassName: "table-highlight",
     },
     {
       field: "scortotal",
       headerName: "Total",
       width: 60,
-      headerClassName: "table--highlight",
-      cellClassName: "table--highlight",
+      headerClassName: "table-highlight",
+      cellClassName: "table-highlight",
     },
     {
       field: "procent",
       headerName: "Procent",
-      headerClassName: "table--highlight",
-      cellClassName: "table--highlight",
+      headerClassName: "table-highlight",
+      cellClassName: "table-highlight",
     },
   ];
 
