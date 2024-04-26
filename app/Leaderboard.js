@@ -40,8 +40,6 @@ const LeaderboardTable = async () => {
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredLeaderboard}
-        showAddRecord={false}
-        showActions={false}
         disableColumnMenu={true}
         pageSize={10}
       />

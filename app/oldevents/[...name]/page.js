@@ -209,8 +209,6 @@ const OldEventTable = async ({ params }) => {
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvent}
-        showAddRecord={false}
-        showActions={false}
         disableColumnMenu={true}
         columnGroupingModel={columnGroupingModel}
         pageSize={50}

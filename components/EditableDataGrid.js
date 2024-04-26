@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -100,16 +100,21 @@ const EditableDataGrid = ({
     renderCell: ReactNodeCell,
   }));
 
-  // Generate the initialRows array based on users and the dynamically generated columns
-  const initialRows = rowsData.map((item, index) => {
-    const row = { id: index };
+  // Update rows state when initialRows prop changes
+  useEffect(() => {
+    // Map rowsData to the format expected by the Data Grid component
+    const initialRows = rowsData.map((item, index) => {
+      const row = { id: index };
 
-    columns.map((col) => {
-      row[col.field] = item[col.field];
+      columns.map((col) => {
+        row[col.field] = item[col.field];
+      });
+
+      return row;
     });
 
-    return row;
-  });
+    setRows(initialRows);
+  }, [rowsData]);
 
   if (showActions) {
     columns.push({
@@ -156,7 +161,7 @@ const EditableDataGrid = ({
     });
   }
 
-  const [rows, setRows] = useState(initialRows);
+  const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
   const handleRowEditStop = (params, event) => {

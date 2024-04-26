@@ -13,7 +13,7 @@ const Home = ({ searchParams }) => {
         LIVE ȘI ONLINE, LA CELE MAI POPULARE BOARD GAMES.
       </p>
       {/* <Events searchParams={searchParams} /> */}
-      {/* <Leaderboard /> */}
+      <Leaderboard />
       <OldEvents />
     </>
   );

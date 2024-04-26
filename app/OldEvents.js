@@ -1,8 +1,10 @@
-import { Box, Typography } from "@mui/material";
-import EditableDataGrid from "@/components/EditableDataGrid";
+"use client";
 
-import dbConnect from "/utils/dbConnect";
-import OldEvents from "/models/OldEvents";
+import { useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+
+import EditableDataGrid from "@/components/EditableDataGrid";
+import AllEvents from "./AllEvents";
 
 function findGame(item) {
   const games = {
@@ -19,38 +21,28 @@ function findGame(item) {
   return "Unknown Game"; // Directly handle unknown game case here
 }
 
-const OldEventsTable = async () => {
-  await dbConnect();
-  const oldEvents = await OldEvents.aggregate([
-    {
-      $match: {
-        name: { $regex: /^clasament_/ }, // Filter documents that start with 'clasament_'
-      },
-    },
-    {
-      $addFields: {
-        nameSplit: { $split: ["$name", "_"] }, // Split the 'name' field by '_'
-      },
-    },
-    {
-      $addFields: {
-        dateStr: { $arrayElemAt: ["$nameSplit", -1] }, // Extract the date string
-      },
-    },
-    {
-      $addFields: {
-        date: {
-          $dateFromString: {
-            dateString: "$dateStr",
-            format: "%d.%m.%Y",
-          },
-        },
-      },
-    },
-    {
-      $sort: { date: -1 }, // Sort by the extracted date
-    },
-  ]);
+const OldEventsTable = () => {
+  const [oldEvents, setOldEvents] = useState([]);
+
+  const allEvents = async () => {
+    const response = await fetch("/api/oldevents", {
+      method: "POST",
+    });
+    const data = await response.json();
+
+    setOldEvents(data);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/oldevents");
+      const data = await response.json();
+
+      setOldEvents(data);
+    };
+
+    fetchData();
+  }, []);
 
   const filteredOldEvents = oldEvents.map((event, i) => {
     const isOnline = event.name.includes("online");
@@ -91,11 +83,10 @@ const OldEventsTable = async () => {
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvents}
-        showAddRecord={false}
-        showActions={false}
         disableColumnMenu={true}
         pageSize={10}
       />
+      <AllEvents allEvents={allEvents} />
     </Box>
   );
 };
