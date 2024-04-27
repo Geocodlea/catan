@@ -7,7 +7,9 @@ import { Box, Typography } from "@mui/material";
 
 const LeaderboardTable = async () => {
   await dbConnect();
-  const leaderboard = await Leaderboard.find({}).sort({ puncte: -1 });
+  const leaderboard = await Leaderboard.find({})
+    .select("nume puncte")
+    .sort({ puncte: -1 });
 
   const filteredLeaderboard = leaderboard.map((user, i) => ({
     place: i + 1,

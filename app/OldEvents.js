@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 
@@ -22,6 +23,7 @@ function findGame(item) {
 }
 
 const OldEventsTable = () => {
+  const { data: session } = useSession();
   const [oldEvents, setOldEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,6 +50,8 @@ const OldEventsTable = () => {
     setLoading(false);
   }, []);
 
+  console.log(oldEvents);
+
   const filteredOldEvents = oldEvents.map((event, i) => {
     const isOnline = event.name.includes("online");
     const isLive = event.name.includes("live");
@@ -59,6 +63,7 @@ const OldEventsTable = () => {
       no: i + 1,
       name: `${game} - ${mode}`,
       link: `/oldevents/${event.name}`,
+      cost: event.participants * 3,
     };
   });
 
@@ -80,6 +85,52 @@ const OldEventsTable = () => {
       width: 150,
     },
   ];
+
+  if (session?.user.role === "admin") {
+    columnsData.push(
+      {
+        field: "cost",
+        headerName: "Calcul",
+        width: 100,
+      },
+      {
+        field: "total",
+        headerName: "Total",
+        width: 100,
+      }
+    );
+  }
+
+  useEffect(() => {
+    if (session?.user.role === "admin") {
+      const fetchData = async () => {
+        const response = await fetch("/api/costEvents");
+        const data = await response.json();
+
+        const updatedFirstArray = oldEvents.map((obj, index) => {
+          if (data[index]) {
+            return { ...obj, participants: data[index].participants };
+          } else {
+            return obj; // If no corresponding object found in second array, return original object
+          }
+        });
+
+        setOldEvents(updatedFirstArray);
+
+        // setOldEvents(
+        //   oldEvents.forEach((obj, i) => {
+        //     // Check if there is a corresponding object in the second array
+        //     if (data[i]) {
+        //       // Add the 'participants' property from the second array to the object in the first array
+        //       obj.participants = data[i].participants;
+        //     }
+        //   })
+        // );
+      };
+
+      fetchData();
+    }
+  }, [session]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: "800px" }}>

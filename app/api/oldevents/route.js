@@ -32,6 +32,11 @@ const allEventsPipeline = [
   {
     $sort: { date: -1 }, // Sort by the extracted date
   },
+  {
+    $project: {
+      name: 1, // Project only the 'name' field
+    },
+  },
 ];
 
 export async function GET() {

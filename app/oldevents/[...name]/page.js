@@ -72,9 +72,6 @@ const OldEventTable = async ({ params }) => {
     {
       $group: {
         _id: "$_id",
-        type: { $first: "$type" },
-        name: { $first: "$name" },
-        database: { $first: "$database" },
         data: { $push: "$data" },
       },
     },
