@@ -23,14 +23,17 @@ function findGame(item) {
 
 const OldEventsTable = () => {
   const [oldEvents, setOldEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const allEvents = async () => {
+    setLoading(true);
     const response = await fetch("/api/oldevents", {
       method: "POST",
     });
     const data = await response.json();
 
     setOldEvents(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -42,6 +45,7 @@ const OldEventsTable = () => {
     };
 
     fetchData();
+    setLoading(false);
   }, []);
 
   const filteredOldEvents = oldEvents.map((event, i) => {
@@ -85,6 +89,7 @@ const OldEventsTable = () => {
         rowsData={filteredOldEvents}
         disableColumnMenu={true}
         pageSize={10}
+        loading={loading}
       />
       <AllEvents allEvents={allEvents} />
     </Box>

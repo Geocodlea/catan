@@ -78,6 +78,7 @@ const EditableDataGrid = ({
   pageSize,
   density,
   hideFooter,
+  loading,
 }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -326,6 +327,7 @@ const EditableDataGrid = ({
       <DataGrid
         rows={rows}
         columns={columns}
+        loading={loading}
         disableColumnMenu={disableColumnMenu}
         disableDensitySelector
         processRowUpdate={processRowUpdate}
