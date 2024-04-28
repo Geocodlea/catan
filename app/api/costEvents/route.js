@@ -46,7 +46,5 @@ export async function GET() {
     },
   ]);
 
-  console.log(costEvents);
-
   return NextResponse.json(costEvents);
 }

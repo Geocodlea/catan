@@ -1,4 +1,5 @@
 "use client";
+import { isEqual } from "lodash";
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
@@ -26,6 +27,8 @@ const OldEventsTable = () => {
   const { data: session } = useSession();
   const [oldEvents, setOldEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isAdmin = session?.user.role === "admin";
+  let total = 0;
 
   const allEvents = async () => {
     setLoading(true);
@@ -50,7 +53,27 @@ const OldEventsTable = () => {
     setLoading(false);
   }, []);
 
-  console.log(oldEvents);
+  useEffect(() => {
+    if (isAdmin) {
+      const fetchData = async () => {
+        const response = await fetch("/api/costEvents");
+        const data = await response.json();
+
+        const costEvents = oldEvents.map((obj, i) => {
+          const eventData = data[i];
+          return eventData
+            ? { ...obj, participants: eventData.participants }
+            : obj;
+        });
+
+        if (!isEqual(oldEvents, costEvents)) {
+          setOldEvents(costEvents);
+        }
+      };
+
+      fetchData();
+    }
+  }, [session, oldEvents]);
 
   const filteredOldEvents = oldEvents.map((event, i) => {
     const isOnline = event.name.includes("online");
@@ -59,11 +82,15 @@ const OldEventsTable = () => {
 
     const game = findGame(event.name);
 
+    const cost = event.participants * 3;
+    total += cost;
+
     return {
       no: i + 1,
       name: `${game} - ${mode}`,
       link: `/oldevents/${event.name}`,
-      cost: event.participants * 3,
+      cost: cost || null,
+      total: total || null,
     };
   });
 
@@ -86,7 +113,7 @@ const OldEventsTable = () => {
     },
   ];
 
-  if (session?.user.role === "admin") {
+  if (isAdmin) {
     columnsData.push(
       {
         field: "cost",
@@ -100,37 +127,6 @@ const OldEventsTable = () => {
       }
     );
   }
-
-  useEffect(() => {
-    if (session?.user.role === "admin") {
-      const fetchData = async () => {
-        const response = await fetch("/api/costEvents");
-        const data = await response.json();
-
-        const updatedFirstArray = oldEvents.map((obj, index) => {
-          if (data[index]) {
-            return { ...obj, participants: data[index].participants };
-          } else {
-            return obj; // If no corresponding object found in second array, return original object
-          }
-        });
-
-        setOldEvents(updatedFirstArray);
-
-        // setOldEvents(
-        //   oldEvents.forEach((obj, i) => {
-        //     // Check if there is a corresponding object in the second array
-        //     if (data[i]) {
-        //       // Add the 'participants' property from the second array to the object in the first array
-        //       obj.participants = data[i].participants;
-        //     }
-        //   })
-        // );
-      };
-
-      fetchData();
-    }
-  }, [session]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: "800px" }}>
