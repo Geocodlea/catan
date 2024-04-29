@@ -78,9 +78,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   await dbConnect();
   await User.deleteOne({ _id: params.id });
-
-  const userId = new mongoose.Types.ObjectId(params.id[0]);
-  await Account.deleteOne({ userId });
+  await Account.deleteOne({ userId: params.id });
 
   // List all files for deleted user
   const [files] = await bucket.getFiles({

@@ -18,13 +18,11 @@ const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const initialValues = {
   name: "",
-  email: "",
   image: "",
 };
 
 const validationSchema = Yup.object().shape({
   name: Yup.string("Name must be a text"),
-  email: Yup.string("Email must be a text"),
   image: Yup.mixed()
     .test("fileFormat", "Unsupported file type", (value) => {
       if (!value) return true;
@@ -46,7 +44,6 @@ const ProfileForm = () => {
       let formData = new FormData();
 
       formData.append("name", values.name);
-      formData.append("email", values.email);
       formData.append("image", values.image);
 
       const response = await fetch(`/api/users/${session.user.id}`, {
@@ -80,17 +77,6 @@ const ProfileForm = () => {
             label="Name"
             type="text"
             placeholder={session?.user.name}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-
-          <Field
-            name="email"
-            component={CustomTextField}
-            label="Email"
-            type="text"
-            placeholder={session?.user.email}
             InputLabelProps={{
               shrink: true,
             }}
