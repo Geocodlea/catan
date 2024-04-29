@@ -1,7 +1,6 @@
 import dbConnect from "/utils/dbConnect";
 import User from "/models/User";
 import Account from "/models/Account";
-import mongoose from "mongoose";
 
 import { v4 as uuidv4 } from "uuid";
 import { Storage } from "@google-cloud/storage";
@@ -20,6 +19,7 @@ const storage = new Storage({
 const bucketName = "geo_bucket_1";
 const bucket = storage.bucket(bucketName);
 
+// Update user from profile
 export async function PATCH(request, { params }) {
   const formData = await request.formData();
   const data = {};
@@ -66,6 +66,7 @@ export async function PATCH(request, { params }) {
   return NextResponse.json({ success: true });
 }
 
+// Update user from admin
 export async function PUT(request, { params }) {
   const data = await request.json();
 

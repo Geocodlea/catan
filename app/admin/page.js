@@ -26,7 +26,6 @@ export default async function Admin() {
     role: user.role,
   }));
 
-  console.log(filteredUsers);
   const columnsData = [
     {
       field: "id",
@@ -41,20 +40,20 @@ export default async function Admin() {
       field: "name",
       headerName: "Name",
       editable: true,
-      width: 150,
+      minWidth: 200,
       flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
       editable: true,
-      width: 150,
+      width: 200,
     },
     {
       field: "role",
       headerName: "Role",
       editable: true,
-      width: 50,
+      width: 80,
     },
   ];
 
@@ -68,13 +67,17 @@ export default async function Admin() {
         <Typography variant="h2">Create Event</Typography>
         <CreateEventForm />
       </Paper>
-      <Typography variant="h3">Clasament</Typography>
+      <Typography variant="h3">Users</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredUsers}
         pageSize={50}
         density={"compact"}
         showActions={true}
+        showAddRecord={true}
+        apiURL={"/users"}
+        uniqueField={"id"}
+        alertText={"User"}
       />
     </>
   );
