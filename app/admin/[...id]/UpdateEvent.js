@@ -120,9 +120,9 @@ const UpdateEvent = ({ params }) => {
             component={CustomSelect}
             label="Type"
             options={[
-              { value: "conference", label: "Conference" },
-              { value: "seminar", label: "Seminar" },
-              { value: "workshop", label: "Workshop" },
+              { value: "catan", label: "Catan" },
+              { value: "whist", label: "Whist" },
+              { value: "rentz", label: "Rentz" },
             ]}
           />
 

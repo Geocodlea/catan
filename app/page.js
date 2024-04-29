@@ -12,7 +12,7 @@ const Home = ({ searchParams }) => {
         TE AȘTEPTĂM LA CONCURSURI, JOCURI AMICALE SAU SESIUNI DE LEARN & PLAY,
         LIVE ȘI ONLINE, LA CELE MAI POPULARE BOARD GAMES.
       </p>
-      {/* <Events searchParams={searchParams} /> */}
+      <Events searchParams={searchParams} />
       <Leaderboard />
       <OldEvents />
     </>

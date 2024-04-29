@@ -31,6 +31,8 @@ const bucket = storage.bucket(bucketName);
 
 const Events = async ({ searchParams }) => {
   const session = await getServerSession(authOptions);
+  const isAdmin = session?.user.role === "admin";
+
   const alert = { text: searchParams.text, severity: searchParams.severity };
 
   await dbConnect();
@@ -102,6 +104,13 @@ const Events = async ({ searchParams }) => {
             <Box className={styles.description}>
               <p>{event.description}</p>
             </Box>
+            <Box>
+              <Link href={`/events/${event.id}`}>
+                <Button variant="contained" className="btn btn-primary">
+                  Detalii
+                </Button>
+              </Link>
+            </Box>
             <Typography className={styles.code}>
               {event.date.toLocaleString("ro-RO", {
                 year: "numeric",
@@ -112,7 +121,8 @@ const Events = async ({ searchParams }) => {
             <Typography variant="overline" gutterBottom>
               {event.type}
             </Typography>
-            {session?.user.role === "admin" && (
+
+            {isAdmin && (
               <Box
                 sx={{
                   display: "flex",

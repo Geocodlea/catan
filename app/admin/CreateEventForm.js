@@ -8,7 +8,6 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import {
   CustomTextField,
-  CustomCheckbox,
   CustomSelect,
   CustomFileUpload,
 } from "@/utils/formsHelper";
@@ -23,7 +22,6 @@ const initialValues = {
   image: "",
   date: "",
   type: "",
-  isAgree: false,
 };
 
 const validationSchema = Yup.object().shape({
@@ -44,10 +42,6 @@ const validationSchema = Yup.object().shape({
     ),
   date: Yup.date().required("Event date is required"),
   type: Yup.string().required("Event Type is required"),
-  isAgree: Yup.boolean().oneOf(
-    [true],
-    "You must agree to the terms and conditions"
-  ),
 });
 
 const CreateEventForm = () => {
@@ -128,17 +122,10 @@ const CreateEventForm = () => {
             component={CustomSelect}
             label="Type"
             options={[
-              { value: "conference", label: "Conference" },
-              { value: "seminar", label: "Seminar" },
-              { value: "workshop", label: "Workshop" },
+              { value: "catan", label: "Catan" },
+              { value: "whist", label: "Whist" },
+              { value: "rentz", label: "Rentz" },
             ]}
-          />
-
-          <Field
-            name="isAgree"
-            type="checkbox"
-            component={CustomCheckbox}
-            label="I agree"
           />
 
           <Box

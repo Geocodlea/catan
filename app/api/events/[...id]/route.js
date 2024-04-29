@@ -26,6 +26,8 @@ export async function PATCH(request, { params }) {
     if (value) data[key] = value;
   }
 
+  await dbConnect();
+
   if (data.image) {
     const bytes = await data.image.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -44,18 +46,16 @@ export async function PATCH(request, { params }) {
 
     // Update the data with the Google Cloud Storage URL
     data.image = `https://storage.googleapis.com/${bucketName}/uploads/events/${filename}`;
+
+    // Find old event image and delete it, before uploading the new one
+    const event = await Event.findOne({ _id: params.id });
+
+    // Trim de full URL, to get only the bucket
+    const imgURL = event.image.slice(44);
+
+    const gcsImgObject = bucket.file(imgURL);
+    await gcsImgObject.delete();
   }
-
-  await dbConnect();
-
-  // Find old event image and delete it, before uploading the new one
-  const event = await Event.findOne({ _id: params.id });
-
-  // Trim de full URL, to get only the bucket
-  const imgURL = event.image.slice(44);
-
-  const gcsObject = bucket.file(imgURL);
-  await gcsObject.delete();
 
   await Event.updateOne({ _id: params.id }, data);
 
