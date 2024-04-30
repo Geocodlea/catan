@@ -10,6 +10,7 @@ global.models.Event =
     image: { type: String },
     date: { type: Date },
     type: { type: String },
+    detalii: { type: String },
   });
 
 export default global.models.Event;
