@@ -172,3 +172,15 @@ h2 {
 .rotate-90 {
   transform: rotate(90deg);
 }
+
+.editorContent {
+  width: 100%;
+
+  a {
+    color: blue;
+  }
+
+  a:hover {
+    color: darkblue;
+  }
+}

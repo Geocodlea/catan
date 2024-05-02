@@ -11,6 +11,8 @@ global.models.Event =
     date: { type: Date },
     type: { type: String },
     detalii: { type: String },
+    premii: { type: String },
+    regulament: { type: String },
   });
 
 export default global.models.Event;
