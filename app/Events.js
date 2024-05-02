@@ -70,7 +70,6 @@ const Events = async ({ searchParams }) => {
             key={event.id}
             style={{
               padding: 0,
-              textAlign: "center",
             }}
           >
             <Box sx={{ position: "relative", height: "300px" }}>

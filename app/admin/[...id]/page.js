@@ -13,11 +13,7 @@ export default async function Update({ params }) {
   if (session?.user.role !== "admin") redirect(`/`);
 
   return (
-    <Paper
-      elevation={24}
-      className={styles.card}
-      sx={{ maxWidth: "600px", textAlign: "center" }}
-    >
+    <Paper elevation={24} className={styles.card} sx={{ maxWidth: "600px" }}>
       <Typography variant="h2">Update Event</Typography>
       <UpdateEvent params={params} />
     </Paper>

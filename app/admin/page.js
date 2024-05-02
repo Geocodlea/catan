@@ -62,7 +62,7 @@ export default async function Admin() {
       <Paper
         elevation={24}
         className={styles.card}
-        sx={{ maxWidth: "600px", marginBottom: "5rem", textAlign: "center" }}
+        sx={{ maxWidth: "600px", marginBottom: "5rem" }}
       >
         <Typography variant="h2">Create Event</Typography>
         <CreateEventForm />

@@ -138,6 +138,7 @@ const UpdateEvent = ({ params }) => {
               loading={isSubmitting}
               loadingIndicator="Updating..."
               variant="contained"
+              className="btn btn-primary"
               sx={{ marginTop: "12px", marginBottom: "20px" }}
             >
               Update event
