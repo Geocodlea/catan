@@ -105,7 +105,7 @@ const Events = async ({ searchParams }) => {
               <p>{event.description}</p>
             </Box>
             <Box>
-              <Link href={`/events/${event.id}`}>
+              <Link href={`/events/${event.type}/${event.id}`}>
                 <Button variant="contained" className="btn btn-primary">
                   Detalii
                 </Button>
