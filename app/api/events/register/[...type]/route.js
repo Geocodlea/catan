@@ -1,5 +1,6 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
+const Participants = await import(`/models/Participants`);
 
 export async function POST(request, { params }) {
   const session = await request.json();
@@ -8,10 +9,7 @@ export async function POST(request, { params }) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const participantModule = await import(
-    `@/models/participants/${params.type[0]}`
-  );
-  const ParticipantType = participantModule.default;
+  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
 
   await dbConnect();
 
@@ -36,10 +34,7 @@ export async function DELETE(request, { params }) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const participantModule = await import(
-    `@/models/participants/${params.type[0]}`
-  );
-  const ParticipantType = participantModule.default;
+  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
 
   await dbConnect();
 

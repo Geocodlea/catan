@@ -21,7 +21,6 @@ export default function Register({ session, type }) {
         body: JSON.stringify({ user: session?.user }),
       });
       if (!response.ok) {
-        // Check for non-successful HTTP status codes
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -35,8 +34,6 @@ export default function Register({ session, type }) {
         severity: "success",
       });
     } catch (error) {
-      console.log(error);
-      // Handle any errors that occurred during the fetch operation
       setAlert({ text: `${error}`, severity: "error" });
     }
   };
@@ -51,7 +48,6 @@ export default function Register({ session, type }) {
         body: JSON.stringify({ id: session?.user.id }),
       });
       if (!response.ok) {
-        // Check for non-successful HTTP status codes
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -65,7 +61,6 @@ export default function Register({ session, type }) {
         severity: "success",
       });
     } catch (error) {
-      // Handle any errors that occurred during the fetch operation
       setAlert({ text: `${error}`, severity: "error" });
     }
   };
