@@ -1,30 +1,73 @@
 "use client";
 
+import { useState } from "react";
 import styles from "@/app/page.module.css";
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
+import AlertMsg from "@/components/AlertMsg";
 
 export default function Register({ session, type }) {
+  const [alert, setAlert] = useState({ text: "", severity: "" });
+
   const register = async () => {
-    fetch(`/api/register/${type}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: session.user }),
-    });
+    try {
+      const response = await fetch(`/api/events/register/${type}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: session?.user }),
+      });
+      if (!response.ok) {
+        // Check for non-successful HTTP status codes
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success === false) {
+        throw new Error(data.message);
+      }
+
+      setAlert({
+        text: `Te-ai înscris cu succes`,
+        severity: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      // Handle any errors that occurred during the fetch operation
+      setAlert({ text: `${error}`, severity: "error" });
+    }
   };
 
   const unregister = async () => {
-    fetch(`/api/register/${type}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: session.user.id }),
-    });
+    try {
+      const response = await fetch(`/api/events/register/${type}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: session?.user.id }),
+      });
+      if (!response.ok) {
+        // Check for non-successful HTTP status codes
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success === false) {
+        throw new Error(data.message);
+      }
+
+      setAlert({
+        text: `Ai anulat înscrierea cu succes`,
+        severity: "success",
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the fetch operation
+      setAlert({ text: `${error}`, severity: "error" });
+    }
   };
 
   return (
@@ -78,6 +121,7 @@ export default function Register({ session, type }) {
           </AddToCalendarButton>
         </Box>
       </Box>
+      <AlertMsg alert={alert} />
     </Box>
   );
 }
