@@ -4,7 +4,6 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 function CustomTabPanel(props) {
@@ -59,6 +58,8 @@ export default function CustomTabs({ tabContents }) {
           value={value}
           onChange={handleChange}
           variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
           aria-label="event tabs"
         >
           {tabContents.map((tab, i) => (

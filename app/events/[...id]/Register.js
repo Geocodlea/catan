@@ -67,8 +67,8 @@ export default function Register({ session, type }) {
 
   return (
     <Box className={styles.grid}>
-      <Box className={styles.card}>
-        <Typography>
+      <Box>
+        <Typography gutterBottom>
           Pentru a te înscrie la Seara de Catan trebuie ca mai întâi să fii{" "}
           <Link href="/api/auth/signin">logat</Link>
         </Typography>
@@ -81,8 +81,8 @@ export default function Register({ session, type }) {
         </Button>
       </Box>
 
-      <Box className={styles.card}>
-        <Typography>
+      <Box>
+        <Typography gutterBottom>
           Te rugăm să folosești această opțiune atunci când dorești să îți
           anulezi participarea
         </Typography>
@@ -95,26 +95,24 @@ export default function Register({ session, type }) {
         </Button>
       </Box>
 
-      <Box className={styles.card}>
-        <Typography>
+      <Box>
+        <Typography gutterBottom>
           Dacă dorești să-ți salvezi data evenimentului în calendar, click mai
           jos:
         </Typography>
 
-        <Box textAlign={"center"}>
-          <AddToCalendarButton
-            name={type}
-            options={["Apple", "Google", "iCal"]}
-            location="AGames"
-            startDate="2024-05-05"
-            endDate="2024-05-05"
-            startTime="19:15"
-            endTime="23:00"
-            timeZone="Europe/Bucharest"
-          >
-            Calendar
-          </AddToCalendarButton>
-        </Box>
+        <AddToCalendarButton
+          name={type}
+          options={["Apple", "Google", "iCal"]}
+          location="AGames"
+          startDate="2024-05-05"
+          endDate="2024-05-05"
+          startTime="19:15"
+          endTime="23:00"
+          timeZone="Europe/Bucharest"
+        >
+          Calendar
+        </AddToCalendarButton>
       </Box>
       <AlertMsg alert={alert} />
     </Box>
