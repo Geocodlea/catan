@@ -79,7 +79,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   await dbConnect();
   await User.deleteOne({ _id: params.id });
-  await Account.deleteOne({ userId: params.id });
+  await Account.deleteMany({ userId: params.id });
 
   // List all files for deleted user
   const [files] = await bucket.getFiles({

@@ -7,8 +7,6 @@ import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "/utils/dbMongoClient";
 import sendVerificationRequest from "/utils/sendVerification";
-import dbConnect from "/utils/dbConnect";
-import User from "/models/User";
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
@@ -53,17 +51,6 @@ export const authOptions = {
       session.user.userID = user.userID;
 
       return session;
-    },
-  },
-
-  events: {
-    async createUser({ user }) {
-      await dbConnect();
-
-      const lastID = await User.findOne().sort({ userID: -1 });
-      const userID = lastID.userID ? lastID.userID + 1 : 1;
-
-      await User.updateOne({ _id: user.id }, { userID, role: "none" });
     },
   },
 
