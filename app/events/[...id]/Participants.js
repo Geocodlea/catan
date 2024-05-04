@@ -53,8 +53,6 @@ export default function Participanti({ type }) {
     },
   ];
 
-  console.log(participants);
-
   return (
     <div>
       <Typography variant="h3">Participanți</Typography>
@@ -67,7 +65,6 @@ export default function Participanti({ type }) {
         showAddRecord={true}
         apiURL={"/events/participants"}
         eventType={type}
-        uniqueField={"id"}
         alertText={"participant"}
         disableColumnMenu={true}
       />

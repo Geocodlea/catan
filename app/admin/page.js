@@ -75,7 +75,6 @@ export default async function Admin() {
         showActions={true}
         showAddRecord={true}
         apiURL={"/users"}
-        uniqueField={"id"}
         alertText={"User"}
       />
     </>

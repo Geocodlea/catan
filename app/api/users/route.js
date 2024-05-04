@@ -13,6 +13,14 @@ export async function POST(request) {
   }
 
   await dbConnect();
+  const emailExists = await User.findOne({ email: data.email });
+  if (emailExists) {
+    return NextResponse.json({
+      success: false,
+      message: "Emailul există deja",
+    });
+  }
+
   const user = new User(data);
   await user.save();
 

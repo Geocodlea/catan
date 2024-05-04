@@ -70,7 +70,26 @@ export async function PATCH(request, { params }) {
 export async function PUT(request, { params }) {
   const data = await request.json();
 
+  if (!data.name || !data.email) {
+    return NextResponse.json({
+      success: false,
+      message: "Numele și Emailul sunt obligatorii",
+    });
+  }
+
   await dbConnect();
+  const emailExists = await User.findOne({
+    email: data.email,
+    _id: { $ne: params.id },
+  });
+
+  if (emailExists) {
+    return NextResponse.json({
+      success: false,
+      message: "Emailul există deja",
+    });
+  }
+
   await User.updateOne({ _id: params.id }, data);
 
   return NextResponse.json({ success: true });

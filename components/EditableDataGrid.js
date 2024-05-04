@@ -27,13 +27,7 @@ import DialogActions from "@mui/material/DialogActions";
 import AlertMsg from "./AlertMsg";
 import ReactNodeCell from "./ReactNodeCell";
 
-function EditToolbar({
-  rows,
-  setRows,
-  setRowModesModel,
-  uniqueField,
-  showAddRecord,
-}) {
+function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
   const handleClick = () => {
     let id;
     if (rows.length === 0) {
@@ -46,7 +40,7 @@ function EditToolbar({
     setRows((oldRows) => [...oldRows, { id, isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: uniqueField },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: id },
     }));
   };
 
@@ -70,7 +64,6 @@ const EditableDataGrid = ({
   rowsData,
   apiURL,
   eventType,
-  uniqueField,
   alertText,
   showAddRecord,
   showActions,
@@ -192,7 +185,7 @@ const EditableDataGrid = ({
 
     try {
       const response = await fetch(
-        `/api/${apiURL}/${rowToDelete[uniqueField]}/${eventType || ""}`,
+        `/api/${apiURL}/${rowToDelete.id}/${eventType || ""}`,
         {
           method: "DELETE",
         }
@@ -237,7 +230,7 @@ const EditableDataGrid = ({
 
     const apiUrl = newRow.isNew
       ? `/api/${apiURL}/${eventType || ""}`
-      : `/api/${apiURL}/${oldRow[uniqueField]}/${eventType || ""}`;
+      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}`;
 
     try {
       const method = newRow.isNew ? "POST" : "PUT";
@@ -273,8 +266,6 @@ const EditableDataGrid = ({
       setAlert({ text: `${error}`, severity: "error" });
     }
   });
-
-  const handleProcessRowUpdateError = useCallback((error) => {}, []);
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     id: false,
@@ -334,7 +325,7 @@ const EditableDataGrid = ({
         disableColumnMenu={disableColumnMenu}
         disableDensitySelector
         processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleProcessRowUpdateError}
+        onProcessRowUpdateError={() => ({})}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -348,7 +339,6 @@ const EditableDataGrid = ({
             rows,
             setRows,
             setRowModesModel,
-            uniqueField,
             showAddRecord,
           },
         }}
