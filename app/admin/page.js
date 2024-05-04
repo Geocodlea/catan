@@ -18,9 +18,8 @@ export default async function Admin() {
   await dbConnect();
   const users = await User.find();
 
-  const filteredUsers = users.map((user, i) => ({
+  const filteredUsers = users.map((user) => ({
     id: user.id,
-    no: i + 1,
     name: user.name,
     email: user.email,
     role: user.role,
@@ -32,7 +31,7 @@ export default async function Admin() {
       headerName: "id",
     },
     {
-      field: "no",
+      field: "nr",
       headerName: "Nr.",
       width: 50,
     },

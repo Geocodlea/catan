@@ -3,11 +3,12 @@ import mongoose from "mongoose";
 export const createParticipantsModel = (event) => {
   const schema = new mongoose.Schema(
     {
-      id: { type: String },
-      name: { type: String },
+      id: { type: String, required: true },
+      name: { type: String, required: true },
       tel: { type: String },
       email: { type: String },
       obs: { type: String },
+      rude: { type: String },
     },
     { collection: `participanti_live_${event}` }
   );

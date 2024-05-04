@@ -77,31 +77,11 @@ const OldEventTable = async ({ params }) => {
     },
   ]);
 
-  const filteredOldEvent = oldevent[0].data.map((user, i) => ({
-    loc: i + 1,
-    userid: user.userid,
-    nume: user.nume,
-    masar1: user.masar1,
-    masar2: user.masar2,
-    masar3: user.masar3,
-    puncter1: user.puncter1,
-    puncter2: user.puncter2,
-    puncter3: user.puncter3,
-    punctetotal: user.punctetotal,
-    scorjocr1: user.punctejocr1,
-    scortotalr1: user.punctejoctotalr1,
-    scorjocr2: user.punctejocr2,
-    scortotalr2: user.punctejoctotalr2,
-    scorjocr3: user.punctejocr3,
-    scortotalr3: user.punctejoctotalr3,
-    scorjocuri: user.punctejoctotal,
-    scortotal: user.punctejocuri,
-    procent: user.procent,
-  }));
+  const filteredOldEvent = oldevent[0].data;
 
   const columnsData = [
     {
-      field: "loc",
+      field: "nr",
       headerName: "Loc",
       width: 50,
     },

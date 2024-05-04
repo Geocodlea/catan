@@ -1,6 +1,6 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
-const Participants = await import(`/models/Participants`);
+import * as Participants from "@/models/Participants";
 
 export async function POST(request, { params }) {
   const session = await request.json();

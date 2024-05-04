@@ -11,15 +11,14 @@ const LeaderboardTable = async () => {
     .select("nume puncte")
     .sort({ puncte: -1 });
 
-  const filteredLeaderboard = leaderboard.map((user, i) => ({
-    place: i + 1,
+  const filteredLeaderboard = leaderboard.map((user) => ({
     name: user.nume,
     points: user.puncte,
   }));
 
   const columnsData = [
     {
-      field: "place",
+      field: "nr",
       headerName: "Loc",
       width: 50,
     },

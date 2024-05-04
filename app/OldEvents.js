@@ -75,7 +75,7 @@ const OldEventsTable = () => {
     }
   }, [session, oldEvents]);
 
-  const filteredOldEvents = oldEvents.map((event, i) => {
+  const filteredOldEvents = oldEvents.map((event) => {
     const isOnline = event.name.includes("online");
     const isLive = event.name.includes("live");
     const mode = isOnline ? "online" : isLive ? "live" : "Campionat Național";
@@ -86,7 +86,6 @@ const OldEventsTable = () => {
     total += cost;
 
     return {
-      no: i + 1,
       name: `${game} - ${mode}`,
       link: `/oldevents/${event.name}`,
       cost: cost || null,
@@ -96,7 +95,7 @@ const OldEventsTable = () => {
 
   const columnsData = [
     {
-      field: "no",
+      field: "nr",
       headerName: "Nr",
       width: 50,
     },

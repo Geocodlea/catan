@@ -9,7 +9,7 @@ import Tabs from "@/components/Tabs";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 import Register from "./Register";
-
+import Participants from "./Participants";
 export default async function EventPage({ params }) {
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "admin";
@@ -31,28 +31,35 @@ export default async function EventPage({ params }) {
       <div dangerouslySetInnerHTML={{ __html: event[tab] }} />
     );
 
+  const tabs = [
+    {
+      label: "Detalii",
+      content: editorContent(event, "detalii"),
+    },
+    {
+      label: "Premii",
+      content: editorContent(event, "premii"),
+    },
+    {
+      label: "Regulament",
+      content: editorContent(event, "regulament"),
+    },
+    {
+      label: "Inscriere",
+      content: <Register session={session} type={params.id[0]} />,
+    },
+  ];
+
+  if (isAdmin) {
+    tabs.push({
+      label: "Participanti",
+      content: <Participants type={params.id[0]} />,
+    });
+  }
+
   return (
     <div className="editorContent">
-      <Tabs
-        tabContents={[
-          {
-            label: "Detalii",
-            content: editorContent(event, "detalii"),
-          },
-          {
-            label: "Premii",
-            content: editorContent(event, "premii"),
-          },
-          {
-            label: "Regulament",
-            content: editorContent(event, "regulament"),
-          },
-          {
-            label: "Inscriere",
-            content: <Register session={session} type={params.id[0]} />,
-          },
-        ]}
-      />
+      <Tabs tabContents={tabs} />
     </div>
   );
 }

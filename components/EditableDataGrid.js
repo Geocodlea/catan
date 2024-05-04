@@ -69,6 +69,7 @@ const EditableDataGrid = ({
   columnsData,
   rowsData,
   apiURL,
+  eventType,
   uniqueField,
   alertText,
   showAddRecord,
@@ -108,6 +109,7 @@ const EditableDataGrid = ({
       const row = { id: index };
 
       columns.map((col) => {
+        row.nr = index + 1;
         row[col.field] = item[col.field];
       });
 
@@ -190,14 +192,13 @@ const EditableDataGrid = ({
 
     try {
       const response = await fetch(
-        `/api/${apiURL}/${rowToDelete[uniqueField]}`,
+        `/api/${apiURL}/${rowToDelete[uniqueField]}/${eventType || ""}`,
         {
           method: "DELETE",
         }
       );
 
       if (!response.ok) {
-        // Check for non-successful HTTP status codes
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       setAlert({
@@ -207,7 +208,6 @@ const EditableDataGrid = ({
 
       setRows(rows.filter((row) => row.id !== id));
     } catch (error) {
-      // Handle any errors that occurred during the fetch operation
       setAlert({ text: `Error deleting ${alertText}`, severity: "error" });
     }
   };
@@ -236,8 +236,8 @@ const EditableDataGrid = ({
     });
 
     const apiUrl = newRow.isNew
-      ? `/api/${apiURL}`
-      : `/api/${apiURL}/${oldRow[uniqueField]}`;
+      ? `/api/${apiURL}/${eventType || ""}`
+      : `/api/${apiURL}/${oldRow[uniqueField]}/${eventType || ""}`;
 
     try {
       const method = newRow.isNew ? "POST" : "PUT";
@@ -248,6 +248,12 @@ const EditableDataGrid = ({
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        throw new Error(data.message);
       }
 
       const actionText = newRow.isNew ? "created" : "updated";
@@ -264,14 +270,11 @@ const EditableDataGrid = ({
 
       return updatedRow;
     } catch (error) {
-      const actionText = newRow.isNew ? "creating" : "updating";
-      setAlert({ text: `Error ${actionText} ${alertText}`, severity: "error" });
+      setAlert({ text: `${error}`, severity: "error" });
     }
   });
 
-  const handleProcessRowUpdateError = useCallback((error) => {
-    setAlert({ text: `Error updating ${alertText}`, severity: "error" });
-  }, []);
+  const handleProcessRowUpdateError = useCallback((error) => {}, []);
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     id: false,
