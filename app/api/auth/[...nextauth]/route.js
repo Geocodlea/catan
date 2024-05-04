@@ -27,10 +27,12 @@ export const authOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
       version: "2.0", // opt-in to Twitter OAuth 2.0
     }),
     EmailProvider({
