@@ -28,13 +28,13 @@ import AlertMsg from "./AlertMsg";
 import ReactNodeCell from "./ReactNodeCell";
 
 function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
-  const handleClick = () => {
+  const addRecord = () => {
     let id;
     if (rows.length === 0) {
-      id = 1;
+      id = "1";
     } else {
       const lastId = rows[rows.length - 1].id;
-      id = lastId + 1;
+      id = `${parseInt(lastId) + 1}`;
     }
 
     setRows((oldRows) => [...oldRows, { id, isNew: true }]);
@@ -49,7 +49,7 @@ function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
       sx={{ display: "flex", justifyContent: "space-between" }}
     >
       {showAddRecord && (
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        <Button color="primary" startIcon={<AddIcon />} onClick={addRecord}>
           Add record
         </Button>
       )}

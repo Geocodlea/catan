@@ -8,8 +8,11 @@ import Event from "/models/Event";
 import Tabs from "@/components/Tabs";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
+import Stack from "@mui/material/Stack";
 import Register from "./Register";
 import Participants from "./Participants";
+import Amical from "./Amical";
+
 export default async function EventPage({ params }) {
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "admin";
@@ -53,7 +56,12 @@ export default async function EventPage({ params }) {
   if (isAdmin) {
     tabs.push({
       label: "Participanti",
-      content: <Participants type={params.id[0]} />,
+      content: (
+        <Stack spacing={4}>
+          <Participants type={params.id[0]} />
+          <Amical type={params.id[0]} />
+        </Stack>
+      ),
     });
   }
 
