@@ -1,4 +1,5 @@
 "use client";
+import ObjectID from "bson-objectid";
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -29,13 +30,7 @@ import ReactNodeCell from "./ReactNodeCell";
 
 function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
   const addRecord = () => {
-    let id;
-    if (rows.length === 0) {
-      id = "1";
-    } else {
-      const lastId = rows[rows.length - 1].id;
-      id = `${parseInt(lastId) + 1}`;
-    }
+    const id = ObjectID().toString();
 
     setRows((oldRows) => [...oldRows, { id, isNew: true }]);
     setRowModesModel((oldModel) => ({
@@ -194,6 +189,13 @@ const EditableDataGrid = ({
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        throw new Error(data.message);
+      }
+
       setAlert({
         text: `Successfully deleted ${alertText}`,
         severity: "success",
@@ -201,7 +203,7 @@ const EditableDataGrid = ({
 
       setRows(rows.filter((row) => row.id !== id));
     } catch (error) {
-      setAlert({ text: `Error deleting ${alertText}`, severity: "error" });
+      setAlert({ text: `${error}`, severity: "error" });
     }
   };
 

@@ -82,7 +82,6 @@ export async function PUT(request, { params }) {
     email: data.email,
     _id: { $ne: params.id },
   });
-
   if (emailExists) {
     return NextResponse.json({
       success: false,
@@ -90,14 +89,20 @@ export async function PUT(request, { params }) {
     });
   }
 
-  await User.updateOne({ _id: params.id }, data);
+  const updatedUser = await User.findOneAndUpdate({ _id: params.id }, data);
 
-  return NextResponse.json({ success: true });
+  const success = !!updatedUser;
+  return NextResponse.json({ success, message: "User-ul nu există" });
 }
 
 export async function DELETE(request, { params }) {
   await dbConnect();
-  await User.deleteOne({ _id: params.id });
+  const deletedUser = await User.findOneAndDelete({ _id: params.id });
+
+  if (!deletedUser) {
+    return NextResponse.json({ success: false, message: "User-ul nu există" });
+  }
+
   await Account.deleteMany({ userId: params.id });
 
   // List all files for deleted user
