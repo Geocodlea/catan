@@ -39,4 +39,21 @@ const createAmicalModel = (event) => {
   return global.models[modelName];
 };
 
-export { createParticipantsModel, createAmicalModel };
+const createVerificationsModel = (event) => {
+  const schema = new mongoose.Schema(
+    {
+      id: { type: mongoose.Schema.Types.ObjectId },
+      runda: { type: Number },
+      stop: { type: Boolean },
+    },
+    { collection: `verificari_live_${event}` }
+  );
+
+  const modelName = `Verificari_live_${event}`;
+  global.models[modelName] =
+    global.models[modelName] || mongoose.model(modelName, schema);
+
+  return global.models[modelName];
+};
+
+export { createParticipantsModel, createAmicalModel, createVerificationsModel };

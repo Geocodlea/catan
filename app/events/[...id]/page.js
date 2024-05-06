@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import Register from "./Register";
 import Participants from "./Participants";
 import Amical from "./Amical";
+import Admin from "./Admin";
 
 export default async function EventPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -54,15 +55,21 @@ export default async function EventPage({ params }) {
   ];
 
   if (isAdmin) {
-    tabs.push({
-      label: "Participanti",
-      content: (
-        <Stack spacing={4}>
-          <Participants type={params.id[0]} />
-          <Amical type={params.id[0]} />
-        </Stack>
-      ),
-    });
+    tabs.push(
+      {
+        label: "Participanti",
+        content: (
+          <Stack spacing={4}>
+            <Participants type={params.id[0]} />
+            <Amical type={params.id[0]} />
+          </Stack>
+        ),
+      },
+      {
+        label: "Admin",
+        content: <Admin type={params.id[0]} />,
+      }
+    );
   }
 
   return (
