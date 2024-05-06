@@ -53,6 +53,16 @@ export async function PATCH(request, { params }) {
     // Pipe the buffer into the write stream
     writeStream.end(buffer);
 
+    // Delete old image
+    const [files] = await bucket.getFiles({
+      prefix: `uploads/users/${params.id}/`,
+    });
+    await Promise.all(
+      files.map(async (file) => {
+        await file.delete();
+      })
+    );
+
     // Wait for the file upload to complete
     await uploadPromise;
 
