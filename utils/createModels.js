@@ -42,9 +42,13 @@ const createAmicalModel = (event) => {
 const createVerificationsModel = (event) => {
   const schema = new mongoose.Schema(
     {
-      id: { type: mongoose.Schema.Types.ObjectId },
+      id: { type: String },
       runda: { type: Number },
       stop: { type: Boolean },
+      meci1: { type: String },
+      meci2: { type: String },
+      rude: { type: String },
+      masa_redusa: { type: String },
     },
     { collection: `verificari_live_${event}` }
   );

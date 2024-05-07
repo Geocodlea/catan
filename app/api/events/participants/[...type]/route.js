@@ -6,7 +6,9 @@ export async function GET(request, { params }) {
   const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
 
   await dbConnect();
-  const participants = await ParticipantType.find().select("id name email");
+  const participants = await ParticipantType.find()
+    .select("id name email")
+    .sort("_id");
 
   return NextResponse.json(participants);
 }
