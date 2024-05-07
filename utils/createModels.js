@@ -60,4 +60,29 @@ const createVerificationsModel = (event) => {
   return global.models[modelName];
 };
 
-export { createParticipantsModel, createAmicalModel, createVerificationsModel };
+const createMatchesModel = (event, round) => {
+  const schema = new mongoose.Schema(
+    {
+      id: { type: String },
+      table: { type: Number },
+      name: { type: String },
+      scor: { type: String },
+      host: { type: String },
+      img: { type: String },
+    },
+    { collection: `meciuri_live_${event}_${round}` }
+  );
+
+  const modelName = `Meciuri_live_${event}_${round}`;
+  global.models[modelName] =
+    global.models[modelName] || mongoose.model(modelName, schema);
+
+  return global.models[modelName];
+};
+
+export {
+  createParticipantsModel,
+  createAmicalModel,
+  createVerificationsModel,
+  createMatchesModel,
+};

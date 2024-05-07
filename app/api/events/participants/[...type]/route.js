@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
 
   await dbConnect();
   const participants = await ParticipantType.find()
-    .select("id name email")
+    .select("id name email obs rude")
     .sort("_id");
 
   return NextResponse.json(participants);

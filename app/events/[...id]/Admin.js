@@ -8,15 +8,19 @@ import AlertMsg from "@/components/AlertMsg";
 
 export default function Admin({ type }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const round = 1;
 
   const start = async (players) => {
     try {
-      const response = await fetch(`/api/events/start/${type}/${players}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/api/events/start/${type}/${players}/${round}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
