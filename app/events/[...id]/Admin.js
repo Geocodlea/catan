@@ -3,14 +3,17 @@
 import { useState } from "react";
 import styles from "@/app/page.module.css";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 import AlertMsg from "@/components/AlertMsg";
 
 export default function Admin({ type }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const [loading, setLoading] = useState(false);
   const round = 1;
 
   const start = async (players) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `/api/events/start/${type}/${players}/${round}`,
@@ -30,6 +33,7 @@ export default function Admin({ type }) {
         throw new Error(data.message);
       }
 
+      setLoading(false);
       setAlert({
         text: `Generare meciuri cu succes`,
         severity: "success",
@@ -70,13 +74,15 @@ export default function Admin({ type }) {
     startButton = (
       <Box>
         <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
-        <Button
+        <LoadingButton
+          loading={loading}
+          loadingIndicator="Generating..."
           variant="contained"
           className="btn btn-primary"
           onClick={() => start(4)}
         >
           Start
-        </Button>
+        </LoadingButton>
       </Box>
     );
   } else {
@@ -84,33 +90,39 @@ export default function Admin({ type }) {
       <Stack spacing={2}>
         <Box>
           <Typography gutterBottom>Generare meciuri 6 juc.</Typography>
-          <Button
+          <LoadingButton
+            loading={loading}
+            loadingIndicator="Generating..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(6)}
           >
             Start
-          </Button>
+          </LoadingButton>
         </Box>
         <Box>
           <Typography gutterBottom>Generare meciuri 5 juc.</Typography>
-          <Button
+          <LoadingButton
+            loading={loading}
+            loadingIndicator="Generating..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(5)}
           >
             Start
-          </Button>
+          </LoadingButton>
         </Box>
         <Box>
           <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
-          <Button
+          <LoadingButton
+            loading={loading}
+            loadingIndicator="Generating..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(4)}
           >
             Start
-          </Button>
+          </LoadingButton>
         </Box>
       </Stack>
     );
