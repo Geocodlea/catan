@@ -1,5 +1,6 @@
 "use client";
 
+//import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "@/app/page.module.css";
 import { Box, Button, Stack, Typography } from "@mui/material";
@@ -7,16 +8,16 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import AlertMsg from "@/components/AlertMsg";
 
-export default function Admin({ type }) {
+export default function Admin({ type, id, round }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loading, setLoading] = useState(false);
-  const round = 1;
+  //  const router = useRouter();
 
   const start = async (players) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/events/start/${type}/${players}/${round}`,
+        `/api/events/start/${type}/${players}/${round + 1}`,
         {
           method: "POST",
           headers: {
@@ -38,6 +39,8 @@ export default function Admin({ type }) {
         text: `Generare meciuri cu succes`,
         severity: "success",
       });
+
+      // router.push(`/events/${type}/${id}`);
     } catch (error) {
       setAlert({ text: `${error}`, severity: "error" });
     }

@@ -43,7 +43,7 @@ const createVerificationsModel = (event) => {
   const schema = new mongoose.Schema(
     {
       id: { type: String },
-      runda: { type: Number },
+      round: { type: Number },
       stop: { type: Boolean },
       meci1: { type: String },
       meci2: { type: String },
@@ -80,9 +80,26 @@ const createMatchesModel = (event, round) => {
   return global.models[modelName];
 };
 
+const createClasamentModel = (event) => {
+  const schema = new mongoose.Schema(
+    {
+      id: { type: String, required: true },
+      name: { type: String, required: true },
+    },
+    { collection: `clasament_live_${event}` }
+  );
+
+  const modelName = `Clasament_live_${event}`;
+  global.models[modelName] =
+    global.models[modelName] || mongoose.model(modelName, schema);
+
+  return global.models[modelName];
+};
+
 export {
   createParticipantsModel,
   createAmicalModel,
   createVerificationsModel,
   createMatchesModel,
+  createClasamentModel,
 };

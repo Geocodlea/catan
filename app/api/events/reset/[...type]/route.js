@@ -10,7 +10,7 @@ export async function DELETE(request, { params }) {
   await dbConnect();
   await ParticipantType.deleteMany();
 
-  await VerificationsType.updateOne({ runda: 0 }, { stop: false });
+  await VerificationsType.updateOne({ round: 0 }, { stop: false });
 
   return NextResponse.json({ success: true });
 }

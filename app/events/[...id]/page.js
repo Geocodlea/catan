@@ -1,9 +1,10 @@
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { authOptions } from "/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import dynamic from "next/dynamic";
 
 import dbConnect from "/utils/dbConnect";
 import Event from "/models/Event";
+import * as Verifications from "@/models/Verifications";
 
 import Tabs from "@/components/Tabs";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
@@ -18,14 +19,23 @@ export default async function EventPage({ params }) {
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "admin";
 
+  const eventType = params.id[0];
+  const id = params.id[1];
+
+  const VerificationsType = Verifications[`Verificari_live_${eventType}`];
+  const verifications = await VerificationsType.findOne({
+    round: { $exists: true },
+  }).select("round");
+  const round = verifications ? verifications.round : 0;
+
   await dbConnect();
-  const event = await Event.findOne({ _id: params.id[1] }).select(
+  const event = await Event.findOne({ _id: id }).select(
     "detalii premii regulament"
   );
 
   const saveData = async (data, tab) => {
     "use server";
-    await Event.updateOne({ _id: params.id[1] }, { [tab]: data });
+    await Event.updateOne({ _id: id }, { [tab]: data });
   };
 
   const editorContent = (event, tab) =>
@@ -50,7 +60,7 @@ export default async function EventPage({ params }) {
     },
     {
       label: "Inscriere",
-      content: <Register session={session} type={params.id[0]} />,
+      content: <Register session={session} type={eventType} />,
     },
   ];
 
@@ -60,14 +70,14 @@ export default async function EventPage({ params }) {
         label: "Participanti",
         content: (
           <Stack spacing={4}>
-            <Participants type={params.id[0]} />
-            <Amical type={params.id[0]} />
+            <Participants type={eventType} />
+            <Amical type={eventType} />
           </Stack>
         ),
       },
       {
         label: "Admin",
-        content: <Admin type={params.id[0]} />,
+        content: <Admin type={eventType} id={id} round={round} />,
       }
     );
   }

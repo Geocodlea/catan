@@ -1,4 +1,4 @@
-import styles from "../page.module.css";
+import styles from "/app/page.module.css";
 
 import { Box, Typography, Stack, Avatar } from "@mui/material";
 

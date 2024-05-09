@@ -4,13 +4,13 @@ import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
-import styles from "../app/page.module.css";
+import styles from "/app/page.module.css";
 import { Box, Paper, Typography, Button } from "@mui/material";
 
 import dbConnect from "/utils/dbConnect";
 import Event from "/models/Event";
 import DeleteEvent from "./admin/DeleteEvent";
-import AlertMsg from "../components/AlertMsg";
+import AlertMsg from "@/components/AlertMsg";
 
 import { redirect } from "next/navigation";
 

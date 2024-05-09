@@ -1,8 +1,11 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+
 import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
+import * as Clasament from "@/models/Clasament";
 
 import { createMatches } from "@/utils/createMatches";
 
@@ -14,6 +17,7 @@ export async function POST(request, { params }) {
   const ParticipantType = Participants[`Participanti_live_${eventType}`];
   const VerificationsType = Verifications[`Verificari_live_${eventType}`];
   const MatchesType = Matches[`Meciuri_live_${eventType}_${round}`];
+  const ClasamentType = Clasament[`Clasament_live_${eventType}`];
 
   await dbConnect();
   const participantsNumber = await ParticipantType.countDocuments();
@@ -37,7 +41,7 @@ export async function POST(request, { params }) {
   // DE STERS LA FINAL !!!
   await VerificationsType.deleteMany();
   await VerificationsType.updateOne(
-    { runda: 0 },
+    { round: 0 },
     { stop: true },
     { upsert: true }
   );
@@ -53,6 +57,32 @@ export async function POST(request, { params }) {
     MatchesType,
     randomParticipants
   );
+
+  // DE STERS LA FINAL !!!
+  await ClasamentType.deleteMany();
+  await ClasamentType.insertMany(randomParticipants);
+
+  await VerificationsType.updateOne({ round: 0 }, { round: 1 });
+
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  // Send emails to all participants
+  randomParticipants
+    .filter((participant) => participant.email)
+    .forEach(async (participant) => {
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: participant.email,
+        subject: `Concurs ${eventType}`,
+        text: `Start runda ${round}`,
+      });
+    });
 
   return NextResponse.json({ success: true });
 }
