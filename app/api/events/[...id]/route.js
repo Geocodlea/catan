@@ -17,6 +17,26 @@ const storage = new Storage({
 const bucketName = "geo_bucket_1";
 const bucket = storage.bucket(bucketName);
 
+export async function GET(request, { params }) {
+  await dbConnect();
+  const event = await Event.findOne({ _id: params.id[0] }).select(
+    "detalii premii regulament"
+  );
+
+  return NextResponse.json(event);
+}
+
+// Edit Event text: detalii, premii and regulament
+export async function PUT(request, { params }) {
+  const body = await request.json();
+
+  await dbConnect();
+  await Event.updateOne({ _id: params.id[0] }, { [body.tab]: body.data });
+
+  return NextResponse.json({ success: true });
+}
+
+// Edit Event from homepage
 export async function PATCH(request, { params }) {
   const formData = await request.formData();
   const data = {};
