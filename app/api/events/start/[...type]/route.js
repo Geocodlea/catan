@@ -10,9 +10,7 @@ import * as Clasament from "@/models/Clasament";
 import { createMatches } from "@/utils/createMatches";
 
 export async function POST(request, { params }) {
-  const eventType = params.type[0];
-  const playersPerTable = params.type[1];
-  const round = params.type[2];
+  const [eventType, playersPerTable, round] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${eventType}`];
   const VerificationsType = Verifications[`Verificari_live_${eventType}`];

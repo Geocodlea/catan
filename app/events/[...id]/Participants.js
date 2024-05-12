@@ -55,7 +55,9 @@ export default function Participanti({ type }) {
 
   return (
     <div>
-      <Typography variant="h3">Participanți</Typography>
+      <Typography variant="h3" gutterBottom>
+        Participanți
+      </Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={participants}

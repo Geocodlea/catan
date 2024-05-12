@@ -66,7 +66,7 @@ const createMatchesModel = (event, round) => {
       id: { type: String },
       table: { type: Number },
       name: { type: String },
-      scor: { type: String },
+      score: { type: String },
       host: { type: String },
       img: { type: String },
     },

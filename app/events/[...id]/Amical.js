@@ -49,7 +49,9 @@ export default function Amical({ type }) {
 
   return (
     <div>
-      <Typography variant="h3">Amical</Typography>
+      <Typography variant="h3" gutterBottom>
+        Amical
+      </Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={participants}

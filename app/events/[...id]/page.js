@@ -5,8 +5,8 @@ import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Tabs from "@/components/Tabs";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
-import AlertMsg from "@/components/AlertMsg";
 
+import AlertMsg from "@/components/AlertMsg";
 import Stack from "@mui/material/Stack";
 import Register from "./Register";
 import Participants from "./Participants";
@@ -94,7 +94,16 @@ export default function EventPage({ params }) {
 
   if (eventStarted) {
     tabs.push(
-      { label: "Meci Propriu", content: <PersonalMatch /> },
+      {
+        label: "Meci Propriu",
+        content: (
+          <PersonalMatch
+            type={eventType}
+            round={round}
+            userID={session?.user.id}
+          />
+        ),
+      },
       { label: "Meciuri", content: <Matches /> },
       { label: "Clasament", content: <Ranking /> }
     );
