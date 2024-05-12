@@ -16,12 +16,15 @@ export default function PersonalMatch({ type, round, userID }) {
     getPersonalMatch();
   }, [round]);
 
-  console.log(participants);
-
   const columnsData = [
     {
       field: "id",
       headerName: "id",
+    },
+    {
+      field: "table",
+      headerName: "masa",
+      hidden: true,
     },
     {
       field: "nr",
@@ -53,11 +56,14 @@ export default function PersonalMatch({ type, round, userID }) {
           columnsData={columnsData}
           rowsData={participants}
           pageSize={10}
-          showActions={true}
           apiURL={"/events/personalMatch"}
           eventType={type}
+          round={round}
           alertText={"participant"}
           disableColumnMenu={true}
+          hideSearch={true}
+          hideFooter={true}
+          hiddenColumn={"table"}
         />
       ) : (
         <p>

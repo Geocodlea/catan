@@ -28,7 +28,13 @@ import DialogActions from "@mui/material/DialogActions";
 import AlertMsg from "./AlertMsg";
 import ReactNodeCell from "./ReactNodeCell";
 
-function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
+function EditToolbar({
+  rows,
+  setRows,
+  setRowModesModel,
+  showAddRecord,
+  hideSearch,
+}) {
   const addRecord = () => {
     const id = ObjectID().toString();
 
@@ -49,7 +55,7 @@ function EditToolbar({ rows, setRows, setRowModesModel, showAddRecord }) {
         </Button>
       )}
       <Box></Box>
-      <GridToolbarQuickFilter />
+      {!hideSearch && <GridToolbarQuickFilter />}
     </GridToolbarContainer>
   );
 }
@@ -59,6 +65,7 @@ const EditableDataGrid = ({
   rowsData,
   apiURL,
   eventType,
+  round,
   alertText,
   showAddRecord,
   showActions,
@@ -67,6 +74,8 @@ const EditableDataGrid = ({
   pageSize,
   density,
   hideFooter,
+  hideSearch,
+  hiddenColumn,
   loading,
 }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
@@ -87,6 +96,7 @@ const EditableDataGrid = ({
     cellClassName: item.cellClassName,
     headerAlign: item.headerAlign,
     align: item.align,
+    hidden: item.hidden,
     renderCell: ReactNodeCell,
   }));
 
@@ -232,7 +242,7 @@ const EditableDataGrid = ({
 
     const apiUrl = newRow.isNew
       ? `/api/${apiURL}/${eventType || ""}`
-      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}`;
+      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}/${round || ""}`;
 
     try {
       const method = newRow.isNew ? "POST" : "PUT";
@@ -271,13 +281,14 @@ const EditableDataGrid = ({
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     id: false,
+    [hiddenColumn]: false,
   });
 
   return (
     <Paper
       elevation={24}
       sx={{
-        height: 500,
+        height: "auto",
         width: "100%",
         marginTop: "1rem",
         "& .actions": {
@@ -342,6 +353,7 @@ const EditableDataGrid = ({
             setRows,
             setRowModesModel,
             showAddRecord,
+            hideSearch,
           },
         }}
         initialState={{
@@ -356,6 +368,7 @@ const EditableDataGrid = ({
         columnVisibilityModel={columnVisibilityModel}
         columnGroupingModel={columnGroupingModel}
         hideFooter={hideFooter}
+        autoHeight={true}
         getRowClassName={(params) => {
           if (params.indexRelativeToCurrentPage % 2 === 0)
             return "table-striped";

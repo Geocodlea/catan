@@ -1,6 +1,7 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
+import * as Verifications from "@/models/Verifications";
 
 export async function POST(request, { params }) {
   const session = await request.json();
@@ -10,8 +11,18 @@ export async function POST(request, { params }) {
   }
 
   const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
+  const VerificationsType = Verifications[`Verificari_live_${params.type[0]}`];
 
   await dbConnect();
+  const eventStarted = await VerificationsType.findOne({
+    round: { $gt: 0 },
+  });
+  if (eventStarted) {
+    return NextResponse.json({
+      success: false,
+      message: "Evenimentul este început",
+    });
+  }
 
   const registeredParticipant = await ParticipantType.findOne({
     id: session.user.id,
