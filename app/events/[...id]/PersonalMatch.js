@@ -49,7 +49,7 @@ export default function PersonalMatch({ type, round, userID }) {
   return (
     <Box sx={{ margin: "auto", maxWidth: "800px" }}>
       <Typography variant="h3" gutterBottom>
-        Meci Propriu
+        Meci Propriu - Masa {participants[0]?.table}
       </Typography>
       {participants.length ? (
         <EditableDataGrid

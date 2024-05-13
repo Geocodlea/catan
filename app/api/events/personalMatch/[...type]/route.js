@@ -3,6 +3,8 @@ import * as Matches from "/models/Matches";
 import { NextResponse } from "next/server";
 import * as Verifications from "@/models/Verifications";
 
+import { calculateScores } from "@/utils/calculateScores";
+
 export async function GET(request, { params }) {
   const [type, round, userID] = params.type;
 
@@ -62,10 +64,15 @@ export async function PUT(request, { params }) {
 
   const scores = await MatchType.find({
     table: data.table,
-  }).select("score");
+  })
+    .select("score")
+    .sort({ score: -1 });
 
-  const playersNumber = scores.length;
-  console.log(playersNumber, scores);
+  console.log(scores);
+
+  const points = calculateScores(type, scores);
+
+  console.log(points);
 
   return NextResponse.json({ success: true });
 }
