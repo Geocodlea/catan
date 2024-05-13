@@ -2,8 +2,40 @@ import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import { Box, Typography } from "@mui/material";
 
-export default function PersonalMatch({ type, round, userID }) {
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import { CustomFileUpload } from "@/utils/formsHelper";
+import AlertMsg from "/components/AlertMsg";
+
+const FILE_SIZE = 5000000; // 5 MB
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+
+const initialValues = {
+  image: "",
+};
+
+const validationSchema = Yup.object().shape({
+  image: Yup.mixed()
+    .required("Image is Required")
+    .test(
+      "fileSize",
+      "File size is too large",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Unsupported file type",
+      (value) =>
+        value === null || (value && SUPPORTED_FORMATS.includes(value.type))
+    ),
+});
+
+export default function PersonalMatch({ type, round, userID, playerName }) {
   const [participants, setParticipants] = useState([]);
+  const [alert, setAlert] = useState({ text: "", severity: "" });
 
   useEffect(() => {
     const getPersonalMatch = async () => {
@@ -46,25 +78,100 @@ export default function PersonalMatch({ type, round, userID }) {
     },
   ];
 
+  const onSubmit = async (values) => {
+    try {
+      let formData = new FormData();
+
+      formData.append("image", values.image);
+
+      const response = await fetch(
+        `/api/events/personalMatch/${type}/${round}/${userID}`,
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        // Check for non-successful HTTP status codes
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setAlert({ text: "Image uploaded successfully", severity: "success" });
+    } catch (error) {
+      // Handle any errors that occurred during the fetch operation
+      setAlert({ text: "Error uploading image", severity: "error" });
+    }
+  };
+
   return (
     <Box sx={{ margin: "auto", maxWidth: "800px" }}>
-      <Typography variant="h3" gutterBottom>
-        Meci Propriu - Masa {participants[0]?.table}
-      </Typography>
       {participants.length ? (
-        <EditableDataGrid
-          columnsData={columnsData}
-          rowsData={participants}
-          pageSize={10}
-          apiURL={"/events/personalMatch"}
-          eventType={type}
-          round={round}
-          alertText={"participant"}
-          disableColumnMenu={true}
-          hideSearch={true}
-          hideFooter={true}
-          hiddenColumn={"table"}
-        />
+        <>
+          <Typography variant="h3" gutterBottom>
+            Meci Propriu - Masa {participants[0]?.table}
+          </Typography>
+          <EditableDataGrid
+            columnsData={columnsData}
+            rowsData={participants}
+            pageSize={10}
+            apiURL={"/events/personalMatch"}
+            eventType={type}
+            round={round}
+            playerName={playerName}
+            alertText={"participant"}
+            disableColumnMenu={true}
+            hideSearch={true}
+            hideFooter={true}
+            hiddenColumn={"table"}
+          />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form style={{ margin: "1rem 0" }}>
+                <Field
+                  name="image"
+                  component={CustomFileUpload}
+                  label="Image"
+                  type="file"
+                  accept="image/*"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+
+                <Box
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <LoadingButton
+                    type="submit"
+                    loading={isSubmitting}
+                    loadingIndicator="Uploading..."
+                    variant="contained"
+                    className="btn btn-primary"
+                    sx={{ marginTop: "12px", marginBottom: "20px" }}
+                  >
+                    Upload image
+                  </LoadingButton>
+                  <AlertMsg alert={alert} />
+                </Box>
+              </Form>
+            )}
+          </Formik>
+          <p style={{ textAlign: "justify" }}>
+            Rugăm primul jucător afișat la această masă să introducă mai sus, la
+            finalul meciului, rezultatele tuturor de la masa sa și să încarce o
+            poză cu masa de joc, de unde să reiasă punctajele. Ceilalți, vă
+            rugăm să verificați în secțiunea Meciuri și Clasament corectitudinea
+            informațiilor afișate. Secțiunile Meciuri și Clasament se
+            actualizează automat la fiecare 30 sec.
+          </p>
+        </>
       ) : (
         <p>
           Salutare, în prezent este deja activ un eveniment. Îi poți urmări

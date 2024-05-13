@@ -1,7 +1,7 @@
 "use client";
 import ObjectID from "bson-objectid";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -66,6 +66,7 @@ const EditableDataGrid = ({
   apiURL,
   eventType,
   round,
+  playerName,
   alertText,
   showAddRecord,
   showActions,
@@ -242,7 +243,9 @@ const EditableDataGrid = ({
 
     const apiUrl = newRow.isNew
       ? `/api/${apiURL}/${eventType || ""}`
-      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}/${round || ""}`;
+      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}/${round || ""}/${
+          playerName || ""
+        }`;
 
     try {
       const method = newRow.isNew ? "POST" : "PUT";

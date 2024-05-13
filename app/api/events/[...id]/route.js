@@ -14,7 +14,7 @@ const storage = new Storage({
 });
 
 // Google Cloud Storage bucket name
-const bucketName = "geo_bucket_1";
+const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
 export async function GET(request, { params }) {
@@ -56,7 +56,7 @@ export async function PATCH(request, { params }) {
     const filename = `${uuidv4()}-${data.image.name}`;
 
     // GCS object (path) where the file will be stored
-    const gcsObject = bucket.file(`uploads/events/${filename}`);
+    const gcsObject = bucket.file(`uploads/events/${params.id}/${filename}`);
 
     // Create a write stream and upload the file to Google Cloud Storage
     const writeStream = gcsObject.createWriteStream({
@@ -65,13 +65,16 @@ export async function PATCH(request, { params }) {
     writeStream.end(buffer);
 
     // Update the data with the Google Cloud Storage URL
-    data.image = `https://storage.googleapis.com/${bucketName}/uploads/events/${filename}`;
+    data.image = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
 
     // Find old event image and delete it, before uploading the new one
     const event = await Event.findOne({ _id: params.id });
 
-    // Trim de full URL, to get only the bucket
-    const imgURL = event.image.slice(44);
+    // Remove the prefix to get only the bucket
+    const imgURL = event.image.replace(
+      `https://storage.googleapis.com/${bucketName}/`,
+      ""
+    );
 
     const gcsImgObject = bucket.file(imgURL);
     await gcsImgObject.delete();

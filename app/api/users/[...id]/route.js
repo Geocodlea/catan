@@ -16,7 +16,7 @@ const storage = new Storage({
 });
 
 // Google Cloud Storage bucket name
-const bucketName = "geo_bucket_1";
+const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
 // Update user from profile
@@ -67,7 +67,7 @@ export async function PATCH(request, { params }) {
     await uploadPromise;
 
     // Update the data with the Google Cloud Storage URL
-    data.image = `https://storage.googleapis.com/${bucketName}/uploads/users/${params.id}/${filename}`;
+    data.image = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
   }
 
   await dbConnect();

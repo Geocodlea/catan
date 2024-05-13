@@ -26,7 +26,7 @@ const storage = new Storage({
 });
 
 // Google Cloud Storage bucket name
-const bucketName = "geo_bucket_1";
+const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
 const Events = async ({ searchParams }) => {
@@ -45,8 +45,11 @@ const Events = async ({ searchParams }) => {
       // Find gcs event image and delete it, before deleting the event
       const event = await Event.findOne({ _id: id });
 
-      // Trim de full URL, to get only the bucket
-      const imgURL = event.image.slice(44);
+      // Remove the prefix to get only the bucket
+      const imgURL = event.image.replace(
+        `https://storage.googleapis.com/${bucketName}/`,
+        ""
+      );
 
       const gcsObject = bucket.file(imgURL);
       await gcsObject.delete();

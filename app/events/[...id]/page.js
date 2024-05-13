@@ -101,6 +101,7 @@ export default function EventPage({ params }) {
             type={eventType}
             round={round}
             userID={session?.user.id}
+            playerName={session?.user.name}
           />
         ),
       },
