@@ -85,15 +85,12 @@ export async function PUT(request, { params }) {
     .select("id score table")
     .sort({ score: -1 });
 
-  console.log(players);
-
   const ids = players.map((player) => player.id);
   const scores = players.map((player) => player.score);
   const table = players[0].table;
+  const totalScore = scores.reduce((a, b) => a + b, 0);
 
   const points = calculateScores(type, scores);
-
-  console.log(points);
 
   await ClasamentType.updateMany({ id: { $in: ids } }, [
     {
@@ -104,6 +101,117 @@ export async function PUT(request, { params }) {
         },
         [`scorjocr${round}`]: {
           $arrayElemAt: [scores, { $indexOfArray: [ids, "$id"] }],
+        },
+        [`scortotalr${round}`]: totalScore,
+      },
+    },
+  ]);
+
+  if (type === "whist") {
+    let maxScore;
+    switch (players.length) {
+      case 4:
+        maxScore = 242;
+        break;
+      case 5:
+        maxScore = 274;
+        break;
+      case 6:
+        maxScore = 306;
+        break;
+    }
+
+    await ClasamentType.updateMany({ id: { $in: ids } }, [
+      {
+        $set: {
+          punctetotal: {
+            $add: [
+              { $ifNull: ["$puncter1", 0] },
+              { $ifNull: ["$puncter2", 0] },
+            ],
+          },
+          scorjocuri: {
+            $add: [
+              { $ifNull: ["$scorjocr1", 0] },
+              { $ifNull: ["$scorjocr2", 0] },
+            ],
+          },
+          scortotal: maxScore,
+          procent: {
+            $trunc: [
+              {
+                $multiply: [
+                  {
+                    $divide: ["$scorjocr1", maxScore],
+                  },
+                  100, // Multiply by 100
+                ],
+              },
+              2, // Number of decimal places
+            ],
+          },
+        },
+      },
+    ]);
+
+    return NextResponse.json({ success: true });
+  }
+
+  await ClasamentType.updateMany({ id: { $in: ids } }, [
+    {
+      $set: {
+        punctetotal: {
+          $add: [
+            { $ifNull: ["$puncter1", 0] },
+            { $ifNull: ["$puncter2", 0] },
+            { $ifNull: ["$puncter3", 0] },
+          ],
+        },
+        scorjocuri: {
+          $add: [
+            { $ifNull: ["$scorjocr1", 0] },
+            { $ifNull: ["$scorjocr2", 0] },
+            { $ifNull: ["$scorjocr3", 0] },
+          ],
+        },
+        scortotal: {
+          $add: [
+            { $ifNull: ["$scortotalr1", 0] },
+            { $ifNull: ["$scortotalr2", 0] },
+            { $ifNull: ["$scortotalr3", 0] },
+          ],
+        },
+        procent: {
+          $trunc: [
+            {
+              $multiply: [
+                {
+                  $add: [
+                    {
+                      $divide: [
+                        { $ifNull: ["$scorjocr1", 0] },
+                        { $ifNull: ["$scortotalr1", 1] }, // Avoid division by zero by defaulting to 1
+                      ],
+                    },
+                    {
+                      $divide: [
+                        { $ifNull: ["$scorjocr2", 0] },
+                        { $ifNull: ["$scortotalr2", 1] },
+                      ],
+                    },
+                    {
+                      $divide: [
+                        { $ifNull: ["$scorjocr3", 0] },
+                        { $ifNull: ["$scortotalr3", 1] },
+                      ],
+                    },
+                  ],
+                },
+                100, // Multiply by 100
+              ],
+            },
+            2, // Number of decimal places
+          ],
         },
       },
     },

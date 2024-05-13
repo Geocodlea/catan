@@ -92,8 +92,14 @@ const createClasamentModel = (event) => {
       puncter2: { type: Number },
       puncter3: { type: Number },
       scorjocr1: { type: Number },
+      scortotalr1: { type: Number },
       scorjocr2: { type: Number },
+      scortotalr2: { type: Number },
       scorjocr3: { type: Number },
+      scortotalr3: { type: Number },
+      scorjocuri: { type: Number },
+      scortotal: { type: Number },
+      procent: { type: Number },
     },
     { collection: `clasament_live_${event}` }
   );

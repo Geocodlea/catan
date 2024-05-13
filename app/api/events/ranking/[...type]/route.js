@@ -8,7 +8,20 @@ export async function GET(request, { params }) {
   const ClasamentType = Clasament[`Clasament_live_${type}`];
 
   await dbConnect();
-  const clasament = await ClasamentType.find();
+  if (type === "whist") {
+    const clasament = await ClasamentType.find().sort({
+      punctetotal: -1,
+      procent: -1,
+    });
+
+    return NextResponse.json(clasament);
+  }
+
+  const clasament = await ClasamentType.find().sort({
+    punctetotal: -1,
+    scorjocuri: -1,
+    procent: -1,
+  });
 
   return NextResponse.json(clasament);
 }
