@@ -1,7 +1,9 @@
+import { NextResponse } from "next/server";
 import dbConnect from "/utils/dbConnect";
 import * as Matches from "/models/Matches";
-import { NextResponse } from "next/server";
 import * as Verifications from "@/models/Verifications";
+import * as Clasament from "/models/Clasament";
+
 import { v4 as uuidv4 } from "uuid";
 import { Storage } from "@google-cloud/storage";
 import { calculateScores } from "@/utils/calculateScores";
@@ -54,6 +56,7 @@ export async function PUT(request, { params }) {
   const score = Number(data.score);
   const MatchType = Matches[`Meciuri_live_${type}_${round}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
+  const ClasamentType = Clasament[`Clasament_live_${type}`];
 
   await dbConnect();
   const eventFinished = await VerificationsType.findOne({
@@ -76,24 +79,42 @@ export async function PUT(request, { params }) {
     return NextResponse.json({ success: true });
   }
 
-  const scores = await MatchType.find({
+  const players = await MatchType.find({
     table: data.table,
   })
-    .select("score")
+    .select("id score table")
     .sort({ score: -1 });
 
-  console.log(scores);
+  console.log(players);
+
+  const ids = players.map((player) => player.id);
+  const scores = players.map((player) => player.score);
+  const table = players[0].table;
 
   const points = calculateScores(type, scores);
 
   console.log(points);
+
+  await ClasamentType.updateMany({ id: { $in: ids } }, [
+    {
+      $set: {
+        [`masar${round}`]: table,
+        [`puncter${round}`]: {
+          $arrayElemAt: [points, { $indexOfArray: [ids, "$id"] }],
+        },
+        [`scorjocr${round}`]: {
+          $arrayElemAt: [scores, { $indexOfArray: [ids, "$id"] }],
+        },
+      },
+    },
+  ]);
 
   return NextResponse.json({ success: true });
 }
 
 // Uploading scores image
 export async function PATCH(request, { params }) {
-  const [type, round, userID] = params.type;
+  const [type, round, userID, eventID] = params.type;
   const formData = await request.formData();
   const image = formData.get("image");
 
@@ -106,7 +127,7 @@ export async function PATCH(request, { params }) {
   const filename = `${uuidv4()}-${image.name}`;
 
   // GCS object (path) where the file will be stored
-  const gcsObject = bucket.file(`uploads/events/${filename}`);
+  const gcsObject = bucket.file(`uploads/events/${eventID}/${filename}`);
 
   // Create a write stream and upload the file to Google Cloud Storage
   const writeStream = gcsObject.createWriteStream({

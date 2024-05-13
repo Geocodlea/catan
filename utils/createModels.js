@@ -85,6 +85,15 @@ const createClasamentModel = (event) => {
     {
       id: { type: String, required: true },
       name: { type: String, required: true },
+      masar1: { type: Number },
+      masar2: { type: Number },
+      masar3: { type: Number },
+      puncter1: { type: Number },
+      puncter2: { type: Number },
+      puncter3: { type: Number },
+      scorjocr1: { type: Number },
+      scorjocr2: { type: Number },
+      scorjocr3: { type: Number },
     },
     { collection: `clasament_live_${event}` }
   );

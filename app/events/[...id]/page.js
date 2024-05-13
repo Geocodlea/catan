@@ -102,11 +102,12 @@ export default function EventPage({ params }) {
             round={round}
             userID={session?.user.id}
             playerName={session?.user.name}
+            eventID={id}
           />
         ),
       },
       { label: "Meciuri", content: <Matches /> },
-      { label: "Clasament", content: <Ranking /> }
+      { label: "Clasament", content: <Ranking type={eventType} /> }
     );
   }
 

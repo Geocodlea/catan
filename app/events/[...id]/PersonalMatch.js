@@ -33,7 +33,13 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-export default function PersonalMatch({ type, round, userID, playerName }) {
+export default function PersonalMatch({
+  type,
+  round,
+  userID,
+  playerName,
+  eventID,
+}) {
   const [participants, setParticipants] = useState([]);
   const [alert, setAlert] = useState({ text: "", severity: "" });
 
@@ -85,7 +91,7 @@ export default function PersonalMatch({ type, round, userID, playerName }) {
       formData.append("image", values.image);
 
       const response = await fetch(
-        `/api/events/personalMatch/${type}/${round}/${userID}`,
+        `/api/events/personalMatch/${type}/${round}/${userID}/${eventID}`,
         {
           method: "PATCH",
           body: formData,
