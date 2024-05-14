@@ -43,7 +43,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const [id, type, round, username] = params.type;
+  const [type, round, host, id] = params.type;
   const data = await request.json();
   const table = data.table;
 
@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
   }
 
   // Update the score and find if all scores are filled
-  await MatchType.updateOne({ id }, { score, host: username });
+  await MatchType.updateOne({ id }, { score, host });
   const tableScores = await MatchType.find({
     table,
     score: null,

@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
 
 export async function GET(request, { params }) {
-  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
+  const type = params.type[0];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
   const participants = await ParticipantType.find()
@@ -14,6 +15,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
+  const type = params.type[0];
   const data = await request.json();
 
   if (!data.name) {
@@ -23,7 +25,7 @@ export async function POST(request, { params }) {
     });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
   const participant = new ParticipantType(data);
@@ -33,6 +35,7 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const [type, id] = params.type;
   const data = await request.json();
 
   if (!data.name) {
@@ -42,19 +45,20 @@ export async function PUT(request, { params }) {
     });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${params.type[1]}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
-  await ParticipantType.updateOne({ id: params.type[0] }, data);
+  await ParticipantType.updateOne({ id }, data);
 
   return NextResponse.json({ success: true });
 }
 
 export async function DELETE(request, { params }) {
-  const ParticipantType = Participants[`Participanti_live_${params.type[1]}`];
+  const [type, id] = params.type;
+  const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
-  await ParticipantType.deleteOne({ id: params.type[0] });
+  await ParticipantType.deleteOne({ id });
 
   return NextResponse.json({ success: true });
 }

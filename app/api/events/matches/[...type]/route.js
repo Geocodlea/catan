@@ -33,3 +33,12 @@ export async function GET(request, { params }) {
 
   return NextResponse.json(matches);
 }
+
+export async function PUT(request, { params }) {
+  const [id, type, round, playerName] = params.type;
+  const data = await request.json();
+
+  console.log(params);
+
+  return NextResponse.json({ success: true });
+}

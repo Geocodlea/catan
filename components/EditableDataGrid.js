@@ -64,9 +64,6 @@ const EditableDataGrid = ({
   columnsData,
   rowsData,
   apiURL,
-  eventType,
-  round,
-  playerName,
   alertText,
   showAddRecord,
   showActions,
@@ -190,12 +187,9 @@ const EditableDataGrid = ({
     const rowToDelete = rows.find((row) => row.id === id);
 
     try {
-      const response = await fetch(
-        `/api/${apiURL}/${rowToDelete.id}/${eventType || ""}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/${apiURL}/${rowToDelete.id}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -242,10 +236,8 @@ const EditableDataGrid = ({
     });
 
     const apiUrl = newRow.isNew
-      ? `/api/${apiURL}/${eventType || ""}`
-      : `/api/${apiURL}/${oldRow.id}/${eventType || ""}/${round || ""}/${
-          playerName || ""
-        }`;
+      ? `/api/${apiURL}/`
+      : `/api/${apiURL}/${oldRow.id}`;
 
     try {
       const method = newRow.isNew ? "POST" : "PUT";

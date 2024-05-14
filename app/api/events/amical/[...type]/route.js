@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import * as Amical from "@/models/Amical";
 
 export async function GET(request, { params }) {
-  const AmicalType = Amical[`Amical_live_${params.type[0]}`];
+  const type = params.type[0];
+  const AmicalType = Amical[`Amical_live_${type}`];
 
   await dbConnect();
   const amical = await AmicalType.find().select("id name email").sort("_id");
@@ -12,6 +13,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
+  const type = params.type[0];
   const data = await request.json();
 
   if (!data.name) {
@@ -21,7 +23,7 @@ export async function POST(request, { params }) {
     });
   }
 
-  const AmicalType = Amical[`Amical_live_${params.type[0]}`];
+  const AmicalType = Amical[`Amical_live_${type}`];
 
   await dbConnect();
   const participant = new AmicalType(data);
@@ -31,6 +33,7 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const [type, id] = params.type;
   const data = await request.json();
 
   if (!data.name) {
@@ -40,19 +43,20 @@ export async function PUT(request, { params }) {
     });
   }
 
-  const AmicalType = Amical[`Amical_live_${params.type[1]}`];
+  const AmicalType = Amical[`Amical_live_${type}`];
 
   await dbConnect();
-  await AmicalType.updateOne({ id: params.type[0] }, data);
+  await AmicalType.updateOne({ id }, data);
 
   return NextResponse.json({ success: true });
 }
 
 export async function DELETE(request, { params }) {
-  const AmicalType = Amical[`Amical_live_${params.type[1]}`];
+  const [type, id] = params.type;
+  const AmicalType = Amical[`Amical_live_${type}`];
 
   await dbConnect();
-  await AmicalType.deleteOne({ id: params.type[0] });
+  await AmicalType.deleteOne({ id });
 
   return NextResponse.json({ success: true });
 }

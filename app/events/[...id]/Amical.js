@@ -59,8 +59,7 @@ export default function Amical({ type }) {
         density={"compact"}
         showActions={true}
         showAddRecord={true}
-        apiURL={"/events/amical"}
-        eventType={type}
+        apiURL={`/events/amical/${type}`}
         alertText={"participant"}
         disableColumnMenu={true}
       />

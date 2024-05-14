@@ -65,8 +65,7 @@ export default function Participanti({ type }) {
         density={"compact"}
         showActions={true}
         showAddRecord={true}
-        apiURL={"/events/participants"}
-        eventType={type}
+        apiURL={`/events/participants/${type}`}
         alertText={"participant"}
         disableColumnMenu={true}
       />

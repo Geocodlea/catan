@@ -63,10 +63,8 @@ export default function Matches({ type, round, isAdmin }) {
               columnsData={columnsData}
               rowsData={match.participants}
               pageSize={10}
-              apiURL={"/events/matches"}
-              eventType={type}
-              round={round}
-              alertText={"participant"}
+              apiURL={`/events/matches/${type}/${round}/${isAdmin}`}
+              alertText={"player"}
               disableColumnMenu={true}
               hideSearch={true}
               hideFooter={true}
