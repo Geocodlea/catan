@@ -33,7 +33,14 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-export default function PersonalMatch({ type, round, userID, host, eventID }) {
+export default function PersonalMatch({
+  type,
+  round,
+  host,
+  isAdmin,
+  userID,
+  eventID,
+}) {
   const [participants, setParticipants] = useState([]);
   const [alert, setAlert] = useState({ text: "", severity: "" });
 
@@ -113,7 +120,7 @@ export default function PersonalMatch({ type, round, userID, host, eventID }) {
             columnsData={columnsData}
             rowsData={participants}
             pageSize={10}
-            apiURL={`/events/personalMatch/${type}/${round}/${host}`}
+            apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
             alertText={"score"}
             disableColumnMenu={true}
             hideSearch={true}

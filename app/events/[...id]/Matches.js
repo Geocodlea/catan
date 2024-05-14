@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import { Box, Typography, Stack } from "@mui/material";
 
-export default function Matches({ type, round, isAdmin }) {
+export default function Matches({ type, round, host, isAdmin }) {
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function Matches({ type, round, isAdmin }) {
               columnsData={columnsData}
               rowsData={match.participants}
               pageSize={10}
-              apiURL={`/events/matches/${type}/${round}/${isAdmin}`}
+              apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
               alertText={"player"}
               disableColumnMenu={true}
               hideSearch={true}

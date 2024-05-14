@@ -99,15 +99,23 @@ export default function EventPage({ params }) {
           <PersonalMatch
             type={type}
             round={round}
-            userID={session?.user.id}
             host={session?.user.name}
+            isAdmin={isAdmin}
+            userID={session?.user.id}
             eventID={id}
           />
         ),
       },
       {
         label: "Meciuri",
-        content: <Matches type={type} round={round} isAdmin={isAdmin} />,
+        content: (
+          <Matches
+            type={type}
+            round={round}
+            host={session?.user.name}
+            isAdmin={isAdmin}
+          />
+        ),
       },
       { label: "Clasament", content: <Ranking type={type} /> }
     );
