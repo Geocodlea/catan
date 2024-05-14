@@ -50,6 +50,10 @@ export default function Ranking({ type }) {
     };
 
     getRanking();
+
+    const intervalId = setInterval(getRanking, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const columnsData = [

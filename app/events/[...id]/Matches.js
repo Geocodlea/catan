@@ -13,6 +13,10 @@ export default function Matches({ type, round, isAdmin }) {
     };
 
     getMatches();
+
+    const intervalId = setInterval(getMatches, 30000);
+
+    return () => clearInterval(intervalId);
   }, [round]);
 
   const columnsData = [
