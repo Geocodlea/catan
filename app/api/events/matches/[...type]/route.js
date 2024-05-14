@@ -8,9 +8,28 @@ export async function GET(request, { params }) {
   const MatchType = Matches[`Meciuri_live_${type}_${round}`];
 
   await dbConnect();
-  const matches = await MatchType.find()
-    .select("id table name score")
-    .sort("table");
+  const matches = await MatchType.aggregate([
+    {
+      $group: {
+        _id: "$table",
+        participants: {
+          $push: {
+            id: "$id",
+            table: "$table",
+            name: "$name",
+            score: "$score",
+            host: "$host",
+            img: "$img",
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+  ]);
 
   return NextResponse.json(matches);
 }

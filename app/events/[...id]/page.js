@@ -108,13 +108,7 @@ export default function EventPage({ params }) {
       },
       {
         label: "Meciuri",
-        content: (
-          <Matches
-            type={eventType}
-            round={round}
-            playerName={session?.user.name}
-          />
-        ),
+        content: <Matches type={eventType} round={round} isAdmin={isAdmin} />,
       },
       { label: "Clasament", content: <Ranking type={eventType} /> }
     );

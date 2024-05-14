@@ -1,29 +1,15 @@
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import { Box, Typography, Stack } from "@mui/material";
 
-const groupByTable = (participants) => {
-  const groups = [];
-
-  participants.forEach((participant) => {
-    const { table } = participant;
-    if (!groups[table]) {
-      // Check if a group for this table exists
-      groups[table] = []; // If not, initialize it
-    }
-    groups[table].push(participant);
-  });
-
-  return groups;
-};
-
-export default function Matches({ type, round, playerName }) {
-  const [participants, setParticipants] = useState([]);
+export default function Matches({ type, round, isAdmin }) {
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     const getMatches = async () => {
       const data = await fetch(`/api/events/matches/${type}/${round}`);
-      setParticipants(await data.json());
+      setMatches(await data.json());
     };
 
     getMatches();
@@ -37,6 +23,7 @@ export default function Matches({ type, round, playerName }) {
     {
       field: "table",
       headerName: "Masa",
+      editable: isAdmin,
       width: 60,
     },
     {
@@ -47,6 +34,7 @@ export default function Matches({ type, round, playerName }) {
     {
       field: "name",
       headerName: "Nume",
+      editable: isAdmin,
       minWidth: 150,
       flex: 1,
     },
@@ -54,7 +42,7 @@ export default function Matches({ type, round, playerName }) {
     {
       field: "score",
       headerName: "Scor",
-      editable: true,
+      editable: isAdmin,
       width: 80,
     },
   ];
@@ -64,23 +52,45 @@ export default function Matches({ type, round, playerName }) {
       <Typography variant="h3" gutterBottom>
         Meciuri - Runda {round}
       </Typography>
-      <Stack spacing={8}>
-        {groupByTable(participants).map((group, index) => (
-          <EditableDataGrid
-            key={index}
-            columnsData={columnsData}
-            rowsData={group}
-            pageSize={10}
-            apiURL={"/events/matches"}
-            eventType={type}
-            round={round}
-            playerName={playerName}
-            alertText={"participant"}
-            disableColumnMenu={true}
-            hideSearch={true}
-            hideFooter={true}
-            hiddenColumn={"nr"}
-          />
+      <Stack spacing={6}>
+        {matches.map((match, index) => (
+          <div key={index}>
+            <EditableDataGrid
+              columnsData={columnsData}
+              rowsData={match.participants}
+              pageSize={10}
+              apiURL={"/events/matches"}
+              eventType={type}
+              round={round}
+              alertText={"participant"}
+              disableColumnMenu={true}
+              hideSearch={true}
+              hideFooter={true}
+              hiddenColumn={"nr"}
+            />
+            {match.participants[0].host && (
+              <Box
+                p={2}
+                textAlign={"center"}
+                border={"1px solid rgb(224, 224, 224)"}
+                borderRadius={"4px"}
+              >
+                Rezultat trimis de: {match.participants[0].host}
+              </Box>
+            )}
+            {match.participants[0].img && (
+              <Box
+                p={2}
+                textAlign={"center"}
+                border={"1px solid rgb(224, 224, 224)"}
+                borderRadius={"4px"}
+              >
+                <Link href={match.participants[0].img} target="_blank">
+                  Imagine Rezultat
+                </Link>
+              </Box>
+            )}
+          </div>
         ))}
       </Stack>
     </Box>
