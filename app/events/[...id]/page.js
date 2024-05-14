@@ -17,8 +17,7 @@ import Matches from "./Matches";
 import Ranking from "./Ranking";
 
 export default function EventPage({ params }) {
-  const eventType = params.id[0];
-  const id = params.id[1];
+  const [type, id] = params.id;
   const { data: session } = useSession();
   const [round, setRound] = useState(0);
   const [event, setEvent] = useState({});
@@ -76,7 +75,7 @@ export default function EventPage({ params }) {
   if (!eventStarted) {
     tabs.push({
       label: "Inscriere",
-      content: <Register session={session} type={eventType} />,
+      content: <Register session={session} type={type} />,
     });
   }
 
@@ -85,8 +84,8 @@ export default function EventPage({ params }) {
       label: "Participanti",
       content: (
         <Stack spacing={4}>
-          <Participants type={eventType} />
-          {isAdmin && <Amical type={eventType} />}
+          <Participants type={type} />
+          {isAdmin && <Amical type={type} />}
         </Stack>
       ),
     });
@@ -98,7 +97,7 @@ export default function EventPage({ params }) {
         label: "Meci Propriu",
         content: (
           <PersonalMatch
-            type={eventType}
+            type={type}
             round={round}
             userID={session?.user.id}
             host={session?.user.name}
@@ -108,22 +107,22 @@ export default function EventPage({ params }) {
       },
       {
         label: "Meciuri",
-        content: <Matches type={eventType} round={round} isAdmin={isAdmin} />,
+        content: <Matches type={type} round={round} isAdmin={isAdmin} />,
       },
-      { label: "Clasament", content: <Ranking type={eventType} /> }
+      { label: "Clasament", content: <Ranking type={type} /> }
     );
   }
 
   if (isAdmin) {
     tabs.push({
       label: "Admin",
-      content: <Admin type={eventType} id={id} round={round} />,
+      content: <Admin type={type} id={id} round={round} />,
     });
   }
 
   useEffect(() => {
     const getRound = async () => {
-      const response = await fetch(`/api/events/round/${eventType}`);
+      const response = await fetch(`/api/events/round/${type}`);
       const round = await response.json();
       setRound(round);
     };

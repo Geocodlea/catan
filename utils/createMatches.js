@@ -11,13 +11,13 @@ const insertParticipant = async (MatchesType, table, id, name) => {
 };
 
 export const createMatches = async (
-  eventType,
+  type,
   participantsNumber,
   playersPerTable,
   MatchesType,
   randomParticipants
 ) => {
-  if (eventType === "catan" || eventType === "cavaleri") {
+  if (type === "catan" || type === "cavaleri") {
     // Number of 4-player tables
     const tables4 = playersPerTableCatan(participantsNumber);
 
@@ -52,7 +52,7 @@ export const createMatches = async (
     );
   }
 
-  if (eventType === "whist" || eventType === "rentz") {
+  if (type === "whist" || type === "rentz") {
     const tables = playersPerTableWhist(participantsNumber, playersPerTable);
 
     // DE STERS LA FINAL !!!
@@ -108,7 +108,7 @@ export const createMatches = async (
   const verificari = await MatchesType.aggregate([
     {
       $lookup: {
-        from: `verificari_live_${eventType}`,
+        from: `verificari_live_${type}`,
         localField: "id",
         foreignField: "id",
         as: "verificari",

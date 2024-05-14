@@ -4,8 +4,10 @@ import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 
 export async function DELETE(request, { params }) {
-  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
-  const VerificationsType = Verifications[`Verificari_live_${params.type[0]}`];
+  const [type] = params.type;
+
+  const ParticipantType = Participants[`Participanti_live_${type}`];
+  const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
   await ParticipantType.deleteMany();

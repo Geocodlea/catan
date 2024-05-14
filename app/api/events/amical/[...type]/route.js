@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import * as Amical from "@/models/Amical";
 
 export async function GET(request, { params }) {
-  const type = params.type[0];
+  const [type] = params.type;
   const AmicalType = Amical[`Amical_live_${type}`];
 
   await dbConnect();
@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-  const type = params.type[0];
+  const [type] = params.type;
   const data = await request.json();
 
   if (!data.name) {

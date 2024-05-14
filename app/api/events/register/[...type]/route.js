@@ -4,14 +4,15 @@ import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 
 export async function POST(request, { params }) {
+  const [type] = params.type;
   const session = await request.json();
 
   if (Object.keys(session).length === 0) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
-  const VerificationsType = Verifications[`Verificari_live_${params.type[0]}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
+  const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
   const eventStarted = await VerificationsType.findOne({
@@ -39,13 +40,14 @@ export async function POST(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+  const [type] = params.type;
   const user = await request.json();
 
   if (Object.keys(user).length === 0) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${params.type[0]}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
 

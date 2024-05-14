@@ -10,12 +10,12 @@ import * as Clasament from "@/models/Clasament";
 import { createMatches } from "@/utils/createMatches";
 
 export async function POST(request, { params }) {
-  const [eventType, playersPerTable, round] = params.type;
+  const [type, playersPerTable, round] = params.type;
 
-  const ParticipantType = Participants[`Participanti_live_${eventType}`];
-  const VerificationsType = Verifications[`Verificari_live_${eventType}`];
-  const MatchesType = Matches[`Meciuri_live_${eventType}_${round}`];
-  const ClasamentType = Clasament[`Clasament_live_${eventType}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
+  const VerificationsType = Verifications[`Verificari_live_${type}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  const ClasamentType = Clasament[`Clasament_live_${type}`];
 
   await dbConnect();
   const participantsNumber = await ParticipantType.countDocuments();
@@ -26,10 +26,7 @@ export async function POST(request, { params }) {
     });
   }
 
-  if (
-    participantsNumber === 7 &&
-    (eventType === "whist" || eventType === "rentz")
-  ) {
+  if (participantsNumber === 7 && (type === "whist" || type === "rentz")) {
     return NextResponse.json({
       success: false,
       message: "Nu este posibil start cu 7 participanți",
@@ -49,7 +46,7 @@ export async function POST(request, { params }) {
   const randomParticipants = participants.sort(() => Math.random() - 0.5);
 
   await createMatches(
-    eventType,
+    type,
     participantsNumber,
     playersPerTable,
     MatchesType,
@@ -77,7 +74,7 @@ export async function POST(request, { params }) {
       await transporter.sendMail({
         from: process.env.EMAIL_FROM,
         to: participant.email,
-        subject: `Concurs ${eventType}`,
+        subject: `Concurs ${type}`,
         text: `Start runda ${round}`,
       });
     });

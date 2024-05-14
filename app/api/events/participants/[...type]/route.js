@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
 
 export async function GET(request, { params }) {
-  const type = params.type[0];
+  const [type] = params.type;
   const ParticipantType = Participants[`Participanti_live_${type}`];
 
   await dbConnect();
@@ -15,7 +15,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-  const type = params.type[0];
+  const [type] = params.type;
   const data = await request.json();
 
   if (!data.name) {
