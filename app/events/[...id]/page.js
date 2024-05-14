@@ -106,7 +106,16 @@ export default function EventPage({ params }) {
           />
         ),
       },
-      { label: "Meciuri", content: <Matches /> },
+      {
+        label: "Meciuri",
+        content: (
+          <Matches
+            type={eventType}
+            round={round}
+            playerName={session?.user.name}
+          />
+        ),
+      },
       { label: "Clasament", content: <Ranking type={eventType} /> }
     );
   }

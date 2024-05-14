@@ -61,8 +61,7 @@ export default function PersonalMatch({
     },
     {
       field: "table",
-      headerName: "masa",
-      hidden: true,
+      headerName: "Masa",
     },
     {
       field: "nr",
@@ -114,7 +113,7 @@ export default function PersonalMatch({
       {participants.length ? (
         <>
           <Typography variant="h3" gutterBottom>
-            Meci Propriu - Masa {participants[0]?.table}
+            Masa {participants[0]?.table}
           </Typography>
           <EditableDataGrid
             columnsData={columnsData}
