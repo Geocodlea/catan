@@ -84,7 +84,7 @@ export default function EventPage({ params }) {
       label: "Participanti",
       content: (
         <Stack spacing={4}>
-          <Participants type={type} />
+          <Participants type={type} round={round} isAdmin={isAdmin} />
           {isAdmin && <Amical type={type} />}
         </Stack>
       ),
