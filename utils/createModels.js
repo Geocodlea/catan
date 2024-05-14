@@ -48,7 +48,7 @@ const createVerificationsModel = (event) => {
       meci1: { type: String },
       meci2: { type: String },
       rude: { type: String },
-      masa_redusa: { type: String },
+      masa_redusa: { type: Boolean },
     },
     { collection: `verificari_live_${event}` }
   );

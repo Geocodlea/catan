@@ -45,6 +45,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   const [id, type, round, username] = params.type;
   const data = await request.json();
+  const table = data.table;
 
   if (isNaN(data.score) || !data.score) {
     return NextResponse.json({
@@ -72,7 +73,7 @@ export async function PUT(request, { params }) {
   // Update the score and find if all scores are filled
   await MatchType.updateOne({ id }, { score, host: username });
   const tableScores = await MatchType.find({
-    table: data.table,
+    table,
     score: null,
   });
   if (tableScores.length) {
@@ -80,17 +81,29 @@ export async function PUT(request, { params }) {
   }
 
   const players = await MatchType.find({
-    table: data.table,
+    table,
   })
-    .select("id score table")
+    .select("id score")
     .sort({ score: -1 });
 
   const ids = players.map((player) => player.id);
   const scores = players.map((player) => player.score);
-  const table = players[0].table;
   const totalScore = scores.reduce((a, b) => a + b, 0);
 
   const points = calculateScores(type, scores);
+
+  // Update verifications only for catan and cavaleri
+  const reducedTable = players.length === 3;
+  if (type === "catan" || type === "cavaleri") {
+    await VerificationsType.updateMany({ id: { $in: ids } }, [
+      {
+        $set: {
+          [`meci${round}`]: table,
+          masa_redusa: reducedTable,
+        },
+      },
+    ]);
+  }
 
   await ClasamentType.updateMany({ id: { $in: ids } }, [
     {
@@ -107,6 +120,7 @@ export async function PUT(request, { params }) {
     },
   ]);
 
+  // Whist - different ranking
   if (type === "whist") {
     let maxScore;
     switch (players.length) {
