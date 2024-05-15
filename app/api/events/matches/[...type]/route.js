@@ -10,6 +10,7 @@ export async function GET(request, { params }) {
   const [type, round] = params.type;
 
   const MatchType = Matches[`Meciuri_live_${type}_${round}`];
+  const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
   const matches = await MatchType.aggregate([
@@ -35,7 +36,10 @@ export async function GET(request, { params }) {
     },
   ]);
 
-  return NextResponse.json(matches);
+  const verification = await VerificationsType.findOne().select("timer");
+  const timer = verification.timer;
+
+  return NextResponse.json({ matches, timer });
 }
 
 export async function PUT(request, { params }) {

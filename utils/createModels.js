@@ -45,6 +45,7 @@ const createVerificationsModel = (event) => {
       id: { type: String },
       round: { type: Number },
       stop: { type: Boolean },
+      timer: { type: Date },
       meci1: { type: String },
       meci2: { type: String },
       rude: { type: String },

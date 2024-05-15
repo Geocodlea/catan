@@ -1,15 +1,19 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
+import CountdownTimer from "@/components/CountdownTimer";
 import { Box, Typography, Stack } from "@mui/material";
 
 export default function Matches({ type, round, host, isAdmin }) {
   const [matches, setMatches] = useState([]);
+  const [timer, setTimer] = useState("");
 
   useEffect(() => {
     const getMatches = async () => {
       const data = await fetch(`/api/events/matches/${type}/${round}`);
-      setMatches(await data.json());
+      const result = await data.json();
+      setMatches(result.matches);
+      setTimer(result.timer);
     };
 
     getMatches();
@@ -56,6 +60,7 @@ export default function Matches({ type, round, host, isAdmin }) {
       <Typography variant="h3" gutterBottom>
         Meciuri - Runda {round}
       </Typography>
+      {timer && <CountdownTimer targetDate={new Date(timer)} />}
       <Stack spacing={6}>
         {matches.map((match, index) => (
           <div key={index}>

@@ -1,6 +1,7 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { emailFooter } from "@/utils/emailFooter";
 
 import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
@@ -75,7 +76,7 @@ export async function POST(request, { params }) {
         from: process.env.EMAIL_FROM,
         to: participant.email,
         subject: `Concurs ${type}`,
-        text: `Start runda ${round}`,
+        text: `Start runda ${round} ${emailFooter}`,
       });
     });
 

@@ -5,7 +5,7 @@ import styles from "@/app/page.module.css";
 import { Box } from "@mui/material";
 
 import AlertMsg from "@/components/AlertMsg";
-import { startButtons, resetButton } from "@/utils/adminButtons";
+import { StartButtons, ResetButton } from "@/utils/adminButtons";
 
 export default function Admin({ type, round }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
@@ -77,14 +77,44 @@ export default function Admin({ type, round }) {
     }
   };
 
-  const timer = async () => {
-    console.log("timer");
+  const timer = async (timerMinutes) => {
+    try {
+      const response = await fetch(`/api/events/timer/${type}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ timerMinutes }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success === false) {
+        throw new Error(data.message);
+      }
+
+      setAlert({
+        text: `Pornit timer cu succes`,
+        severity: "success",
+      });
+    } catch (error) {
+      setAlert({ text: `${error}`, severity: "error" });
+    }
   };
 
   return (
     <Box className={styles.grid} textAlign={"center"}>
-      {startButtons(type, loading, round, isFinalRound, start, timer)}
-      {resetButton(isFinalRound, reset)}
+      <StartButtons
+        type={type}
+        loading={loading}
+        round={round}
+        isFinalRound={isFinalRound}
+        start={start}
+        timer={timer}
+      />
+      <ResetButton isFinalRound={isFinalRound} reset={reset} />
       <AlertMsg alert={alert} />
     </Box>
   );

@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-const startButtons = (type, loading, round, isFinalRound, start, timer) => {
+const StartButtons = ({ type, loading, round, isFinalRound, start, timer }) => {
+  const [timerMinutes, setTimerMinutes] = useState(0);
+
   if (type === "catan" || type === "cavaleri") {
     if (round === 0) {
       return (
@@ -22,13 +26,20 @@ const startButtons = (type, loading, round, isFinalRound, start, timer) => {
     if (!isFinalRound) {
       return (
         <Box>
-          <Typography gutterBottom>Pornește timer meci</Typography>
+          <Typography gutterBottom>Introdu minute durată meci</Typography>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            onChange={(event) => setTimerMinutes(event.target.value)}
+            sx={{ mb: 2 }}
+          />
           <Button
             variant="contained"
             className="btn btn-primary"
-            onClick={timer}
+            onClick={() => timer(timerMinutes)}
           >
-            Timer
+            Start Timer
           </Button>
         </Box>
       );
@@ -79,7 +90,7 @@ const startButtons = (type, loading, round, isFinalRound, start, timer) => {
   }
 };
 
-const resetButton = (isFinalRound, reset) => (
+const ResetButton = ({ isFinalRound, reset }) => (
   <Box>
     {isFinalRound ? (
       <Typography gutterBottom>
@@ -97,4 +108,4 @@ const resetButton = (isFinalRound, reset) => (
   </Box>
 );
 
-export { startButtons, resetButton };
+export { StartButtons, ResetButton };
