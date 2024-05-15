@@ -8,7 +8,7 @@ import * as Clasament from "@/models/Clasament";
 import { createMatches } from "@/utils/createMatches";
 
 export async function GET(request, { params }) {
-  const [type] = params.type;
+  const [type, isFinalRound] = params.type;
 
   const VerificationsType = Verifications[`Verificari_live_${type}`];
 
@@ -30,6 +30,14 @@ export async function GET(request, { params }) {
   const allScoresSubmitted = roundScores === 0;
 
   if (!allScoresSubmitted) {
+    return NextResponse.json(round);
+  }
+
+  if (isFinalRound) {
+    await VerificationsType.updateOne(
+      { stop: true },
+      { stop: false, timer: null }
+    );
     return NextResponse.json(round);
   }
 
@@ -80,7 +88,6 @@ export async function GET(request, { params }) {
   ]);
 
   await createMatches(type, participantsNumber, 6, MatchesType, participants);
-
   await VerificationsType.updateOne({ stop: true }, { round, timer: null });
 
   return NextResponse.json(round);

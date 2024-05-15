@@ -7,18 +7,9 @@ import { Box } from "@mui/material";
 import AlertMsg from "@/components/AlertMsg";
 import { StartButtons, ResetButton } from "@/utils/adminButtons";
 
-export default function Admin({ type, round }) {
+export default function Admin({ type, round, isFinalRound }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loading, setLoading] = useState(false);
-
-  const isFinalRound =
-    type === "catan"
-      ? round === 3
-      : type === "cavaleri" || type === "whist"
-      ? round === 2
-      : type === "rentz"
-      ? round === 1
-      : false;
 
   const start = async (players) => {
     setLoading(true);

@@ -25,6 +25,15 @@ export default function EventPage({ params }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const isAdmin = session?.user.role === "admin";
 
+  const isFinalRound =
+    type === "catan"
+      ? round === 3
+      : type === "cavaleri" || type === "whist"
+      ? round === 2
+      : type === "rentz"
+      ? round === 1
+      : false;
+
   const saveData = async (data, tab) => {
     try {
       const response = await fetch(`/api/events/${id}`, {
@@ -124,13 +133,13 @@ export default function EventPage({ params }) {
   if (isAdmin) {
     tabs.push({
       label: "Admin",
-      content: <Admin type={type} round={round} />,
+      content: <Admin type={type} round={round} isFinalRound={isFinalRound} />,
     });
   }
 
   useEffect(() => {
     const getRound = async () => {
-      const response = await fetch(`/api/events/round/${type}`);
+      const response = await fetch(`/api/events/round/${type}/${isFinalRound}`);
       const round = await response.json();
       setRound(round);
     };
