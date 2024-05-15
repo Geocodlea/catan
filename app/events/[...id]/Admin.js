@@ -2,14 +2,23 @@
 
 import { useState } from "react";
 import styles from "@/app/page.module.css";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { Box } from "@mui/material";
 
 import AlertMsg from "@/components/AlertMsg";
+import { startButtons, resetButton } from "@/utils/adminButtons";
 
-export default function Admin({ type, id, round }) {
+export default function Admin({ type, round }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loading, setLoading] = useState(false);
+
+  const isFinalRound =
+    type === "catan"
+      ? round === 3
+      : type === "cavaleri" || type === "whist"
+      ? round === 2
+      : type === "rentz"
+      ? round === 1
+      : false;
 
   const start = async (players) => {
     setLoading(true);
@@ -68,77 +77,14 @@ export default function Admin({ type, id, round }) {
     }
   };
 
-  let startButton;
-  if (type === "catan" || type === "cavaleri") {
-    startButton = (
-      <Box>
-        <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
-        <LoadingButton
-          loading={loading}
-          loadingIndicator="Generating..."
-          variant="contained"
-          className="btn btn-primary"
-          onClick={() => start(4)}
-        >
-          Start
-        </LoadingButton>
-      </Box>
-    );
-  } else {
-    startButton = (
-      <Stack spacing={2}>
-        <Box>
-          <Typography gutterBottom>Generare meciuri 6 juc.</Typography>
-          <LoadingButton
-            loading={loading}
-            loadingIndicator="Generating..."
-            variant="contained"
-            className="btn btn-primary"
-            onClick={() => start(6)}
-          >
-            Start
-          </LoadingButton>
-        </Box>
-        <Box>
-          <Typography gutterBottom>Generare meciuri 5 juc.</Typography>
-          <LoadingButton
-            loading={loading}
-            loadingIndicator="Generating..."
-            variant="contained"
-            className="btn btn-primary"
-            onClick={() => start(5)}
-          >
-            Start
-          </LoadingButton>
-        </Box>
-        <Box>
-          <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
-          <LoadingButton
-            loading={loading}
-            loadingIndicator="Generating..."
-            variant="contained"
-            className="btn btn-primary"
-            onClick={() => start(4)}
-          >
-            Start
-          </LoadingButton>
-        </Box>
-      </Stack>
-    );
-  }
+  const timer = async () => {
+    console.log("timer");
+  };
 
   return (
-    <Box className={styles.grid}>
-      {startButton}
-
-      <Box>
-        <Typography gutterBottom>
-          Șterge jucătorii înscriși și permite înscrieri
-        </Typography>
-        <Button variant="contained" className="btn btn-error" onClick={reset}>
-          Reset
-        </Button>
-      </Box>
+    <Box className={styles.grid} textAlign={"center"}>
+      {startButtons(type, loading, round, isFinalRound, start, timer)}
+      {resetButton(isFinalRound, reset)}
       <AlertMsg alert={alert} />
     </Box>
   );
