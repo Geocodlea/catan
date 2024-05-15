@@ -5,6 +5,7 @@ import * as Verifications from "@/models/Verifications";
 import * as Clasament from "/models/Clasament";
 
 import { calculateScores } from "@/utils/calculateScores";
+import { getMatches } from "@/utils/getMatches";
 
 export async function GET(request, { params }) {
   const [type, round] = params.type;
@@ -13,28 +14,23 @@ export async function GET(request, { params }) {
   const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
-  const matches = await MatchesType.aggregate([
-    {
-      $group: {
-        _id: "$table",
-        participants: {
-          $push: {
-            id: "$id",
-            table: "$table",
-            name: "$name",
-            score: "$score",
-            host: "$host",
-            img: "$img",
-          },
-        },
-      },
-    },
-    {
-      $sort: {
-        _id: 1,
-      },
-    },
-  ]);
+  const matches = await getMatches(type, round);
+
+  let matches1, matches2;
+  if (round === 2) {
+    matches1 = await getMatches(type, 1);
+  }
+
+  if (round === 3) {
+    matches1 = await getMatches(type, 1);
+    matches2 = await getMatches(type, 2);
+  }
+
+  console.log(
+    // matches
+    matches1
+    //matches2[0].participants
+  );
 
   const verification = await VerificationsType.findOne().select("timer");
   const timer = verification.timer;
