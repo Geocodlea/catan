@@ -15,7 +15,7 @@ export const createMatches = async (
   participantsNumber,
   playersPerTable,
   MatchesType,
-  randomParticipants
+  participants
 ) => {
   if (type === "catan" || type === "cavaleri") {
     // Number of 4-player tables
@@ -30,7 +30,7 @@ export const createMatches = async (
 
     // Distribute players into 4-player tables
     await Promise.all(
-      randomParticipants
+      participants
         .filter((_, i) => i < tables4 * 4)
         .map(({ id, name }, i) =>
           insertParticipant(MatchesType, Math.floor(i / 4) + 1, id, name)
@@ -39,7 +39,7 @@ export const createMatches = async (
 
     // Distribute remaining players into 3-player tables
     await Promise.all(
-      randomParticipants
+      participants
         .filter((_, i) => i >= tables4 * 4 && i < tables4 * 4 + tables3 * 3)
         .map(({ id, name }, i) =>
           insertParticipant(
@@ -61,7 +61,7 @@ export const createMatches = async (
 
     // Distribute players into 6-player tables
     await Promise.all(
-      randomParticipants
+      participants
         .filter((_, i) => i < tables.tables6 * 6)
         .map(({ id, name }, i) =>
           insertParticipant(MatchesType, Math.floor(i / 6) + 1, id, name)
@@ -70,7 +70,7 @@ export const createMatches = async (
 
     // Distribute remaining players into 5-player tables
     await Promise.all(
-      randomParticipants
+      participants
         .filter(
           (_, i) =>
             i >= tables.tables6 * 6 &&
@@ -88,7 +88,7 @@ export const createMatches = async (
 
     // Distribute remaining players into 4-player tables
     await Promise.all(
-      randomParticipants
+      participants
         .filter(
           (_, i) =>
             i >= tables.tables5 * 5 &&

@@ -5,6 +5,8 @@ import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
 import * as Clasament from "@/models/Clasament";
 
+import { createMatches } from "@/utils/createMatches";
+
 export async function GET(request, { params }) {
   const [type] = params.type;
 
@@ -61,6 +63,7 @@ export async function GET(request, { params }) {
     },
     {
       $project: {
+        id: 1,
         name: 1,
         punctetotal: "$participants.punctetotal",
         scorjocuri: "$participants.scorjocuri",
@@ -76,13 +79,7 @@ export async function GET(request, { params }) {
     },
   ]);
 
-  // await createMatches(
-  //   type,
-  //   participantsNumber,
-  //   playersPerTable,
-  //   MatchesType,
-  //   participants
-  // );
+  await createMatches(type, participantsNumber, 6, MatchesType, participants);
 
   console.log(MatchesType);
 
