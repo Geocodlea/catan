@@ -23,27 +23,26 @@ const StartButtons = ({ type, loading, round, isFinalRound, start, timer }) => {
         </Box>
       );
     }
-    if (!isFinalRound) {
-      return (
-        <Box>
-          <Typography gutterBottom>Introdu minute durată meci</Typography>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            onChange={(event) => setTimerMinutes(event.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            className="btn btn-primary"
-            onClick={() => timer(timerMinutes)}
-          >
-            Start Timer
-          </Button>
-        </Box>
-      );
-    }
+
+    return (
+      <Box>
+        <Typography gutterBottom>Introdu minute durată meci</Typography>
+        <TextField
+          variant="outlined"
+          required
+          fullWidth
+          onChange={(event) => setTimerMinutes(event.target.value)}
+          sx={{ mb: 2 }}
+        />
+        <Button
+          variant="contained"
+          className="btn btn-primary"
+          onClick={() => timer(timerMinutes)}
+        >
+          Start Timer
+        </Button>
+      </Box>
+    );
   }
 
   if (round === 0) {

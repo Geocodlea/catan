@@ -81,9 +81,7 @@ export async function GET(request, { params }) {
 
   await createMatches(type, participantsNumber, 6, MatchesType, participants);
 
-  console.log(MatchesType);
-
-  // await VerificationsType.updateOne({ stop: true }, { round, timer: null });
+  await VerificationsType.updateOne({ stop: true }, { round, timer: null });
 
   return NextResponse.json(round);
 }
