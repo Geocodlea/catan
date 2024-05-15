@@ -26,7 +26,7 @@ const CountdownTimer = ({ targetDate }) => {
     return () => clearInterval(timer);
   }, [targetDate]);
 
-  return <h4>Timp rămas: {timeLeft}</h4>;
+  return <h4 style={{ padding: "1rem" }}>Timp rămas: {timeLeft}</h4>;
 };
 
 export default CountdownTimer;

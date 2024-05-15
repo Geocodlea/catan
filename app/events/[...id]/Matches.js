@@ -12,7 +12,7 @@ export default function Matches({ type, round, host, isAdmin }) {
     const getMatches = async () => {
       const data = await fetch(`/api/events/matches/${type}/${round}`);
       const result = await data.json();
-      setMatches(result.matches);
+      setMatches(result.allMatches);
       setTimer(result.timer);
     };
 
@@ -56,50 +56,60 @@ export default function Matches({ type, round, host, isAdmin }) {
   ];
 
   return (
-    <Box sx={{ margin: "auto", maxWidth: "800px" }}>
-      <Typography variant="h3" gutterBottom>
-        Meciuri - Runda {round}
-      </Typography>
+    <>
       {timer && <CountdownTimer targetDate={new Date(timer)} />}
-      <Stack spacing={6}>
-        {matches.map((match, index) => (
-          <div key={index}>
-            <EditableDataGrid
-              columnsData={columnsData}
-              rowsData={match.participants}
-              pageSize={10}
-              apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
-              alertText={"player"}
-              disableColumnMenu={true}
-              hideSearch={true}
-              hideFooter={true}
-              hiddenColumn={"nr"}
-            />
-            {match.participants[0].host && (
-              <Box
-                p={2}
-                textAlign={"center"}
-                border={"1px solid rgb(224, 224, 224)"}
-                borderRadius={"4px"}
-              >
-                Rezultat trimis de: {match.participants[0].host}
+      {matches.map((match, index) => (
+        <Box
+          sx={{
+            margin: "0 auto 4rem",
+            maxWidth: "800px",
+          }}
+          key={index}
+        >
+          <Typography variant="h3" gutterBottom>
+            Meciuri - Runda {round - index}
+          </Typography>
+          <Stack spacing={6}>
+            {match.map((match, index) => (
+              <Box key={index}>
+                <EditableDataGrid
+                  columnsData={columnsData}
+                  rowsData={match.participants}
+                  pageSize={10}
+                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
+                  alertText={"player"}
+                  disableColumnMenu={true}
+                  hideSearch={true}
+                  hideFooter={true}
+                  hiddenColumn={"nr"}
+                />
+                {match.participants[0].host && (
+                  <Box
+                    p={2}
+                    textAlign={"center"}
+                    border={"1px solid rgb(224, 224, 224)"}
+                    borderRadius={"4px"}
+                  >
+                    Rezultat trimis de: {match.participants[0].host}
+                  </Box>
+                )}
+                {match.participants[0].img && (
+                  <Box
+                    p={2}
+                    textAlign={"center"}
+                    border={"1px solid rgb(224, 224, 224)"}
+                    borderRadius={"4px"}
+                  >
+                    <Link href={match.participants[0].img} target="_blank">
+                      Imagine Rezultat
+                    </Link>
+                  </Box>
+                )}
               </Box>
-            )}
-            {match.participants[0].img && (
-              <Box
-                p={2}
-                textAlign={"center"}
-                border={"1px solid rgb(224, 224, 224)"}
-                borderRadius={"4px"}
-              >
-                <Link href={match.participants[0].img} target="_blank">
-                  Imagine Rezultat
-                </Link>
-              </Box>
-            )}
-          </div>
-        ))}
-      </Stack>
-    </Box>
+            ))}
+          </Stack>
+        </Box>
+      ))}
+    </>
   );
 }

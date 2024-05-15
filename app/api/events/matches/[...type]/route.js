@@ -14,28 +14,26 @@ export async function GET(request, { params }) {
   const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
+
   const matches = await getMatches(type, round);
+  const allMatches = [matches];
 
+  // Get past rounds matches
   let matches1, matches2;
-  if (round === 2) {
+  if (round === "2") {
     matches1 = await getMatches(type, 1);
+    allMatches.push(matches1);
   }
-
-  if (round === 3) {
+  if (round === "3") {
     matches1 = await getMatches(type, 1);
     matches2 = await getMatches(type, 2);
+    allMatches.push(matches2, matches1);
   }
-
-  console.log(
-    // matches
-    matches1
-    //matches2[0].participants
-  );
 
   const verification = await VerificationsType.findOne().select("timer");
   const timer = verification.timer;
 
-  return NextResponse.json({ matches, timer });
+  return NextResponse.json({ allMatches, timer });
 }
 
 export async function PUT(request, { params }) {

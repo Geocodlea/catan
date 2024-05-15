@@ -3,7 +3,7 @@ import * as Matches from "/models/Matches";
 
 export const getMatches = async (type, round) => {
   const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  console.log(MatchesType);
+
   await dbConnect();
   const matches = await MatchesType.aggregate([
     {
