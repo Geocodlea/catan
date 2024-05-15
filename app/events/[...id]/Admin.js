@@ -53,7 +53,7 @@ export default function Admin({ type, round }) {
 
   const reset = async () => {
     try {
-      const response = await fetch(`/api/events/reset/${type}`, {
+      const response = await fetch(`/api/events/reset/${type}/${round}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

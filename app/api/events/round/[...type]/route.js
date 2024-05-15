@@ -20,20 +20,73 @@ export async function GET(request, { params }) {
     return NextResponse.json(round);
   }
 
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  let MatchesType = Matches[`Meciuri_live_${type}_${round}`];
 
   const roundScores = await MatchesType.find({
     score: null,
   }).count();
   const allScoresSubmitted = roundScores === 0;
 
-  if (allScoresSubmitted) {
-    round++;
-    const ClasamentType = Clasament[`Clasament_live_${type}`];
-    const ParticipantType = Participants[`Participanti_live_${type}`];
-
-    await VerificationsType.updateOne({ stop: true }, { round, timer: null });
+  if (!allScoresSubmitted) {
+    return NextResponse.json(round);
   }
+
+  // All scores submitted, start the next round
+  round++;
+  MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  const ClasamentType = Clasament[`Clasament_live_${type}`];
+  const ParticipantType = Participants[`Participanti_live_${type}`];
+
+  const participantsNumber = await ParticipantType.countDocuments();
+  if (participantsNumber < 4) {
+    return NextResponse.json({
+      success: false,
+      message: "Nu sunt minim 4 înscriși",
+    });
+  }
+
+  const participants = await ParticipantType.aggregate([
+    {
+      $lookup: {
+        from: "clasament_live_catan",
+        localField: "id",
+        foreignField: "id",
+        as: "participants",
+      },
+    },
+    {
+      $unwind: {
+        path: "$participants",
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        punctetotal: "$participants.punctetotal",
+        scorjocuri: "$participants.scorjocuri",
+        procent: "$participants.procent",
+      },
+    },
+    {
+      $sort: {
+        punctetotal: -1,
+        scorjocuri: -1,
+        procent: -1,
+      },
+    },
+  ]);
+
+  // await createMatches(
+  //   type,
+  //   participantsNumber,
+  //   playersPerTable,
+  //   MatchesType,
+  //   participants
+  // );
+
+  console.log(MatchesType);
+
+  // await VerificationsType.updateOne({ stop: true }, { round, timer: null });
 
   return NextResponse.json(round);
 }

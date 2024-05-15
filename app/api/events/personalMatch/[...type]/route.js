@@ -54,7 +54,9 @@ export async function PATCH(request, { params }) {
   const filename = `${uuidv4()}-${image.name}`;
 
   // GCS object (path) where the file will be stored
-  const gcsObject = bucket.file(`uploads/events/${eventID}/${filename}`);
+  const gcsObject = bucket.file(
+    `uploads/events/${eventID}/matches/${filename}`
+  );
 
   // Create a write stream and upload the file to Google Cloud Storage
   const writeStream = gcsObject.createWriteStream({

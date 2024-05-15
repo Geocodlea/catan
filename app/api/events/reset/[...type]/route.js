@@ -2,17 +2,26 @@ import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
+import * as Matches from "@/models/Matches";
+import * as Clasament from "@/models/Clasament";
 
 export async function DELETE(request, { params }) {
-  const [type] = params.type;
+  const [type, round] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  const ClasamentType = Clasament[`Clasament_live_${type}`];
 
   await dbConnect();
   await ParticipantType.deleteMany();
 
-  await VerificationsType.updateOne({ round: 0 }, { stop: false });
+  await VerificationsType.updateOne(
+    { round: { $exists: true } },
+    { stop: false, round: 0, timer: null }
+  );
+  await MatchesType.collection.drop();
+  await ClasamentType.collection.drop();
 
   return NextResponse.json({ success: true });
 }
