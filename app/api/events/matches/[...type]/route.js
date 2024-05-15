@@ -9,11 +9,11 @@ import { calculateScores } from "@/utils/calculateScores";
 export async function GET(request, { params }) {
   const [type, round] = params.type;
 
-  const MatchType = Matches[`Meciuri_live_${type}_${round}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
-  const matches = await MatchType.aggregate([
+  const matches = await MatchesType.aggregate([
     {
       $group: {
         _id: "$table",
@@ -56,7 +56,7 @@ export async function PUT(request, { params }) {
   }
 
   const score = Number(data.score);
-  const MatchType = Matches[`Meciuri_live_${type}_${round}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
   const ClasamentType = Clasament[`Clasament_live_${type}`];
 
@@ -73,8 +73,8 @@ export async function PUT(request, { params }) {
   }
 
   // Update the score and find if all scores are filled
-  await MatchType.updateOne({ id }, { table, name, score, host });
-  const tableScores = await MatchType.find({
+  await MatchesType.updateOne({ id }, { table, name, score, host });
+  const tableScores = await MatchesType.find({
     table,
     score: null,
   });
@@ -83,7 +83,7 @@ export async function PUT(request, { params }) {
   }
 
   // Find all players in the table
-  const players = await MatchType.find({
+  const players = await MatchesType.find({
     table,
   })
     .select("id name score")

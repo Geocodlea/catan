@@ -21,18 +21,18 @@ const bucket = storage.bucket(bucketName);
 export async function GET(request, { params }) {
   const [type, round, userID] = params.type;
 
-  const MatchType = Matches[`Meciuri_live_${type}_${round}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
 
   await dbConnect();
   // Find the table value associated with the given userID
-  const user = await MatchType.findOne({
+  const user = await MatchesType.findOne({
     id: userID,
   }).select("table");
 
   if (!user) return NextResponse.json({});
 
   // Find all entries with the same "table" value
-  const personalMatch = await MatchType.find({ table: user.table }).select(
+  const personalMatch = await MatchesType.find({ table: user.table }).select(
     "id table name score"
   );
 
@@ -45,7 +45,7 @@ export async function PATCH(request, { params }) {
   const formData = await request.formData();
   const image = formData.get("image");
 
-  const MatchType = Matches[`Meciuri_live_${type}_${round}`];
+  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
 
   const bytes = await image.arrayBuffer();
   const buffer = Buffer.from(bytes);
@@ -66,10 +66,10 @@ export async function PATCH(request, { params }) {
   const imageURL = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
 
   await dbConnect();
-  const user = await MatchType.findOne({
+  const user = await MatchesType.findOne({
     id: userID,
   }).select("table");
-  await MatchType.updateMany({ table: user.table }, { img: imageURL });
+  await MatchesType.updateMany({ table: user.table }, { img: imageURL });
 
   return NextResponse.json({ success: true });
 }
