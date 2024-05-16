@@ -10,10 +10,7 @@ import { getMatches } from "@/utils/getMatches";
 export async function GET(request, { params }) {
   const [type, round] = params.type;
 
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
-
-  await dbConnect();
 
   const matches = await getMatches(type, round);
   const allMatches = [matches];
@@ -30,6 +27,7 @@ export async function GET(request, { params }) {
     allMatches.push(matches2, matches1);
   }
 
+  await dbConnect();
   const verification = await VerificationsType.findOne().select("timer");
   const timer = verification.timer;
 
@@ -42,7 +40,12 @@ export async function PUT(request, { params }) {
   const table = data.table;
   const name = data.name;
 
-  if (isNaN(data.score) || !data.score) {
+  if (
+    isNaN(data.score) ||
+    data.score === null ||
+    data.score === undefined ||
+    data.score === ""
+  ) {
     return NextResponse.json({
       success: false,
       message: "Scorul trebuie să fie un număr",

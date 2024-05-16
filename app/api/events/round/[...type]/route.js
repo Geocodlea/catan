@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
-import * as Clasament from "@/models/Clasament";
 
 import { createMatches } from "@/utils/createMatches";
 

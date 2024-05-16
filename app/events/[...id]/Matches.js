@@ -50,6 +50,7 @@ export default function Matches({ type, round, host, isAdmin }) {
     {
       field: "score",
       headerName: "Scor",
+      type: "number",
       editable: isAdmin,
       width: 80,
     },

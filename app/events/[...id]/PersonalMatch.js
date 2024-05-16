@@ -79,6 +79,7 @@ export default function PersonalMatch({
     {
       field: "score",
       headerName: "Scor",
+      type: "number",
       editable: true,
       width: 80,
     },

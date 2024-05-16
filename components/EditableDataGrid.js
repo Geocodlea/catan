@@ -1,7 +1,8 @@
 "use client";
 import ObjectID from "bson-objectid";
+import { isEqual } from "lodash";
 
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -14,7 +15,6 @@ import {
   GridToolbarContainer,
   GridToolbarQuickFilter,
   GridActionsCellItem,
-  GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
 import Box from "@mui/material/Box";
@@ -28,13 +28,7 @@ import DialogActions from "@mui/material/DialogActions";
 import AlertMsg from "./AlertMsg";
 import ReactNodeCell from "./ReactNodeCell";
 
-function EditToolbar({
-  rows,
-  setRows,
-  setRowModesModel,
-  showAddRecord,
-  hideSearch,
-}) {
+function EditToolbar({ setRows, setRowModesModel, showAddRecord, hideSearch }) {
   const addRecord = () => {
     const id = ObjectID().toString();
 
@@ -163,12 +157,6 @@ const EditableDataGrid = ({
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
@@ -229,6 +217,10 @@ const EditableDataGrid = ({
   };
 
   const processRowUpdate = useCallback(async (newRow, oldRow) => {
+    if (isEqual(newRow, oldRow)) {
+      return oldRow;
+    }
+
     const body = {};
 
     columnsData.forEach((col) => {
@@ -278,6 +270,16 @@ const EditableDataGrid = ({
     id: false,
     [hiddenColumn]: false,
   });
+
+  const handleRowClick = useCallback((params) => {
+    setRowModesModel((oldModel) => ({
+      // Other rows in view mode
+      ...Object.keys(oldModel).reduce((acc, id) => {
+        return { ...acc, [id]: { mode: GridRowModes.View } };
+      }, {}),
+      [params.id]: { mode: GridRowModes.Edit },
+    }));
+  }, []);
 
   return (
     <Paper
@@ -337,7 +339,7 @@ const EditableDataGrid = ({
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
+        onRowClick={handleRowClick}
         slots={{ toolbar: EditToolbar }}
         onColumnVisibilityModelChange={(newModel) =>
           setColumnVisibilityModel(newModel)
