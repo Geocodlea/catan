@@ -7,7 +7,7 @@ import * as Matches from "@/models/Matches";
 import { createMatches } from "@/utils/createMatches";
 
 export async function GET(request, { params }) {
-  const [type, isFinalRound] = params.type;
+  const [type] = params.type;
 
   const VerificationsType = Verifications[`Verificari_live_${type}`];
 
@@ -17,8 +17,17 @@ export async function GET(request, { params }) {
   }).select("round");
   let round = verification.round;
 
+  const isFinalRound =
+    type === "catan"
+      ? round === 3
+      : type === "cavaleri" || type === "whist"
+      ? round === 2
+      : type === "rentz"
+      ? round === 1
+      : false;
+
   if (round === 0) {
-    return NextResponse.json(round);
+    return NextResponse.json({ round, isFinalRound });
   }
 
   let MatchesType = Matches[`Meciuri_live_${type}_${round}`];
@@ -29,7 +38,7 @@ export async function GET(request, { params }) {
   const allScoresSubmitted = roundScores === 0;
 
   if (!allScoresSubmitted) {
-    return NextResponse.json(round);
+    return NextResponse.json({ round, isFinalRound });
   }
 
   if (isFinalRound) {
@@ -37,26 +46,26 @@ export async function GET(request, { params }) {
       { stop: true },
       { stop: false, timer: null }
     );
-    return NextResponse.json(round);
+    return NextResponse.json({ round, isFinalRound });
   }
 
   // All scores submitted, start the next round
   round++;
+  await VerificationsType.updateOne({ stop: true }, { round, timer: null });
+
   MatchesType = Matches[`Meciuri_live_${type}_${round}`];
   const ParticipantType = Participants[`Participanti_live_${type}`];
+  let participantsNumber = await ParticipantType.countDocuments();
 
-  const participantsNumber = await ParticipantType.countDocuments();
-  if (participantsNumber < 4) {
-    return NextResponse.json({
-      success: false,
-      message: "Nu sunt minim 4 înscriși",
-    });
+  if (type === "whist") {
+    participantsNumber = 6;
   }
+  const playersPerTable = "6";
 
   const participants = await ParticipantType.aggregate([
     {
       $lookup: {
-        from: "clasament_live_catan",
+        from: `clasament_live_${type}`,
         localField: "id",
         foreignField: "id",
         as: "participants",
@@ -85,8 +94,13 @@ export async function GET(request, { params }) {
     },
   ]);
 
-  await createMatches(type, participantsNumber, 6, MatchesType, participants);
-  await VerificationsType.updateOne({ stop: true }, { round, timer: null });
+  await createMatches(
+    type,
+    participantsNumber,
+    playersPerTable,
+    MatchesType,
+    participants
+  );
 
-  return NextResponse.json(round);
+  return NextResponse.json({ round, isFinalRound });
 }

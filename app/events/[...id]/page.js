@@ -20,19 +20,11 @@ export default function EventPage({ params }) {
   const [type, id] = params.id;
   const { data: session } = useSession();
   const [round, setRound] = useState(0);
+  const [isFinalRound, setIsFinalRound] = useState(false);
   const [event, setEvent] = useState({});
   const [eventStarted, setEventStarted] = useState(false);
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const isAdmin = session?.user.role === "admin";
-
-  const isFinalRound =
-    type === "catan"
-      ? round === 3
-      : type === "cavaleri" || type === "whist"
-      ? round === 2
-      : type === "rentz"
-      ? round === 1
-      : false;
 
   const saveData = async (data, tab) => {
     try {
@@ -139,9 +131,10 @@ export default function EventPage({ params }) {
 
   useEffect(() => {
     const getRound = async () => {
-      const response = await fetch(`/api/events/round/${type}/${isFinalRound}`);
-      const round = await response.json();
-      setRound(round);
+      const response = await fetch(`/api/events/round/${type}`);
+      const data = await response.json();
+      setRound(data.round);
+      setIsFinalRound(data.isFinalRound);
     };
 
     getRound();
