@@ -78,6 +78,8 @@ export default function Matches({ type, round, host, isAdmin }) {
                   pageSize={10}
                   apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
                   alertText={"player"}
+                  showAddRecord={isAdmin}
+                  showActions={isAdmin}
                   disableColumnMenu={true}
                   hideSearch={true}
                   hideFooter={true}

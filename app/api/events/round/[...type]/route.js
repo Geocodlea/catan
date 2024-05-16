@@ -44,7 +44,6 @@ export async function GET(request, { params }) {
   // All scores submitted, start the next round
   round++;
   MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  const ClasamentType = Clasament[`Clasament_live_${type}`];
   const ParticipantType = Participants[`Participanti_live_${type}`];
 
   const participantsNumber = await ParticipantType.countDocuments();
