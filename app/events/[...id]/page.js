@@ -138,9 +138,9 @@ export default function EventPage({ params }) {
     };
 
     getRound();
-    const intervalId = setInterval(getRound, 10000);
+    const interval = setInterval(getRound, 10000);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
