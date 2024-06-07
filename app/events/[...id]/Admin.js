@@ -44,12 +44,15 @@ export default function Admin({ type, round, isFinalRound }) {
 
   const reset = async () => {
     try {
-      const response = await fetch(`/api/events/reset/${type}/${round}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/api/events/reset/${type}/${round}/${isFinalRound}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

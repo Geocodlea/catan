@@ -5,8 +5,10 @@ import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
 import * as Clasament from "@/models/Clasament";
 
+import { sortOrder } from "@/utils/sortRanking";
+
 export async function DELETE(request, { params }) {
-  const [type, round] = params.type;
+  const [type, round, isFinalRound] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
@@ -14,6 +16,26 @@ export async function DELETE(request, { params }) {
   const ClasamentType = Clasament[`Clasament_live_${type}`];
 
   await dbConnect();
+
+  if (isFinalRound) {
+    const roundScores = await MatchesType.find({
+      score: null,
+    }).count();
+    const allScoresSubmitted = roundScores === 0;
+
+    if (!allScoresSubmitted) {
+      return NextResponse.json({
+        success: false,
+        message: "Nu sunt introduse toate scorurile",
+      });
+    }
+
+    const leaderboard = await ClasamentType.find().sort(sortOrder(type));
+
+    console.log(leaderboard);
+    return NextResponse.json(leaderboard);
+  }
+
   await ParticipantType.deleteMany();
 
   await VerificationsType.updateOne(

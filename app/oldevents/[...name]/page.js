@@ -60,14 +60,43 @@ const OldEventTable = async ({ params }) => {
         "data.punctetotalNumber": { $toDouble: "$data.punctetotal" },
         "data.punctejocuriNumber": { $toDouble: "$data.punctejocuri" },
         "data.procentNumber": { $toDouble: "$data.procent" },
+        "data.puncter2Number": { $toDouble: "$data.puncter2" },
       },
     },
     {
-      $sort: {
-        "data.punctetotalNumber": -1,
-        "data.punctejocuriNumber": -1,
-        "data.procentNumber": -1,
+      $facet: {
+        whist: [
+          { $match: { name: /whist/i } },
+          {
+            $sort: {
+              "data.puncter2Number": -1,
+              "data.punctetotalNumber": -1,
+              "data.procentNumber": -1,
+            },
+          },
+        ],
+        notWhist: [
+          { $match: { name: { $not: /whist/i } } },
+          {
+            $sort: {
+              "data.punctetotalNumber": -1,
+              "data.punctejocuriNumber": -1,
+              "data.procentNumber": -1,
+            },
+          },
+        ],
       },
+    },
+    {
+      $project: {
+        data: { $concatArrays: ["$whist", "$notWhist"] },
+      },
+    },
+    {
+      $unwind: "$data",
+    },
+    {
+      $replaceRoot: { newRoot: "$data" },
     },
     {
       $group: {
