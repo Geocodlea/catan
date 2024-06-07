@@ -92,6 +92,7 @@ const createClasamentModel = (event) => {
       puncter1: { type: Number },
       puncter2: { type: Number },
       puncter3: { type: Number },
+      punctetotal: { type: Number },
       scorjocr1: { type: Number },
       scortotalr1: { type: Number },
       scorjocr2: { type: Number },
