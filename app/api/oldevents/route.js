@@ -34,7 +34,8 @@ const allEventsPipeline = [
   },
   {
     $project: {
-      name: 1, // Project only the 'name' field
+      name: 1,
+      participants: { $size: "$data" },
     },
   },
 ];

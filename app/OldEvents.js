@@ -1,5 +1,4 @@
 "use client";
-import { isEqual } from "lodash";
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
@@ -28,6 +27,7 @@ const OldEventsTable = () => {
   const [oldEvents, setOldEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const isAdmin = session?.user.role === "admin";
+  let cost = 0;
   let total = 0;
 
   const allEvents = async () => {
@@ -53,28 +53,6 @@ const OldEventsTable = () => {
     setLoading(false);
   }, []);
 
-  // useEffect(() => {
-  //   if (isAdmin) {
-  //     const fetchData = async () => {
-  //       const response = await fetch("/api/costEvents");
-  //       const data = await response.json();
-
-  //       const costEvents = oldEvents.map((obj, i) => {
-  //         const eventData = data[i];
-  //         return eventData
-  //           ? { ...obj, participants: eventData.participants }
-  //           : obj;
-  //       });
-
-  //       if (!isEqual(oldEvents, costEvents)) {
-  //         setOldEvents(costEvents);
-  //       }
-  //     };
-
-  //     fetchData();
-  //   }
-  // }, [session, oldEvents]);
-
   const filteredOldEvents = oldEvents.map((event) => {
     const isOnline = event.name.includes("online");
     const isLive = event.name.includes("live");
@@ -82,14 +60,17 @@ const OldEventsTable = () => {
 
     const game = findGame(event.name);
 
-    const cost = event.participants * 3;
-    total += cost;
+    const isCurrentMonth = event.name.includes("06.2024");
+    if (isCurrentMonth) {
+      cost = event.participants * 3;
+      total += cost;
+    }
 
     return {
       name: `${game} - ${mode}`,
       link: `/oldevents/${event.name}`,
-      cost: cost || null,
-      total: total || null,
+      cost: isCurrentMonth ? cost : null,
+      total: isCurrentMonth ? total : null,
     };
   });
 
@@ -118,13 +99,6 @@ const OldEventsTable = () => {
         field: "cost",
         headerName: "Calcul",
         width: 100,
-        valueGetter: (value, row) => {
-          console.log(row);
-          if (row.link.includes("04.2024")) {
-            return row.participants * 50;
-          }
-          return null;
-        },
       },
       {
         field: "total",

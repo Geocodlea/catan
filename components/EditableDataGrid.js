@@ -89,7 +89,6 @@ const EditableDataGrid = ({
     headerAlign: item.headerAlign,
     align: item.align,
     hidden: item.hidden,
-    valueGetter: item.valueGetter,
     renderCell: ReactNodeCell,
   }));
 
