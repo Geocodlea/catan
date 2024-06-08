@@ -4,6 +4,7 @@ global.models = global.models || {};
 
 const LeaderboardSchema = new mongoose.Schema(
   {
+    id: { type: String, required: true },
     nume: { type: String, required: true },
     puncte: { type: Number, required: true },
     numeJoc: { type: String },

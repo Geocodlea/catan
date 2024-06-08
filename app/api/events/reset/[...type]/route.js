@@ -34,6 +34,31 @@ export async function DELETE(request, { params }) {
 
     const participants = await ClasamentType.find().sort(sortOrder(type));
 
+    // Update Leaderboard
+    const leaderboardPoints = [100, 70, 50, 35, 25];
+    participants.forEach(async (participant, i) => {
+      const id = participant.id;
+      const leaderboardParticipant = await Leaderboard.findOne({
+        id,
+      }).select("puncte");
+
+      if (leaderboardParticipant) {
+        await Leaderboard.updateOne(
+          { id },
+          {
+            puncte: leaderboardParticipant.puncte + leaderboardPoints[i] || 0,
+          }
+        );
+      } else {
+        await Leaderboard.create({
+          id,
+          nume: participant.name,
+          puncte: leaderboardPoints[i] || 0,
+        });
+      }
+    });
+
+    // Create old event
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -67,12 +92,7 @@ export async function DELETE(request, { params }) {
 
     await OldEvents.create(oldEvent);
 
-    const leaderboardPoints = [100, 70, 50, 35, 25];
-
-    const leaderboard = await Leaderboard.find();
-
-    //  console.log(leaderboard);
-    return NextResponse.json(leaderboard);
+    return NextResponse.json({ success: true });
   }
 
   await ParticipantType.deleteMany();
