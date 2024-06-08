@@ -53,27 +53,27 @@ const OldEventsTable = () => {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (isAdmin) {
-      const fetchData = async () => {
-        const response = await fetch("/api/costEvents");
-        const data = await response.json();
+  // useEffect(() => {
+  //   if (isAdmin) {
+  //     const fetchData = async () => {
+  //       const response = await fetch("/api/costEvents");
+  //       const data = await response.json();
 
-        const costEvents = oldEvents.map((obj, i) => {
-          const eventData = data[i];
-          return eventData
-            ? { ...obj, participants: eventData.participants }
-            : obj;
-        });
+  //       const costEvents = oldEvents.map((obj, i) => {
+  //         const eventData = data[i];
+  //         return eventData
+  //           ? { ...obj, participants: eventData.participants }
+  //           : obj;
+  //       });
 
-        if (!isEqual(oldEvents, costEvents)) {
-          setOldEvents(costEvents);
-        }
-      };
+  //       if (!isEqual(oldEvents, costEvents)) {
+  //         setOldEvents(costEvents);
+  //       }
+  //     };
 
-      fetchData();
-    }
-  }, [session, oldEvents]);
+  //     fetchData();
+  //   }
+  // }, [session, oldEvents]);
 
   const filteredOldEvents = oldEvents.map((event) => {
     const isOnline = event.name.includes("online");
@@ -118,6 +118,13 @@ const OldEventsTable = () => {
         field: "cost",
         headerName: "Calcul",
         width: 100,
+        valueGetter: (value, row) => {
+          console.log(row);
+          if (row.link.includes("04.2024")) {
+            return row.participants * 50;
+          }
+          return null;
+        },
       },
       {
         field: "total",
