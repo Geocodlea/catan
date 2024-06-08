@@ -49,6 +49,7 @@ export async function POST(request, { params }) {
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
   const ClasamentType = Clasament[`Clasament_live_${type}`];
+  const VerificationsType = Verifications[`Verificari_live_${type}`];
 
   await dbConnect();
   const participant = new ParticipantType(data);
@@ -57,6 +58,8 @@ export async function POST(request, { params }) {
   await participantMatch.save();
   const participantClasament = new ClasamentType(data);
   await participantClasament.save();
+  const participantVerification = new VerificationsType({ id: data.id });
+  await participantVerification.save();
 
   return NextResponse.json({ success: true });
 }

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import * as Participants from "@/models/Participants";
 import * as Matches from "/models/Matches";
 import * as Clasament from "/models/Clasament";
+import * as Verifications from "@/models/Verifications";
 
 export async function GET(request, { params }) {
   const [type] = params.type;
@@ -36,11 +37,14 @@ export async function POST(request, { params }) {
   if (round !== "0") {
     const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
     const ClasamentType = Clasament[`Clasament_live_${type}`];
+    const VerificationsType = Verifications[`Verificari_live_${type}`];
 
     const participantMatch = new MatchesType(data);
     await participantMatch.save();
     const participantClasament = new ClasamentType(data);
     await participantClasament.save();
+    const participantVerification = new VerificationsType({ id: data.id });
+    await participantVerification.save();
   }
 
   return NextResponse.json({ success: true });
