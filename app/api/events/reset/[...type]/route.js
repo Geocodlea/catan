@@ -35,8 +35,8 @@ export async function DELETE(request, { params }) {
     const participants = await ClasamentType.find().sort(sortOrder(type));
 
     const date = new Date();
-    const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if needed
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, add leading zero if needed
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
 
     const oldEventName = `clasament_live_${type}_${day}.${month}.${year}`;
