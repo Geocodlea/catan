@@ -108,7 +108,7 @@ export default function Admin({ type, round, isFinalRound }) {
         start={start}
         timer={timer}
       />
-      <ResetButton isFinalRound={isFinalRound} reset={reset} />
+      <ResetButton round={round} isFinalRound={isFinalRound} reset={reset} />
       <AlertMsg alert={alert} />
     </Box>
   );

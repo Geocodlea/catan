@@ -3,7 +3,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-const StartButtons = ({ type, loading, round, isFinalRound, start, timer }) => {
+const StartButtons = ({ type, loading, round, start, timer }) => {
   const [timerMinutes, setTimerMinutes] = useState(0);
 
   if (type === "catan" || type === "cavaleri") {
@@ -89,21 +89,23 @@ const StartButtons = ({ type, loading, round, isFinalRound, start, timer }) => {
   }
 };
 
-const ResetButton = ({ isFinalRound, reset }) => (
+const ResetButton = ({ round, isFinalRound, reset }) => (
   <Box>
-    {isFinalRound ? (
+    {round === 0 && (
+      <Typography gutterBottom>Șterge jucătorii înscriși</Typography>
+    )}
+    {isFinalRound && (
       <Typography gutterBottom>
         Șterge și introduce eveniment în evenimente anterioare, introduce
         jucători în leaderboard
       </Typography>
-    ) : (
-      <Typography gutterBottom>
-        Șterge jucătorii înscriși și permite înscrieri
-      </Typography>
     )}
-    <Button variant="contained" className="btn btn-error" onClick={reset}>
-      Reset
-    </Button>
+
+    {(round === 0 || isFinalRound) && (
+      <Button variant="contained" className="btn btn-error" onClick={reset}>
+        Reset
+      </Button>
+    )}
   </Box>
 );
 

@@ -9,6 +9,20 @@ import Leaderboard from "@/models/Leaderboard";
 
 import { sortOrder } from "@/utils/sortRanking";
 
+// Function to drop Matches based on type
+const dropMatches = async (type) => {
+  // Get all keys from the Matches object
+  const allKeys = Object.keys(Matches);
+
+  // Filter keys based on the specified type
+  const filteredKeys = allKeys.filter((key) => key.includes(type));
+
+  // Drop each filtered collection
+  for (const key of filteredKeys) {
+    await Matches[key].collection.drop();
+  }
+};
+
 export async function DELETE(request, { params }) {
   const [type, round, isFinalRound] = params.type;
 
@@ -19,7 +33,7 @@ export async function DELETE(request, { params }) {
 
   await dbConnect();
 
-  if (isFinalRound) {
+  if (isFinalRound === "true") {
     const roundScores = await MatchesType.find({
       score: null,
     }).count();
@@ -92,17 +106,16 @@ export async function DELETE(request, { params }) {
 
     await OldEvents.create(oldEvent);
 
-    return NextResponse.json({ success: true });
+    await ClasamentType.collection.drop();
+    await dropMatches(type);
   }
 
   await ParticipantType.deleteMany();
-
+  await VerificationsType.deleteMany({ round: { $exists: false } });
   await VerificationsType.updateOne(
     { round: { $exists: true } },
-    { stop: false, round: 0, timer: null }
+    { round: 0, stop: false }
   );
-  await MatchesType.collection.drop();
-  await ClasamentType.collection.drop();
 
   return NextResponse.json({ success: true });
 }
