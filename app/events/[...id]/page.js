@@ -125,7 +125,14 @@ export default function EventPage({ params }) {
   if (isAdmin) {
     tabs.push({
       label: "Admin",
-      content: <Admin type={type} round={round} isFinalRound={isFinalRound} />,
+      content: (
+        <Admin
+          type={type}
+          round={round}
+          isFinalRound={isFinalRound}
+          eventID={id}
+        />
+      ),
     });
   }
 

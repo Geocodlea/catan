@@ -7,7 +7,7 @@ import { Box } from "@mui/material";
 import AlertMsg from "@/components/AlertMsg";
 import { StartButtons, ResetButton } from "@/utils/adminButtons";
 
-export default function Admin({ type, round, isFinalRound }) {
+export default function Admin({ type, round, isFinalRound, eventID }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +45,7 @@ export default function Admin({ type, round, isFinalRound }) {
   const reset = async () => {
     try {
       const response = await fetch(
-        `/api/events/reset/${type}/${round}/${isFinalRound}`,
+        `/api/events/reset/${type}/${round}/${isFinalRound}/${eventID}`,
         {
           method: "DELETE",
           headers: {

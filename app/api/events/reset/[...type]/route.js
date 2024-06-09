@@ -9,6 +9,21 @@ import Leaderboard from "@/models/Leaderboard";
 
 import { sortOrder } from "@/utils/sortRanking";
 
+import { Storage } from "@google-cloud/storage";
+
+// Set up Google Cloud Storage client
+const storage = new Storage({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  credentials: {
+    client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  },
+});
+
+// Google Cloud Storage bucket name
+const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
+const bucket = storage.bucket(bucketName);
+
 // Function to drop Matches based on type
 const dropMatches = async (type) => {
   // Get all keys from the Matches object
@@ -24,7 +39,7 @@ const dropMatches = async (type) => {
 };
 
 export async function DELETE(request, { params }) {
-  const [type, round, isFinalRound] = params.type;
+  const [type, round, isFinalRound, eventID] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
@@ -108,6 +123,18 @@ export async function DELETE(request, { params }) {
 
     await ClasamentType.collection.drop();
     await dropMatches(type);
+
+    // List all files for deleted matches
+    const [files] = await bucket.getFiles({
+      prefix: `uploads/events/${eventID}/matches/`,
+    });
+
+    // Delete each file
+    await Promise.all(
+      files.map(async (file) => {
+        await file.delete();
+      })
+    );
   }
 
   await ParticipantType.deleteMany();
