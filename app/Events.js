@@ -42,17 +42,17 @@ const Events = async ({ searchParams }) => {
     "use server";
 
     try {
-      // Find gcs event image and delete it, before deleting the event
-      const event = await Event.findOne({ _id: id });
+      // List all files for deleted event
+      const [files] = await bucket.getFiles({
+        prefix: `uploads/events/${id}/`,
+      });
 
-      // Remove the prefix to get only the bucket
-      const imgURL = event.image.replace(
-        `https://storage.googleapis.com/${bucketName}/`,
-        ""
+      // Delete each file
+      await Promise.all(
+        files.map(async (file) => {
+          await file.delete();
+        })
       );
-
-      const gcsObject = bucket.file(imgURL);
-      await gcsObject.delete();
 
       await Event.deleteOne({ _id: id });
     } catch (error) {
