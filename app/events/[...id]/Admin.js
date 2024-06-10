@@ -9,10 +9,11 @@ import { StartButtons, ResetButton } from "@/utils/adminButtons";
 
 export default function Admin({ type, round, isFinalRound, eventID }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
-  const [loading, setLoading] = useState(false);
+  const [loadingStart, setLoadingStart] = useState(false);
+  const [loadingReset, setLoadingReset] = useState(false);
 
   const start = async (players) => {
-    setLoading(true);
+    setLoadingStart(true);
     try {
       const response = await fetch(
         `/api/events/start/${type}/${players}/${round + 1}`,
@@ -32,17 +33,18 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
         throw new Error(data.message);
       }
 
-      setLoading(false);
       setAlert({
         text: `Generare meciuri cu succes`,
         severity: "success",
       });
     } catch (error) {
+      setLoadingStart(false);
       setAlert({ text: `${error}`, severity: "error" });
     }
   };
 
   const reset = async () => {
+    setLoadingReset(true);
     try {
       const response = await fetch(
         `/api/events/reset/${type}/${round}/${isFinalRound}/${eventID}`,
@@ -67,6 +69,7 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
         severity: "success",
       });
     } catch (error) {
+      setLoadingReset(false);
       setAlert({ text: `${error}`, severity: "error" });
     }
   };
@@ -102,13 +105,18 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
     <Box className={styles.grid} textAlign={"center"}>
       <StartButtons
         type={type}
-        loading={loading}
+        loading={loadingStart}
         round={round}
         isFinalRound={isFinalRound}
         start={start}
         timer={timer}
       />
-      <ResetButton round={round} isFinalRound={isFinalRound} reset={reset} />
+      <ResetButton
+        loading={loadingReset}
+        round={round}
+        isFinalRound={isFinalRound}
+        reset={reset}
+      />
       <AlertMsg alert={alert} />
     </Box>
   );

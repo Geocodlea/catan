@@ -13,7 +13,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
           <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
           <LoadingButton
             loading={loading}
-            loadingIndicator="Generating..."
+            loadingIndicator="Generare..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(4)}
@@ -31,6 +31,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
           variant="outlined"
           required
           fullWidth
+          type="number"
           onChange={(event) => setTimerMinutes(event.target.value)}
           sx={{ mb: 2 }}
         />
@@ -52,7 +53,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
           <Typography gutterBottom>Generare meciuri 6 juc.</Typography>
           <LoadingButton
             loading={loading}
-            loadingIndicator="Generating..."
+            loadingIndicator="Generare..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(6)}
@@ -64,7 +65,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
           <Typography gutterBottom>Generare meciuri 5 juc.</Typography>
           <LoadingButton
             loading={loading}
-            loadingIndicator="Generating..."
+            loadingIndicator="Generare..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(5)}
@@ -76,7 +77,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
           <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
           <LoadingButton
             loading={loading}
-            loadingIndicator="Generating..."
+            loadingIndicator="Generare..."
             variant="contained"
             className="btn btn-primary"
             onClick={() => start(4)}
@@ -89,7 +90,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
   }
 };
 
-const ResetButton = ({ round, isFinalRound, reset }) => (
+const ResetButton = ({ loading, round, isFinalRound, reset }) => (
   <Box>
     {round === 0 && (
       <Typography gutterBottom>Șterge jucătorii înscriși</Typography>
@@ -102,9 +103,15 @@ const ResetButton = ({ round, isFinalRound, reset }) => (
     )}
 
     {(round === 0 || isFinalRound) && (
-      <Button variant="contained" className="btn btn-error" onClick={reset}>
+      <LoadingButton
+        loading={loading}
+        loadingIndicator="Reset..."
+        variant="contained"
+        className="btn btn-error"
+        onClick={reset}
+      >
         Reset
-      </Button>
+      </LoadingButton>
     )}
   </Box>
 );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "@/app/page.module.css";
 import { Box, Button, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Link from "next/link";
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
@@ -10,8 +11,10 @@ import AlertMsg from "@/components/AlertMsg";
 
 export default function Register({ session, type }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const [loading, setLoading] = useState(false);
 
   const register = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/events/register/${type}`, {
         method: "POST",
@@ -24,6 +27,7 @@ export default function Register({ session, type }) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      setLoading(false);
       const data = await response.json();
       if (data.success === false) {
         throw new Error(data.message);
@@ -72,13 +76,15 @@ export default function Register({ session, type }) {
           Pentru a te înscrie la Seara de Catan trebuie ca mai întâi să fii{" "}
           <Link href="/api/auth/signin">logat</Link>
         </Typography>
-        <Button
+        <LoadingButton
+          loading={loading}
+          loadingIndicator="Înscriere..."
           variant="contained"
           className="btn btn-primary"
           onClick={register}
         >
           Înscriere
-        </Button>
+        </LoadingButton>
       </Box>
 
       <Box>
