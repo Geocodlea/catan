@@ -11,8 +11,7 @@ import contactBg from "/public/img/contact_bg.jpg";
 import profileBg from "/public/img/profile_bg.jpg";
 // import otherBg from "/public/img/other_bg.jpg";
 
-function ParallaxBanner({ children }) {
-  const [offset, setOffset] = useState(0);
+function Banner({ children }) {
   const segment = useSelectedLayoutSegment();
 
   let imageUrl;
@@ -30,31 +29,18 @@ function ParallaxBanner({ children }) {
       imageUrl = bg;
   }
 
-  useEffect(() => {
-    function handleScroll() {
-      setOffset(window.scrollY);
-    }
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <>
       <Box
         sx={{
           position: "absolute",
-          transform: `translateY(${offset * 0.5}px)`,
           width: "100%",
-          height: "70vh",
+          height: "50vh",
           zIndex: -1,
         }}
       >
         <Image
-          alt="bg"
+          alt="background"
           src={imageUrl}
           placeholder="blur"
           fill
@@ -70,4 +56,4 @@ function ParallaxBanner({ children }) {
   );
 }
 
-export default ParallaxBanner;
+export default Banner;

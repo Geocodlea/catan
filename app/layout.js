@@ -7,7 +7,7 @@ import React from "react";
 import AuthProvider from "@/context/AuthProvider";
 
 import AppBar from "@/components/Appbar";
-import ParallaxBanner from "@/components/ParallaxBanner";
+import Banner from "@/components/Banner";
 import Footer from "@/components/Footer";
 
 import { Paper, Box } from "@mui/material";
@@ -25,13 +25,13 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <AuthProvider>
           <AppBar />
-          <ParallaxBanner>
+          <Banner>
             <Box className={styles.main}>
               <Paper elevation={24} className={styles.content}>
                 {children}
               </Paper>
             </Box>
-          </ParallaxBanner>
+          </Banner>
           <Footer />
         </AuthProvider>
       </body>

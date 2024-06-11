@@ -68,7 +68,7 @@ function DrawerAppBar({ windowAppBar }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= window.innerHeight * 0.5) {
+      if (window.scrollY >= window.innerHeight * 0.4) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
