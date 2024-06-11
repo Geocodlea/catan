@@ -11,10 +11,10 @@ const Privacy = () => {
         <Box>
           <h2>1. Introduction</h2>
           <p className={styles.description}>
-            Welcome to [Your Website Name]. This Privacy Policy is designed to
-            inform you about the types of information we collect, how we use and
-            protect that information, and your choices regarding the collection
-            and use of your data.
+            Welcome to AGames. This Privacy Policy is designed to inform you
+            about the types of information we collect, how we use and protect
+            that information, and your choices regarding the collection and use
+            of your data.
           </p>
         </Box>
         <Box>
@@ -36,7 +36,7 @@ const Privacy = () => {
         </Box>
         <Box>
           <h2>3. Use of Information</h2>
-          <p className={styles.description}>
+          <div className={styles.description}>
             We use the collected information for the following purposes:
             <ul>
               <li>To provide and maintain our services.</li>
@@ -46,11 +46,11 @@ const Privacy = () => {
                 updates.
               </li>
             </ul>
-          </p>
+          </div>
         </Box>
         <Box>
           <h2>4. Data Sharing</h2>
-          <p className={styles.description}>
+          <div className={styles.description}>
             We may share your information with third parties under the following
             circumstances:
             <ul>
@@ -62,7 +62,7 @@ const Privacy = () => {
                 acquisition, or sale of assets.
               </li>
             </ul>
-          </p>
+          </div>
         </Box>
         <Box>
           <h2>5. Cookies and Similar Technologies</h2>
@@ -81,14 +81,14 @@ const Privacy = () => {
         </Box>
         <Box>
           <h2>7. Your Rights</h2>
-          <p className={styles.description}>
+          <div className={styles.description}>
             You have the right to:
             <ul>
               <li>Access, correct, or delete your personal information.</li>
               <li>Object to the processing of your personal data.</li>
               <li>Withdraw your consent.</li>
             </ul>
-          </p>
+          </div>
         </Box>
         <Box>
           <h2>8. Changes to this Privacy Policy</h2>
@@ -101,11 +101,11 @@ const Privacy = () => {
           <h2>9. Contact Us</h2>
           <p className={styles.description}>
             If you have any questions or concerns about this Privacy Policy,
-            please contact us at [Your Contact Information].
+            please contact us using the contact form.
           </p>
         </Box>
         <p style={{ fontSize: "1.3rem", fontWeight: "bold", alignSelf: "end" }}>
-          Effective Date: 10.11.2023
+          Effective Date: 10.11.2024
         </p>
       </Stack>
     </>

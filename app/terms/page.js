@@ -28,8 +28,8 @@ const Terms = () => {
           <h2>3. Intellectual Property</h2>
           <p className={styles.description}>
             All content on this website, including but not limited to text,
-            graphics, logos, and images, is the property of [Your Company] and
-            is protected by intellectual property laws. You may not reproduce,
+            graphics, logos, and images, is the property of AGames and is
+            protected by intellectual property laws. You may not reproduce,
             modify, or distribute any content from this website without our
             prior written consent.
           </p>
@@ -46,9 +46,8 @@ const Terms = () => {
         <Box>
           <h2>5. Privacy Policy</h2>
           <p className={styles.description}>
-            Your use of this website is also governed by our Privacy Policy,
-            which can be found [link to privacy policy]. By using the website,
-            you consent to the terms of the Privacy Policy.
+            Your use of this website is also governed by our Privacy Policy. By
+            using the website, you consent to the terms of the Privacy Policy.
           </p>
         </Box>
         <Box>
@@ -79,8 +78,8 @@ const Terms = () => {
         <Box>
           <h2>9. Contact Information</h2>
           <p className={styles.description}>
-            If you have any questions about these terms, please contact us at
-            [Your Contact Information].
+            If you have any questions about these terms, please contact us using
+            the contact form.
           </p>
         </Box>
       </Stack>

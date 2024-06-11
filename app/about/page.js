@@ -7,10 +7,25 @@ export default async function About() {
     <>
       <h1 className={styles.title}>About Us</h1>
       <p className={styles.description} style={{ marginBottom: "2rem" }}>
-        We're passionate about helping you bring your creative ideas to life. We
-        understand the power of visuals and how they can transform your design
-        concepts into reality. Our mission is to provide you with the most
-        user-friendly, versatile, and innovative mockup tools on the web.
+        Welcome to AGames, your ultimate destination for engaging and exciting
+        board game events! Whether you're a seasoned strategist, a casual gamer,
+        or someone just looking to have fun, we create unforgettable experiences
+        tailored to every type of board game enthusiast. <br />
+        <br />
+        At AGames, we believe in the power of games to bring people together.
+        Our mission is to foster community, creativity, and camaraderie through
+        the love of board games. From classic favorites to modern masterpieces,
+        our events cater to all tastes and skill levels. <br />
+        <br />
+        Join us for weekly game nights, themed tournaments, and special events
+        that promise hours of entertainment and friendly competition. Our
+        dedicated team of game masters ensures every event is welcoming and
+        inclusive, so you can focus on what matters most: playing, laughing, and
+        connecting with others. <br />
+        <br />
+        Discover your next favorite game and make lasting memories with us. Come
+        roll the dice, draw the cards, and be part of our vibrant gaming
+        community. Welcome to AGames, where every event is a game-changer!
       </p>
       <Typography variant="h6" className={styles.code} mb={3}>
         Here is our team:

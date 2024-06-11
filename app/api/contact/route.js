@@ -19,7 +19,7 @@ export async function POST(request) {
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: process.env.EMAIL_TO,
-    subject: `Message from NextJS Template - Contact Form`,
+    subject: `Message from AGames - Contact Form`,
     text: `${data.message} \n\n Sent from: ${data.name} \n Email: ${data.email} \n Phone: ${data.phone}`,
   });
 

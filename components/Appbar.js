@@ -42,7 +42,7 @@ function DrawerAppBar({ windowAppBar }) {
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Box sx={{ fontSize: 0 }}>
         <Link href="/">
-          <Image src="/next.svg" alt="Logo" width={70} height={70} />
+          <Image src="/logo.svg" alt="Logo" width={70} height={70} />
         </Link>
       </Box>
       <Divider />
@@ -105,7 +105,7 @@ function DrawerAppBar({ windowAppBar }) {
           >
             <Link href="/">
               <Image
-                src="/vercel.svg"
+                src="/logo_white.svg"
                 alt="Logo"
                 width={70}
                 height={70}

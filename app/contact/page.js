@@ -22,11 +22,15 @@ export default function Contact() {
           <PinDropSharpIcon color="info" fontSize="large" />
           <Stack spacing={2}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Find us at the office
+              Find us at
             </Typography>
             <Typography variant="body1">
-              Bld Basarabia, no. 37 <br />
-              022103 Bucharest <br /> Romania
+              Creative Board Gaming <br />
+              Str Mendeleev, nr 29, Sector 1 <br />
+              București,{" "}
+              <a href="http://www.cbgshop.ro/info/locatie/" target="_blank">
+                @1UP Gamers Pub
+              </a>
             </Typography>
           </Stack>
         </Stack>
@@ -34,12 +38,12 @@ export default function Contact() {
           <CallIcon color="info" fontSize="large" />
           <Stack spacing={2}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Give us a ring
+              Contact
             </Typography>
             <Typography variant="body1">
-              Elon Musk
-              <br /> +40 723 456 789
-              <br /> Mon - Fri, 7:00-15:00
+              Tel: <a href="tel:0736465213">0736465213</a>
+              <br />
+              Email: <a href="mailto:contact@cbgshop.ro">contact@cbgshop.ro</a>
             </Typography>
           </Stack>
         </Stack>

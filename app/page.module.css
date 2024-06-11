@@ -257,3 +257,10 @@
     transform: rotate(0deg);
   }
 }
+
+/* Large Desktops */
+@media (min-width: 1351px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
