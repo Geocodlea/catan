@@ -14,14 +14,13 @@ export default function ProfileImage() {
         position: "relative",
         height: "250px",
         width: "250px",
-        marginBottom: "3rem",
       }}
     >
       <Image
         alt="profile image"
         src={session?.user.image ? session.user.image : "/img/avatar.png"}
         fill
-        sizes="(max-width: 768px) 100vw"
+        sizes="100vw"
         style={{
           objectFit: "cover",
           borderRadius: "50%",

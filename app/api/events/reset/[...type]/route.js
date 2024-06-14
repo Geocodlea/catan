@@ -7,7 +7,7 @@ import * as Clasament from "@/models/Clasament";
 import OldEvents from "@/models/OldEvents";
 import Leaderboard from "@/models/Leaderboard";
 
-import { sortOrder } from "@/utils/sortRanking";
+import { sortOrder } from "@/utils/helpers";
 
 import { Storage } from "@google-cloud/storage";
 

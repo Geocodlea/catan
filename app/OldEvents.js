@@ -2,25 +2,11 @@
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
+import { gameName } from "@/utils/helpers";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import AllEvents from "./AllEvents";
-
-function findGame(item) {
-  const games = {
-    catan: "Catan",
-    whist: "Whist",
-    rentz: "Rentz",
-    cavaleri: "Catan - Orașe și Cavaleri",
-  };
-  for (let key in games) {
-    if (item.includes(key)) {
-      return games[key]; // Return the display name directly
-    }
-  }
-  return "Unknown Game"; // Directly handle unknown game case here
-}
 
 const OldEventsTable = () => {
   const { data: session } = useSession();
@@ -54,12 +40,6 @@ const OldEventsTable = () => {
   }, []);
 
   const filteredOldEvents = oldEvents.map((event) => {
-    const isOnline = event.name.includes("online");
-    const isLive = event.name.includes("live");
-    const mode = isOnline ? "online" : isLive ? "live" : "Campionat Național";
-
-    const game = findGame(event.name);
-
     const isCurrentMonth = event.name.includes("06.2024");
     if (isCurrentMonth) {
       cost = event.participants * 3;
@@ -67,7 +47,7 @@ const OldEventsTable = () => {
     }
 
     return {
-      name: `${game} - ${mode}`,
+      name: gameName(event),
       link: `/oldevents/${event.name}`,
       cost: isCurrentMonth ? cost : null,
       total: isCurrentMonth ? total : null,
