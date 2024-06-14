@@ -230,7 +230,7 @@ const OldEventTable = async ({ params }) => {
 
   return (
     <>
-      <Typography variant="h3">Clasament</Typography>
+      <h3>Clasament</h3>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvent}

@@ -11,9 +11,7 @@ export default function Contact() {
       spacing={{ xs: 4, md: 8, lg: 16 }}
     >
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-          Send us a message
-        </Typography>
+        <h3>Send us a message</h3>
         <ContactForm />
       </Stack>
 

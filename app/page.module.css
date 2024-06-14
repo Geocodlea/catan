@@ -259,8 +259,9 @@
 }
 
 /* Large Desktops */
-@media (min-width: 1351px) {
+@media (min-width: 1500px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 50px;
   }
 }

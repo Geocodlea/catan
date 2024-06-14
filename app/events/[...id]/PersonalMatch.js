@@ -125,9 +125,7 @@ export default function PersonalMatch({
     <Box sx={{ margin: "auto", maxWidth: "800px" }}>
       {participants.length ? (
         <>
-          <Typography variant="h3" gutterBottom>
-            Masa {participants[0]?.table}
-          </Typography>
+          <h3>Masa {participants[0]?.table}</h3>
           <EditableDataGrid
             columnsData={columnsData}
             rowsData={participants}

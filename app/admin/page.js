@@ -66,7 +66,7 @@ export default async function Admin() {
         <Typography variant="h2">Create Event</Typography>
         <CreateEventForm />
       </Paper>
-      <Typography variant="h3">Users</Typography>
+      <h3>Users</h3>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredUsers}

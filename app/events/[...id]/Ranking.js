@@ -159,7 +159,7 @@ export default function Ranking({ type, round }) {
 
   return (
     <>
-      <Typography variant="h3">Clasament</Typography>
+      <h3>Clasament</h3>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={players}

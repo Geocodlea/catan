@@ -78,9 +78,7 @@ export default function Matches({ type, round, host, isAdmin }) {
           }}
           key={index}
         >
-          <Typography variant="h3" gutterBottom>
-            Meciuri - Runda {round - index}
-          </Typography>
+          <h3>Meciuri - Runda {round - index}</h3>
           <Stack spacing={6}>
             {match.map((match, index) => (
               <Box key={index}>

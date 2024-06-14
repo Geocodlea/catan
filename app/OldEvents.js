@@ -110,7 +110,7 @@ const OldEventsTable = () => {
 
   return (
     <Box sx={{ width: "100%", maxWidth: "800px" }}>
-      <Typography variant="h3">Evenimente Anterioare</Typography>
+      <h3>Evenimente Anterioare</h3>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvents}

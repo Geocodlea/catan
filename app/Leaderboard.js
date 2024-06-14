@@ -37,7 +37,7 @@ const LeaderboardTable = async () => {
 
   return (
     <Box mb={8} mt={8} sx={{ width: "100%", maxWidth: "800px" }}>
-      <Typography variant="h3">Leaderboard</Typography>
+      <h3>Leaderboard</h3>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredLeaderboard}
