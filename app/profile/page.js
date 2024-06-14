@@ -63,17 +63,18 @@ export default async function Profile() {
         padding: "1rem 2rem",
       }}
     >
-      <Stack spacing={4}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "-10rem",
-          }}
-        >
-          <ProfileImage />
-        </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "-10rem",
+          marginBottom: "3rem",
+        }}
+      >
+        <ProfileImage />
+      </Box>
 
+      <Stack spacing={4}>
         <div>
           <h3>Profile</h3>
           <ProfileForm />

@@ -2,19 +2,19 @@ import styles from "./page.module.css";
 
 import { Box, Paper, Skeleton } from "@mui/material";
 
-const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const skeletons = [1, 2, 3, 4];
 
 export default function Loading() {
   return (
     <>
       <Skeleton width="80%" className={styles.title} />
-      <Skeleton variant="rounded" width="100%" height="18vh" />
       <Skeleton
         variant="rounded"
-        width="80%"
-        height="30px"
-        sx={{ margin: "2rem 0" }}
+        width="100%"
+        height="18vh"
+        sx={{ margin: "1rem 0 3rem" }}
       />
+
       <Box className={styles.grid}>
         {skeletons.map((skeleton) => (
           <Paper elevation={24} key={skeleton}>
@@ -35,6 +35,20 @@ export default function Loading() {
           </Paper>
         ))}
       </Box>
+
+      <Skeleton
+        variant="rounded"
+        width="100%"
+        height="50vh"
+        sx={{ margin: "3rem 0" }}
+      />
+
+      <Skeleton
+        variant="rounded"
+        width="100%"
+        height="50vh"
+        sx={{ margin: "3rem 0" }}
+      />
     </>
   );
 }

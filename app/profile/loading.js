@@ -7,7 +7,11 @@ export default function Loading() {
     <Paper
       elevation={24}
       className={styles.card}
-      sx={{ width: "100%", maxWidth: "600px", marginBottom: "13rem" }}
+      sx={{
+        width: "100%",
+        maxWidth: "600px",
+        marginBottom: "13rem",
+      }}
     >
       <Box
         sx={{
@@ -31,18 +35,34 @@ export default function Loading() {
       <Stack spacing={2} alignItems="center">
         <Skeleton variant="rounded" width="100%" height={60} />
         <Skeleton variant="rounded" width="100%" height={60} />
-        <Skeleton variant="rounded" width="100%" height={60} />
+
         <Skeleton
           variant="rounded"
           width="30%"
           height={40}
-          sx={{ marginLeft: "35%", marginRight: "35%" }}
+          style={{
+            marginLeft: "35%",
+            marginRight: "35%",
+            marginBottom: "3rem",
+          }}
+        />
+
+        <Skeleton variant="rounded" width="100%" height="50vh" />
+
+        <Skeleton
+          variant="rounded"
+          width="100%"
+          height="10vh"
+          style={{ margin: "3rem 0 1rem" }}
         />
         <Skeleton
           variant="rounded"
           width="30%"
           height={40}
-          sx={{ marginLeft: "35%", marginRight: "35%" }}
+          style={{
+            marginLeft: "35%",
+            marginRight: "35%",
+          }}
         />
       </Stack>
     </Paper>

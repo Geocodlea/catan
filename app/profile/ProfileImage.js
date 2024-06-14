@@ -20,7 +20,8 @@ export default function ProfileImage() {
         alt="profile image"
         src={session?.user.image ? session.user.image : "/img/avatar.png"}
         fill
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority
         style={{
           objectFit: "cover",
           borderRadius: "50%",

@@ -8,7 +8,7 @@ export default function Loading() {
   return (
     <>
       <Skeleton width="70%" className={styles.title} />
-      <Skeleton variant="rounded" width="100%" height="10vh" />
+      <Skeleton variant="rounded" width="100%" height="50vh" />
       <Skeleton
         variant="rounded"
         width={200}
