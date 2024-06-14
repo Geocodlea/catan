@@ -3,8 +3,6 @@ import EditableDataGrid from "@/components/EditableDataGrid";
 import dbConnect from "/utils/dbConnect";
 import OldEvents from "/models/OldEvents";
 
-import { Typography } from "@mui/material";
-
 const columnGroupingModel = [
   {
     groupId: "Masa",

@@ -20,14 +20,14 @@ const Privacy = () => {
         <Box>
           <h2>2. Information We Collect</h2>
           <Stack spacing={2}>
-            <h3>a) Personal Information:</h3>
+            <h4>a) Personal Information:</h4>
             <p className={styles.description}>
               We may collect personal information such as your name, email
               address, and other contact details when you voluntarily provide
               them through forms on our Website.
             </p>
 
-            <h3>b) Automatically Collected Information:</h3>
+            <h4>b) Automatically Collected Information:</h4>
             <p className={styles.description}>
               We may automatically collect certain information about your visit,
               including your IP address, browser type, and device information.

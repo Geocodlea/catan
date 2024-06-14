@@ -3,7 +3,7 @@ import EditableDataGrid from "@/components/EditableDataGrid";
 import dbConnect from "/utils/dbConnect";
 import Leaderboard from "/models/Leaderboard";
 
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 const LeaderboardTable = async () => {
   await dbConnect();
