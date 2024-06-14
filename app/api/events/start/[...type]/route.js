@@ -34,8 +34,6 @@ export async function POST(request, { params }) {
     });
   }
 
-  // DE STERS LA FINAL !!!
-  await VerificationsType.deleteMany();
   await VerificationsType.updateOne(
     { round: 0 },
     { stop: true },
@@ -54,8 +52,6 @@ export async function POST(request, { params }) {
     randomParticipants
   );
 
-  // DE STERS LA FINAL !!!
-  await ClasamentType.deleteMany();
   await ClasamentType.insertMany(randomParticipants);
 
   await VerificationsType.updateOne({ round: 0 }, { round: 1 });

@@ -85,6 +85,17 @@ export default function PersonalMatch({
     },
   ];
 
+  // Only for Whist Final
+  if (type === "whist" && round === 2) {
+    columnsData.push({
+      field: "licitari",
+      headerName: "Licitari Corecte",
+      type: "number",
+      editable: true,
+      width: 120,
+    });
+  }
+
   const onSubmit = async (values) => {
     try {
       let formData = new FormData();

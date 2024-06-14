@@ -24,10 +24,6 @@ export const createMatches = async (
     // Number of 3-player tables
     const tables3 = (participantsNumber - tables4 * 4) / 3;
 
-    // DE STERS LA FINAL !!!
-    console.log(tables4, tables3);
-    await MatchesType.deleteMany();
-
     // Distribute players into 4-player tables
     await Promise.all(
       participants
@@ -54,10 +50,6 @@ export const createMatches = async (
 
   if (type === "whist" || type === "rentz") {
     const tables = playersPerTableWhist(participantsNumber, playersPerTable);
-
-    // DE STERS LA FINAL !!!
-    console.log(tables);
-    await MatchesType.deleteMany();
 
     // Distribute players into 6-player tables
     await Promise.all(

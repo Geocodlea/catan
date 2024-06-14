@@ -56,6 +56,17 @@ export default function Matches({ type, round, host, isAdmin }) {
     },
   ];
 
+  // Only for Whist Final
+  if (type === "whist" && round === 2) {
+    columnsData.push({
+      field: "licitari",
+      headerName: "Licitari Corecte",
+      type: "number",
+      editable: isAdmin,
+      width: 120,
+    });
+  }
+
   return (
     <>
       {timer && <CountdownTimer targetDate={new Date(timer)} />}

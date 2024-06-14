@@ -70,17 +70,15 @@ export async function PUT(request, { params }) {
   const table = data.table;
   const name = data.name;
 
-  if (
-    isNaN(data.score) ||
-    data.score === null ||
-    data.score === undefined ||
-    data.score === ""
-  ) {
+  if (isNaN(data.score) || !data.score) {
     return NextResponse.json({
       success: false,
       message: "Scorul trebuie să fie un număr",
     });
   }
+
+  // Only for Whist Final
+  const licitari = data.licitari;
 
   const score = Number(data.score);
   const ParticipantType = Participants[`Participanti_live_${type}`];
@@ -102,7 +100,7 @@ export async function PUT(request, { params }) {
 
   // Update the score and find if all scores are filled
   await ParticipantType.updateOne({ id }, { name });
-  await MatchesType.updateOne({ id }, { table, name, score, host });
+  await MatchesType.updateOne({ id }, { table, name, score, host, licitari });
   const tableScores = await MatchesType.find({
     table,
     score: null,
@@ -115,13 +113,16 @@ export async function PUT(request, { params }) {
   const players = await MatchesType.find({
     table,
   })
-    .select("id name score")
+    .select("id name score licitari")
     .sort({ score: -1 });
 
   const ids = players.map((player) => player.id);
   const names = players.map((player) => player.name);
   const scores = players.map((player) => player.score);
   const totalScore = scores.reduce((a, b) => a + b, 0);
+
+  // Only for Whist Final
+  const licitariAll = players.map((player) => player.licitari);
 
   const points = calculateScores(type, scores);
 
@@ -199,6 +200,9 @@ export async function PUT(request, { params }) {
               },
               2, // Number of decimal places
             ],
+          },
+          licitari: {
+            $arrayElemAt: [licitariAll, { $indexOfArray: [ids, "$id"] }],
           },
         },
       },

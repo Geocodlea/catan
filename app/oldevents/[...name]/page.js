@@ -61,6 +61,7 @@ const OldEventTable = async ({ params }) => {
         "data.punctejocuriNumber": { $toDouble: "$data.punctejocuri" },
         "data.procentNumber": { $toDouble: "$data.procent" },
         "data.puncter2Number": { $toDouble: "$data.puncter2" },
+        "data.licitariNumber": { $toDouble: "$data.licitari" },
       },
     },
     {
@@ -70,8 +71,7 @@ const OldEventTable = async ({ params }) => {
           {
             $sort: {
               "data.puncter2Number": -1,
-              "data.punctetotalNumber": -1,
-              "data.procentNumber": -1,
+              "data.licitariNumber": -1,
             },
           },
         ],

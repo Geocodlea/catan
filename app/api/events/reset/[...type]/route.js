@@ -116,6 +116,7 @@ export async function DELETE(request, { params }) {
         punctejoctotal: participant.scorjocuri || null,
         punctejocuri: participant.scortotal || null,
         procent: participant.procent || null,
+        licitari: participant.licitari || null,
       })),
     };
 

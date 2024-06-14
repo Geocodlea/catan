@@ -70,6 +70,7 @@ const createMatchesModel = (event, round) => {
       score: { type: Number },
       host: { type: String },
       img: { type: String },
+      licitari: { type: Number },
     },
     { collection: `meciuri_live_${event}_${round}` }
   );
@@ -102,6 +103,7 @@ const createClasamentModel = (event) => {
       scorjocuri: { type: Number },
       scortotal: { type: Number },
       procent: { type: Number },
+      licitari: { type: Number },
     },
     { collection: `clasament_live_${event}` }
   );
