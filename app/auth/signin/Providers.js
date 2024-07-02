@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-import styles from "app/page.module.css";
+import styles from "/app/page.module.css";
 import { Button, Typography, Stack, Divider } from "@mui/material";
 
 import { Formik, Form, Field } from "formik";
