@@ -105,7 +105,7 @@ const Privacy = () => {
           </p>
         </Box>
         <p style={{ fontSize: "1.3rem", fontWeight: "bold", alignSelf: "end" }}>
-          Effective Date: 10.11.2024
+          Effective Date: 01.07.2024
         </p>
       </Stack>
     </>

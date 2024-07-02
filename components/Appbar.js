@@ -18,7 +18,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NavItems from "./NavItems";
 
 const drawerWidth = 240;
-const navItems = ["home", "about", "contact", "login"];
+const navItems = ["home", "login"];
 
 function DrawerAppBar({ windowAppBar }) {
   const [mobileOpen, setMobileOpen] = useState(false);

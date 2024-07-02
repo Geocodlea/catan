@@ -89,7 +89,7 @@ const OldEventsTable = () => {
   }
 
   return (
-    <Box sx={{ width: "100%", maxWidth: "800px" }}>
+    <Box mt={8} sx={{ width: "100%", maxWidth: "800px" }}>
       <h3>Evenimente Anterioare</h3>
       <EditableDataGrid
         columnsData={columnsData}

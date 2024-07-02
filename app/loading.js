@@ -42,13 +42,6 @@ export default function Loading() {
         height="50vh"
         sx={{ margin: "3rem 0" }}
       />
-
-      <Skeleton
-        variant="rounded"
-        width="100%"
-        height="50vh"
-        sx={{ margin: "3rem 0" }}
-      />
     </>
   );
 }
