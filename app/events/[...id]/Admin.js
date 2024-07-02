@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useState } from "react";
 import styles from "@/app/page.module.css";
 import { Box } from "@mui/material";
@@ -11,6 +13,7 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loadingStart, setLoadingStart] = useState(false);
   const [loadingReset, setLoadingReset] = useState(false);
+  const router = useRouter();
 
   const start = async (players) => {
     setLoadingStart(true);
@@ -68,6 +71,10 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
         text: `Resetare cu succes`,
         severity: "success",
       });
+
+      if (isFinalRound) {
+        router.push("/");
+      }
     } catch (error) {
       setLoadingReset(false);
       setAlert({ text: `${error}`, severity: "error" });

@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
-import { Typography } from "@mui/material";
 
-export default function Participanti({ type, round, isAdmin }) {
+export default function Participanti({ type, round, isAdmin, isOrganizer }) {
   const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
@@ -29,26 +28,26 @@ export default function Participanti({ type, round, isAdmin }) {
     {
       field: "name",
       headerName: "Nume",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       minWidth: 150,
       flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 150,
     },
     {
       field: "obs",
       headerName: "Obs",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 200,
     },
     {
       field: "rude",
       headerName: "Rude",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 55,
     },
   ];
@@ -61,8 +60,8 @@ export default function Participanti({ type, round, isAdmin }) {
         rowsData={participants}
         pageSize={50}
         density={"compact"}
-        showActions={isAdmin}
-        showAddRecord={isAdmin}
+        showActions={isAdmin || isOrganizer}
+        showAddRecord={isAdmin || isOrganizer}
         apiURL={`/events/participants/${type}/${round}`}
         alertText={"participant"}
         disableColumnMenu={true}

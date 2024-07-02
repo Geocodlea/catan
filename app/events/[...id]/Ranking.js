@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
-import { Typography } from "@mui/material";
 
 const columnGroupingModel = [
   {

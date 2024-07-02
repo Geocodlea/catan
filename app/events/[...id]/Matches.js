@@ -2,9 +2,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import CountdownTimer from "@/components/CountdownTimer";
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
-export default function Matches({ type, round, host, isAdmin }) {
+export default function Matches({ type, round, host, isAdmin, isOrganizer }) {
   const [matches, setMatches] = useState([]);
   const [timer, setTimer] = useState("");
 
@@ -31,7 +31,7 @@ export default function Matches({ type, round, host, isAdmin }) {
     {
       field: "table",
       headerName: "Masa",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 60,
     },
     {
@@ -42,7 +42,7 @@ export default function Matches({ type, round, host, isAdmin }) {
     {
       field: "name",
       headerName: "Nume",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       minWidth: 150,
       flex: 1,
     },
@@ -51,7 +51,7 @@ export default function Matches({ type, round, host, isAdmin }) {
       field: "score",
       headerName: "Scor",
       type: "number",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 80,
     },
   ];
@@ -62,7 +62,7 @@ export default function Matches({ type, round, host, isAdmin }) {
       field: "licitari",
       headerName: "Licitari Corecte",
       type: "number",
-      editable: isAdmin,
+      editable: isAdmin || isOrganizer,
       width: 120,
     });
   }
@@ -86,10 +86,10 @@ export default function Matches({ type, round, host, isAdmin }) {
                   columnsData={columnsData}
                   rowsData={match.participants}
                   pageSize={10}
-                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
+                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}`}
                   alertText={"player"}
-                  showAddRecord={isAdmin}
-                  showActions={isAdmin}
+                  showAddRecord={isAdmin || isOrganizer}
+                  showActions={isAdmin || isOrganizer}
                   disableColumnMenu={true}
                   hideSearch={true}
                   hideFooter={true}

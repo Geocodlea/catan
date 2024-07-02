@@ -4,6 +4,9 @@ import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
 
+import nodemailer from "nodemailer";
+import { emailFooter } from "@/utils/emailFooter";
+
 import { createMatches } from "@/utils/createMatches";
 
 export async function GET(request, { params }) {
@@ -46,7 +49,7 @@ export async function GET(request, { params }) {
       { stop: true },
       { stop: false, timer: null }
     );
-    return NextResponse.json({ round, isFinalRound });
+    return NextResponse.json({ round, isFinalRound, isFinished: true });
   }
 
   // All scores submitted, start the next round
@@ -80,6 +83,7 @@ export async function GET(request, { params }) {
       $project: {
         id: 1,
         name: 1,
+        email: 1,
         punctetotal: "$participants.punctetotal",
         scorjocuri: "$participants.scorjocuri",
         procent: "$participants.procent",
@@ -101,6 +105,26 @@ export async function GET(request, { params }) {
     MatchesType,
     participants
   );
+
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  // Send emails to all participants
+  participants
+    .filter((participant) => participant.email)
+    .forEach(async (participant) => {
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: participant.email,
+        subject: `Concurs Catan`,
+        text: `Start runda ${round} ${emailFooter}`,
+      });
+    });
 
   return NextResponse.json({ round, isFinalRound });
 }

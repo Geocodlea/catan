@@ -49,8 +49,8 @@ export async function POST(request, { params }) {
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: session.user.email,
-    subject: `Înscriere Seara de ${type}`,
-    text: `Salutare ${session.user.name}, ne bucură înscrierea ta la Seara de ${type}. \r\n\r\n În cazul în care nu vei mai putea ajunge, te rugăm să ne anunți sau să îți anulezi înscrierea pe site: www.agames.ro \r\n\r\n Mulțumim, o zi frumoasă în continuare 😊 ${emailFooter}`,
+    subject: `Înscriere Catan - Etapă Locală`,
+    text: `Salutare ${session.user.name}, ne bucură înscrierea ta la etapa locală de Catan. \r\n\r\n În cazul în care nu vei mai putea ajunge, te rugăm să ne anunți sau să îți anulezi înscrierea pe site. \r\n\r\n Mulțumim, o zi frumoasă în continuare 😊 ${emailFooter}`,
   });
 
   return NextResponse.json({ success: true });

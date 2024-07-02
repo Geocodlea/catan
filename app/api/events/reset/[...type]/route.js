@@ -5,7 +5,7 @@ import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
 import * as Clasament from "@/models/Clasament";
 import OldEvents from "@/models/OldEvents";
-import Leaderboard from "@/models/Leaderboard";
+import Event from "@/models/Event";
 
 import { sortOrder } from "@/utils/helpers";
 
@@ -53,48 +53,19 @@ export async function DELETE(request, { params }) {
       score: null,
     }).count();
     const allScoresSubmitted = roundScores === 0;
-
     if (!allScoresSubmitted) {
       return NextResponse.json({
         success: false,
         message: "Nu sunt introduse toate scorurile",
       });
     }
-
     const participants = await ClasamentType.find().sort(sortOrder(type));
-
-    // Update Leaderboard
-    const leaderboardPoints = [100, 70, 50, 35, 25];
-    participants.forEach(async (participant, i) => {
-      const id = participant.id;
-      const leaderboardParticipant = await Leaderboard.findOne({
-        id,
-      }).select("puncte");
-
-      if (leaderboardParticipant) {
-        await Leaderboard.updateOne(
-          { id },
-          {
-            puncte: leaderboardParticipant.puncte + leaderboardPoints[i] || 0,
-          }
-        );
-      } else {
-        await Leaderboard.create({
-          id,
-          nume: participant.name,
-          puncte: leaderboardPoints[i] || 0,
-        });
-      }
-    });
-
     // Create old event
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-
     const oldEventName = `clasament_live_${type}_${day}.${month}.${year}`;
-
     const oldEvent = {
       name: oldEventName,
       data: participants.map((participant) => ({
@@ -119,23 +90,20 @@ export async function DELETE(request, { params }) {
         licitari: participant.licitari || null,
       })),
     };
-
     await OldEvents.create(oldEvent);
-
     await ClasamentType.collection.drop();
     await dropMatches(type);
-
-    // List all files for deleted matches
+    // List all files for deleted event
     const [files] = await bucket.getFiles({
-      prefix: `uploads/events/${eventID}/matches/`,
+      prefix: `uploads/events/${eventID}/`,
     });
-
     // Delete each file
     await Promise.all(
       files.map(async (file) => {
         await file.delete();
       })
     );
+    await Event.deleteOne({ _id: eventID });
   }
 
   await ParticipantType.deleteMany();

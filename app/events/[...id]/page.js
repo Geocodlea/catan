@@ -24,6 +24,7 @@ export default function EventPage({ params }) {
   const [eventStarted, setEventStarted] = useState(false);
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [isOrganizer, setIsOrganizer] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const isAdmin = session?.user.role === "admin";
 
   const saveData = async (data, tab) => {
@@ -123,9 +124,15 @@ export default function EventPage({ params }) {
             isOrganizer={isOrganizer}
           />
         ),
-      },
-      { label: "Clasament", content: <Ranking type={type} round={round} /> }
+      }
     );
+  }
+
+  if (eventStarted && (isAdmin || isOrganizer || isFinished)) {
+    tabs.push({
+      label: "Clasament",
+      content: <Ranking type={type} round={round} />,
+    });
   }
 
   if (isAdmin || isOrganizer) {
@@ -148,6 +155,7 @@ export default function EventPage({ params }) {
       const data = await response.json();
       setRound(data.round);
       setIsFinalRound(data.isFinalRound);
+      setIsFinished(data.isFinished);
     };
 
     getRound();

@@ -97,8 +97,7 @@ const ResetButton = ({ loading, round, isFinalRound, reset }) => (
     )}
     {isFinalRound && (
       <Typography gutterBottom>
-        Șterge și introduce eveniment în evenimente anterioare, introduce
-        jucători în leaderboard
+        Șterge și introduce eveniment în evenimente anterioare
       </Typography>
     )}
 

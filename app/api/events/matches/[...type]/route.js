@@ -65,7 +65,7 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const [type, round, host, isAdmin, id] = params.type;
+  const [type, round, host, isAdmin, isOrganizer, id] = params.type;
   const data = await request.json();
   const table = data.table;
   const name = data.name;
@@ -88,7 +88,7 @@ export async function PUT(request, { params }) {
 
   await dbConnect();
 
-  if (isAdmin !== "true") {
+  if (isAdmin !== "true" || isOrganizer !== "true") {
     const eventFinished = await VerificationsType.findOne({ stop: false });
     if (eventFinished) {
       return NextResponse.json({
@@ -275,7 +275,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const [type, round, , , id] = params.type;
+  const [type, round, , , , id] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const MatchesType = Matches[`Meciuri_live_${type}_${round}`];

@@ -71,7 +71,7 @@ export async function POST(request, { params }) {
       await transporter.sendMail({
         from: process.env.EMAIL_FROM,
         to: participant.email,
-        subject: `Concurs ${type}`,
+        subject: `Concurs Catan`,
         text: `Start runda ${round} ${emailFooter}`,
       });
     });
