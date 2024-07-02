@@ -10,7 +10,6 @@ import AlertMsg from "@/components/AlertMsg";
 import Stack from "@mui/material/Stack";
 import Register from "./Register";
 import Participants from "./Participants";
-import Amical from "./Amical";
 import Admin from "./Admin";
 import PersonalMatch from "./PersonalMatch";
 import Matches from "./Matches";
@@ -24,6 +23,7 @@ export default function EventPage({ params }) {
   const [event, setEvent] = useState({});
   const [eventStarted, setEventStarted] = useState(false);
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const [isOrganizer, setIsOrganizer] = useState(false);
   const isAdmin = session?.user.role === "admin";
 
   const saveData = async (data, tab) => {
@@ -52,7 +52,7 @@ export default function EventPage({ params }) {
   };
 
   const editorContent = (event, tab) =>
-    isAdmin ? (
+    isAdmin || isOrganizer ? (
       <Editor saveData={saveData} initialData={event[tab]} tab={tab} />
     ) : (
       <div dangerouslySetInnerHTML={{ __html: event[tab] || "" }} />
@@ -80,13 +80,17 @@ export default function EventPage({ params }) {
     });
   }
 
-  if (isAdmin || eventStarted) {
+  if (isAdmin || isOrganizer || eventStarted) {
     tabs.push({
       label: "Participanti",
       content: (
         <Stack spacing={4}>
-          <Participants type={type} round={round} isAdmin={isAdmin} />
-          {isAdmin && <Amical type={type} />}
+          <Participants
+            type={type}
+            round={round}
+            isAdmin={isAdmin}
+            isOrganizer={isOrganizer}
+          />
         </Stack>
       ),
     });
@@ -102,6 +106,7 @@ export default function EventPage({ params }) {
             round={round}
             host={session?.user.name}
             isAdmin={isAdmin}
+            isOrganizer={isOrganizer}
             userID={session?.user.id}
             eventID={id}
           />
@@ -115,6 +120,7 @@ export default function EventPage({ params }) {
             round={round}
             host={session?.user.name}
             isAdmin={isAdmin}
+            isOrganizer={isOrganizer}
           />
         ),
       },
@@ -122,7 +128,7 @@ export default function EventPage({ params }) {
     );
   }
 
-  if (isAdmin) {
+  if (isAdmin || isOrganizer) {
     tabs.push({
       label: "Admin",
       content: (
@@ -154,15 +160,20 @@ export default function EventPage({ params }) {
     const getEvent = async () => {
       const response = await fetch(`/api/events/${id}`);
       const event = await response.json();
+
+      if (session?.user.id === event.organizer) {
+        setIsOrganizer(true);
+      }
+
       setEvent(event);
     };
 
     getEvent();
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     round === 0 ? setEventStarted(false) : setEventStarted(true);
-  }, [round, event, isAdmin]);
+  }, [round, event, isAdmin, isOrganizer]);
 
   return (
     <div className="editorContent">

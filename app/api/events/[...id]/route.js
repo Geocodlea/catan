@@ -20,7 +20,7 @@ const bucket = storage.bucket(bucketName);
 export async function GET(request, { params }) {
   await dbConnect();
   const event = await Event.findOne({ _id: params.id[0] }).select(
-    "detalii premii regulament"
+    "detalii premii regulament organizer"
   );
 
   return NextResponse.json(event);
