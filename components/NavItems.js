@@ -90,6 +90,11 @@ const NavItems = ({
               <MenuItem onClick={handleCloseMenu}>Admin</MenuItem>
             </Link>
           )}
+          {session.user.role === "organizer" && (
+            <Link href="/organizer">
+              <MenuItem onClick={handleCloseMenu}>Organizator</MenuItem>
+            </Link>
+          )}
           <Link href="/profile">
             <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
           </Link>
