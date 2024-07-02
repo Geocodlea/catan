@@ -13,6 +13,7 @@ global.models.Event =
     detalii: { type: String },
     premii: { type: String },
     regulament: { type: String },
+    organizer: { type: String },
   });
 
 export default global.models.Event;

@@ -42,7 +42,7 @@ const validationSchema = Yup.object().shape({
   date: Yup.date().required("Event date is required"),
 });
 
-const CreateEventForm = () => {
+const CreateEventForm = ({ userID }) => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
 
   const onSubmit = async (values) => {
@@ -53,6 +53,8 @@ const CreateEventForm = () => {
       formData.append("description", values.description);
       formData.append("image", values.image);
       formData.append("date", values.date);
+      formData.append("type", "catan");
+      formData.append("organizer", userID);
 
       const response = await fetch("/api/events", {
         method: "POST",

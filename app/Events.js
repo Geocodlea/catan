@@ -124,23 +124,24 @@ const Events = async ({ searchParams }) => {
               {event.type}
             </Typography>
 
-            {isAdmin && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  padding: "1rem",
-                }}
-              >
-                <Link href={`/admin/${event.id}`}>
-                  <Button variant="contained" className="btn btn-primary">
-                    Edit Event
-                  </Button>
-                </Link>
+            {isAdmin ||
+              (session?.user.id === event.organizer && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    padding: "1rem",
+                  }}
+                >
+                  <Link href={`/admin/${event.id}`}>
+                    <Button variant="contained" className="btn btn-primary">
+                      Edit Event
+                    </Button>
+                  </Link>
 
-                <DeleteEvent handleDelete={handleDelete} id={event.id} />
-              </Box>
-            )}
+                  <DeleteEvent handleDelete={handleDelete} id={event.id} />
+                </Box>
+              ))}
           </Paper>
         ))}
       </Box>
