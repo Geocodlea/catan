@@ -10,7 +10,8 @@ import UpdateEvent from "./UpdateEvent";
 export default async function Update({ params }) {
   const session = await getServerSession(authOptions);
 
-  if (session?.user.role !== "admin") redirect(`/`);
+  if (session?.user.role !== "organizer" && session?.user.role !== "admin")
+    redirect(`/`);
 
   return (
     <Paper elevation={24} className={styles.card} sx={{ maxWidth: "600px" }}>

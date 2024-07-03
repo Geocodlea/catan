@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import styles from "/app/page.module.css";
 import { Paper, Typography } from "@mui/material";
 
-import CreateEventForm from "./CreateEventForm";
+import CreateEventForm from "/app/admin/CreateEventForm";
 
-export default async function Admin() {
+export default async function Organizer() {
   const session = await getServerSession(authOptions);
   if (session?.user.role !== "organizer") redirect(`/`);
 

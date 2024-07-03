@@ -8,11 +8,7 @@ import * as Yup from "yup";
 import { Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import {
-  CustomTextField,
-  CustomSelect,
-  CustomFileUpload,
-} from "@/utils/formsHelper";
+import { CustomTextField, CustomFileUpload } from "@/utils/formsHelper";
 import AlertMsg from "/components/AlertMsg";
 
 const FILE_SIZE = 5000000; // 5 MB
@@ -23,7 +19,6 @@ const initialValues = {
   description: "",
   image: "",
   date: "",
-  type: "",
 };
 
 const validationSchema = Yup.object().shape({
@@ -39,7 +34,6 @@ const validationSchema = Yup.object().shape({
       return value.size <= FILE_SIZE;
     }),
   date: Yup.date("Event date must be a date"),
-  type: Yup.string("Event Type must be a text"),
 });
 
 const UpdateEvent = ({ params }) => {
@@ -53,7 +47,7 @@ const UpdateEvent = ({ params }) => {
       formData.append("description", values.description);
       formData.append("image", values.image);
       formData.append("date", values.date);
-      formData.append("type", values.type);
+      formData.append("type", "catan");
 
       const response = await fetch(`/api/events/${params.id}`, {
         method: "PATCH",
@@ -113,17 +107,6 @@ const UpdateEvent = ({ params }) => {
             InputLabelProps={{
               shrink: true,
             }}
-          />
-
-          <Field
-            name="type"
-            component={CustomSelect}
-            label="Type"
-            options={[
-              { value: "catan", label: "Catan" },
-              { value: "whist", label: "Whist" },
-              { value: "rentz", label: "Rentz" },
-            ]}
           />
 
           <Box
