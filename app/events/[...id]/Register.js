@@ -9,14 +9,14 @@ import Link from "next/link";
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import AlertMsg from "@/components/AlertMsg";
 
-export default function Register({ session, type }) {
+export default function Register({ session, type, eventID }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [loading, setLoading] = useState(false);
 
   const register = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/events/register/${type}`, {
+      const response = await fetch(`/api/events/register/${type}/${eventID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function Register({ session, type }) {
 
   const unregister = async () => {
     try {
-      const response = await fetch(`/api/events/register/${type}`, {
+      const response = await fetch(`/api/events/register/${type}/${eventID}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

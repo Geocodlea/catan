@@ -20,25 +20,6 @@ const createParticipantsModel = (event) => {
   return global.models[modelName];
 };
 
-const createAmicalModel = (event) => {
-  const schema = new mongoose.Schema(
-    {
-      id: { type: String, required: true },
-      name: { type: String, required: true },
-      tel: { type: String },
-      email: { type: String },
-      obs: { type: String },
-    },
-    { collection: `amical_live_${event}` }
-  );
-
-  const modelName = `Amical_live_${event}`;
-  global.models[modelName] =
-    global.models[modelName] || mongoose.model(modelName, schema);
-
-  return global.models[modelName];
-};
-
 const createVerificationsModel = (event) => {
   const schema = new mongoose.Schema(
     {
@@ -70,7 +51,6 @@ const createMatchesModel = (event, round) => {
       score: { type: Number },
       host: { type: String },
       img: { type: String },
-      licitari: { type: Number },
     },
     { collection: `meciuri_live_${event}_${round}` }
   );
@@ -103,7 +83,6 @@ const createClasamentModel = (event) => {
       scorjocuri: { type: Number },
       scortotal: { type: Number },
       procent: { type: Number },
-      licitari: { type: Number },
     },
     { collection: `clasament_live_${event}` }
   );
@@ -117,7 +96,6 @@ const createClasamentModel = (event) => {
 
 export {
   createParticipantsModel,
-  createAmicalModel,
   createVerificationsModel,
   createMatchesModel,
   createClasamentModel,

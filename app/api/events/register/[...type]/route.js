@@ -1,23 +1,30 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
-import * as Participants from "@/models/Participants";
-import * as Verifications from "@/models/Verifications";
 import nodemailer from "nodemailer";
 import { emailFooter } from "@/utils/emailFooter";
 
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+} from "@/utils/createModels";
+
 export async function POST(request, { params }) {
-  const [type] = params.type;
+  const [type, eventID] = params.type;
   const session = await request.json();
 
   if (Object.keys(session).length === 0) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const eventStarted = await VerificationsType.findOne({
+  await createParticipantsModel(eventID);
+  await createVerificationsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+
+  const eventStarted = await Verifications.findOne({
     round: { $gt: 0 },
   });
   if (eventStarted) {
@@ -27,7 +34,7 @@ export async function POST(request, { params }) {
     });
   }
 
-  const registeredParticipant = await ParticipantType.findOne({
+  const registeredParticipant = await Participants.findOne({
     id: session.user.id,
   });
 
@@ -35,7 +42,7 @@ export async function POST(request, { params }) {
     return NextResponse.json({ success: false, message: "Ești deja înscris" });
   }
 
-  const participant = new ParticipantType(session.user);
+  const participant = new Participants(session.user);
   await participant.save();
 
   const transporter = nodemailer.createTransport({
@@ -57,25 +64,26 @@ export async function POST(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const [type] = params.type;
+  const [type, eventID] = params.type;
   const user = await request.json();
 
   if (Object.keys(user).length === 0) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-
+  // Create models
   await dbConnect();
+  await createParticipantsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
 
-  const registeredParticipant = await ParticipantType.findOne({
+  const registeredParticipant = await Participants.findOne({
     id: user.id,
   });
   if (!registeredParticipant) {
     return NextResponse.json({ success: false, message: "Nu ești înscris" });
   }
 
-  await ParticipantType.deleteOne({ id: user.id });
+  await Participants.deleteOne({ id: user.id });
 
   return NextResponse.json({ success: true });
 }
