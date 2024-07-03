@@ -45,7 +45,7 @@ export async function POST(request, { params }) {
 
   if (round !== "0") {
     await createVerificationsModel(eventID);
-    await createMatchesModel(eventID);
+    await createMatchesModel(eventID, round);
     await createClasamentModel(eventID);
     const Verifications = mongoose.models[`Verificari_live_${eventID}`];
     const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
@@ -81,7 +81,7 @@ export async function PUT(request, { params }) {
   await Participants.updateOne({ id }, data);
 
   if (round !== "0") {
-    await createMatchesModel(eventID);
+    await createMatchesModel(eventID, round);
     await createClasamentModel(eventID);
     const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
     const Clasament = mongoose.models[`Clasament_live_${eventID}`];
@@ -104,7 +104,7 @@ export async function DELETE(request, { params }) {
   await Participants.deleteOne({ id });
 
   if (round !== "0") {
-    await createMatchesModel(eventID);
+    await createMatchesModel(eventID, round);
     const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
 
     await Matches.deleteOne({ id });

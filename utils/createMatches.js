@@ -1,8 +1,8 @@
 import { playersPerTableCatan, playersPerTableWhist } from "./playersPerTable";
 
 // Create and save a new match document
-const insertParticipant = async (MatchesType, table, id, name) => {
-  const newParticipant = new MatchesType({
+const insertParticipant = async (Matches, table, id, name) => {
+  const newParticipant = new Matches({
     table,
     id,
     name,
@@ -14,7 +14,7 @@ export const createMatches = async (
   type,
   participantsNumber,
   playersPerTable,
-  MatchesType,
+  Matches,
   participants
 ) => {
   if (type === "catan" || type === "cavaleri") {
@@ -29,7 +29,7 @@ export const createMatches = async (
       participants
         .filter((_, i) => i < tables4 * 4)
         .map(({ id, name }, i) =>
-          insertParticipant(MatchesType, Math.floor(i / 4) + 1, id, name)
+          insertParticipant(Matches, Math.floor(i / 4) + 1, id, name)
         )
     );
 
@@ -38,12 +38,7 @@ export const createMatches = async (
       participants
         .filter((_, i) => i >= tables4 * 4 && i < tables4 * 4 + tables3 * 3)
         .map(({ id, name }, i) =>
-          insertParticipant(
-            MatchesType,
-            Math.floor(i / 3) + 1 + tables4,
-            id,
-            name
-          )
+          insertParticipant(Matches, Math.floor(i / 3) + 1 + tables4, id, name)
         )
     );
   }
@@ -56,7 +51,7 @@ export const createMatches = async (
       participants
         .filter((_, i) => i < tables.tables6 * 6)
         .map(({ id, name }, i) =>
-          insertParticipant(MatchesType, Math.floor(i / 6) + 1, id, name)
+          insertParticipant(Matches, Math.floor(i / 6) + 1, id, name)
         )
     );
 
@@ -70,7 +65,7 @@ export const createMatches = async (
         )
         .map(({ id, name }, i) =>
           insertParticipant(
-            MatchesType,
+            Matches,
             Math.floor(i / 5) + 1 + tables.tables6,
             id,
             name
@@ -88,7 +83,7 @@ export const createMatches = async (
         )
         .map(({ id, name }, i) =>
           insertParticipant(
-            MatchesType,
+            Matches,
             Math.floor(i / 4) + 1 + tables.tables5,
             id,
             name
@@ -97,7 +92,7 @@ export const createMatches = async (
     );
   }
 
-  const verificari = await MatchesType.aggregate([
+  const verificari = await Matches.aggregate([
     {
       $lookup: {
         from: `verificari_live_${type}`,
@@ -126,8 +121,8 @@ export const createMatches = async (
   ]);
 
   for (let i = 0; i < 15; i++) {
-    await verifyMatches(verificari, MatchesType);
-    await verifyMatchesReverse(verificari, MatchesType);
+    await verifyMatches(verificari, Matches);
+    await verifyMatchesReverse(verificari, Matches);
     verificari.sort((a, b) => a.table - b.table);
   }
 };
@@ -152,9 +147,9 @@ const isSwitchable = (verificari, player1, player2) => {
 };
 
 // Switch tables between two players
-const switchTables = async (MatchesType, player1, player2) => {
-  await MatchesType.updateOne({ id: player1.id }, { table: player2.table });
-  await MatchesType.updateOne({ id: player2.id }, { table: player1.table });
+const switchTables = async (Matches, player1, player2) => {
+  await Matches.updateOne({ id: player1.id }, { table: player2.table });
+  await Matches.updateOne({ id: player2.id }, { table: player1.table });
 
   const temp = player1.table;
   player1.table = player2.table;
@@ -162,13 +157,13 @@ const switchTables = async (MatchesType, player1, player2) => {
 };
 
 // Switch tables if two players have the same table and rude
-const verifyMatches = async (verificari, MatchesType) => {
+const verifyMatches = async (verificari, Matches) => {
   for (let i = 0; i < verificari.length; i++) {
     for (let j = i + 1; j < verificari.length; j++) {
       if (sameVerifications(verificari[i], verificari[j])) {
         for (let k = j + 1; k < verificari.length; k++) {
           if (isSwitchable(verificari, verificari[j], verificari[k])) {
-            await switchTables(MatchesType, verificari[j], verificari[k]);
+            await switchTables(Matches, verificari[j], verificari[k]);
             return;
           }
         }
@@ -177,13 +172,13 @@ const verifyMatches = async (verificari, MatchesType) => {
   }
 };
 
-const verifyMatchesReverse = async (verificari, MatchesType) => {
+const verifyMatchesReverse = async (verificari, Matches) => {
   for (let i = verificari.length - 1; i >= 0; i--) {
     for (let j = i - 1; j >= 0; j--) {
       if (sameVerifications(verificari[i], verificari[j])) {
         for (let k = j - 1; k >= 0; k--) {
           if (isSwitchable(verificari, verificari[k], verificari[j])) {
-            await switchTables(MatchesType, verificari[j], verificari[k]);
+            await switchTables(Matches, verificari[j], verificari[k]);
             return;
           }
         }

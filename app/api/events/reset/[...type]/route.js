@@ -49,7 +49,7 @@ export async function DELETE(request, { params }) {
   await dbConnect();
   await createParticipantsModel(eventID);
   await createVerificationsModel(eventID);
-  await createMatchesModel(eventID);
+  await createMatchesModel(eventID, round);
   await createClasamentModel(eventID);
   const Participants = mongoose.models[`Participanti_live_${eventID}`];
   const Verifications = mongoose.models[`Verificari_live_${eventID}`];

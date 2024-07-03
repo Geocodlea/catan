@@ -3,25 +3,34 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { emailFooter } from "@/utils/emailFooter";
 
-import * as Participants from "@/models/Participants";
-import * as Verifications from "@/models/Verifications";
-import * as Matches from "@/models/Matches";
-import * as Clasament from "@/models/Clasament";
 import Event from "@/models/Event";
 import OldParticipants from "@/models/OldParticipants";
+
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+  createMatchesModel,
+  createClasamentModel,
+} from "@/utils/createModels";
 
 import { createMatches } from "@/utils/createMatches";
 
 export async function POST(request, { params }) {
   const [type, playersPerTable, round, eventID] = params.type;
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  const ClasamentType = Clasament[`Clasament_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const participantsNumber = await ParticipantType.countDocuments();
+  await createParticipantsModel(eventID);
+  await createVerificationsModel(eventID);
+  await createMatchesModel(eventID, round);
+  await createClasamentModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
+
+  const participantsNumber = await Participants.countDocuments();
   if (participantsNumber < 4) {
     return NextResponse.json({
       success: false,
@@ -29,13 +38,9 @@ export async function POST(request, { params }) {
     });
   }
 
-  await VerificationsType.updateOne(
-    { round: 0 },
-    { stop: true },
-    { upsert: true }
-  );
-  const participants = await ParticipantType.find();
-  await VerificationsType.insertMany(participants);
+  await Verifications.updateOne({ round: 0 }, { stop: true }, { upsert: true });
+  const participants = await Participants.find();
+  await Verifications.insertMany(participants);
 
   const randomParticipants = participants.sort(() => Math.random() - 0.5);
 
@@ -43,13 +48,13 @@ export async function POST(request, { params }) {
     type,
     participantsNumber,
     playersPerTable,
-    MatchesType,
+    Matches,
     randomParticipants
   );
 
-  await ClasamentType.insertMany(randomParticipants);
+  await Clasament.insertMany(randomParticipants);
 
-  await VerificationsType.updateOne({ round: 0 }, { round: 1 });
+  await Verifications.updateOne({ round: 0 }, { round: 1 });
 
   const transporter = nodemailer.createTransport({
     service: "Gmail",
