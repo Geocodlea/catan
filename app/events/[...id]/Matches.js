@@ -21,6 +21,7 @@ export default function Matches({
         `/api/events/matches/${type}/${round}/${eventID}`
       );
       const result = await data.json();
+
       setMatches(result.allMatches);
       setTimer(result.timer);
     };

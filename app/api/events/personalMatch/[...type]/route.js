@@ -23,6 +23,8 @@ const bucket = storage.bucket(bucketName);
 export async function GET(request, { params }) {
   const [type, round, userID, eventID] = params.type;
 
+  if (round === "undefined") return NextResponse.json({});
+
   // Create models
   await dbConnect();
   await createMatchesModel(eventID, round);

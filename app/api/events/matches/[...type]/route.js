@@ -15,6 +15,8 @@ import { getMatches } from "@/utils/getMatches";
 export async function GET(request, { params }) {
   const [type, round, eventID] = params.type;
 
+  if (round === "undefined") return NextResponse.json({});
+
   // Create models
   await dbConnect();
   await createVerificationsModel(eventID);
@@ -36,7 +38,7 @@ export async function GET(request, { params }) {
   }
 
   const verification = await Verifications.findOne().select("timer");
-  const timer = verification.timer;
+  const timer = verification?.timer;
 
   return NextResponse.json({ allMatches, timer });
 }
