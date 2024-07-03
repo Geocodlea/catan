@@ -152,7 +152,7 @@ export default function EventPage({ params }) {
 
   useEffect(() => {
     const getRound = async () => {
-      const response = await fetch(`/api/events/round/${type}`);
+      const response = await fetch(`/api/events/round/${type}/${id}`);
       const data = await response.json();
       setRound(data.round);
       setIsFinalRound(data.isFinalRound);

@@ -1,41 +1,43 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
-import * as Participants from "@/models/Participants";
-import * as Verifications from "@/models/Verifications";
-import * as Matches from "@/models/Matches";
-
 import nodemailer from "nodemailer";
 import { emailFooter } from "@/utils/emailFooter";
+
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+  createMatchesModel,
+  createClasamentModel,
+} from "@/utils/createModels";
 
 import { createMatches } from "@/utils/createMatches";
 
 export async function GET(request, { params }) {
-  const [type] = params.type;
+  const [type, eventID] = params.type;
 
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const verification = await VerificationsType.findOne({
+  await createParticipantsModel(eventID);
+  await createVerificationsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+
+  const verification = await Verifications.findOne({
     round: { $exists: true },
   }).select("round");
   let round = verification.round;
 
-  const isFinalRound =
-    type === "catan"
-      ? round === 3
-      : type === "cavaleri" || type === "whist"
-      ? round === 2
-      : type === "rentz"
-      ? round === 1
-      : false;
+  const isFinalRound = type === "catan" ? round === 3 : false;
 
   if (round === 0) {
     return NextResponse.json({ round, isFinalRound });
   }
 
-  let MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  await createMatchesModel(eventID, round);
+  let Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
 
-  const roundScores = await MatchesType.find({
+  const roundScores = await Matches.find({
     score: null,
   }).count();
   const allScoresSubmitted = roundScores === 0;
@@ -45,30 +47,25 @@ export async function GET(request, { params }) {
   }
 
   if (isFinalRound) {
-    await VerificationsType.updateOne(
-      { stop: true },
-      { stop: false, timer: null }
-    );
+    await Verifications.updateOne({ stop: true }, { stop: false, timer: null });
     return NextResponse.json({ round, isFinalRound, isFinished: true });
   }
 
   // All scores submitted, start the next round
   round++;
-  await VerificationsType.updateOne({ stop: true }, { round, timer: null });
+  await Verifications.updateOne({ stop: true }, { round, timer: null });
 
-  MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  let participantsNumber = await ParticipantType.countDocuments();
+  await createMatchesModel(eventID, round);
+  Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
 
-  if (type === "whist") {
-    participantsNumber = 6;
-  }
+  const participantsNumber = await Participants.countDocuments();
   const playersPerTable = "6";
 
-  const participants = await ParticipantType.aggregate([
+  await createClasamentModel(eventID);
+  const participants = await Participants.aggregate([
     {
       $lookup: {
-        from: `clasament_live_${type}`,
+        from: `clasament_live_${eventID}`,
         localField: "id",
         foreignField: "id",
         as: "participants",
@@ -102,8 +99,9 @@ export async function GET(request, { params }) {
     type,
     participantsNumber,
     playersPerTable,
-    MatchesType,
-    participants
+    Matches,
+    participants,
+    eventID
   );
 
   const transporter = nodemailer.createTransport({

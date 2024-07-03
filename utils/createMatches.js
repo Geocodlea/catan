@@ -15,7 +15,8 @@ export const createMatches = async (
   participantsNumber,
   playersPerTable,
   Matches,
-  participants
+  participants,
+  eventID
 ) => {
   if (type === "catan" || type === "cavaleri") {
     // Number of 4-player tables
@@ -95,7 +96,7 @@ export const createMatches = async (
   const verificari = await Matches.aggregate([
     {
       $lookup: {
-        from: `verificari_live_${type}`,
+        from: `verificari_live_${eventID}`,
         localField: "id",
         foreignField: "id",
         as: "verificari",

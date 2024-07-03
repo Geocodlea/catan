@@ -49,7 +49,8 @@ export async function POST(request, { params }) {
     participantsNumber,
     playersPerTable,
     Matches,
-    randomParticipants
+    randomParticipants,
+    eventID
   );
 
   await Clasament.insertMany(randomParticipants);

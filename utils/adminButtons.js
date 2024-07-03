@@ -92,25 +92,22 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
 
 const ResetButton = ({ loading, round, isFinalRound, reset }) => (
   <Box>
-    {round === 0 && (
-      <Typography gutterBottom>Șterge jucătorii înscriși</Typography>
-    )}
     {isFinalRound && (
-      <Typography gutterBottom>
-        Șterge și introduce eveniment în evenimente anterioare
-      </Typography>
-    )}
+      <>
+        <Typography gutterBottom>
+          Șterge și introduce eveniment în evenimente anterioare
+        </Typography>
 
-    {(round === 0 || isFinalRound) && (
-      <LoadingButton
-        loading={loading}
-        loadingIndicator="Reset..."
-        variant="contained"
-        className="btn btn-error"
-        onClick={reset}
-      >
-        Reset
-      </LoadingButton>
+        <LoadingButton
+          loading={loading}
+          loadingIndicator="Reset..."
+          variant="contained"
+          className="btn btn-error"
+          onClick={reset}
+        >
+          Reset
+        </LoadingButton>
+      </>
     )}
   </Box>
 );
