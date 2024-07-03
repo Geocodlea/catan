@@ -9,6 +9,13 @@ import { Box, Paper, Typography, Button } from "@mui/material";
 
 import dbConnect from "/utils/dbConnect";
 import Event from "/models/Event";
+
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+} from "@/utils/createModels";
+
 import DeleteEvent from "./admin/DeleteEvent";
 import AlertMsg from "@/components/AlertMsg";
 
@@ -41,6 +48,20 @@ const Events = async ({ searchParams }) => {
   const handleDelete = async (id) => {
     "use server";
 
+    // Create models
+    await dbConnect();
+    await createParticipantsModel(id);
+    await createVerificationsModel(id);
+    const Participants = mongoose.models[`Participanti_live_${id}`];
+    const Verifications = mongoose.models[`Verificari_live_${id}`];
+
+    const eventStarted = await Verifications.findOne({
+      round: { $gt: 0 },
+    });
+    if (eventStarted) {
+      redirect(`/?text=Event already started&severity=error`);
+    }
+
     try {
       // List all files for deleted event
       const [files] = await bucket.getFiles({
@@ -59,6 +80,7 @@ const Events = async ({ searchParams }) => {
       redirect(`/?text=Error deleting event&severity=error`);
     }
 
+    await Participants.collection.drop();
     revalidatePath("/");
     redirect(`/?text=Event deleted successfully&severity=success`);
   };

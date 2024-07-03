@@ -108,12 +108,8 @@ export async function DELETE(request, { params }) {
     await Event.deleteOne({ _id: eventID });
   }
 
-  await Participants.deleteMany();
-  await Verifications.deleteMany({ round: { $exists: false } });
-  await Verifications.updateOne(
-    { round: { $exists: true } },
-    { round: 0, stop: false }
-  );
+  await Participants.collection.drop();
+  await Verifications.collection.drop();
 
   return NextResponse.json({ success: true });
 }
