@@ -23,12 +23,8 @@ export async function POST(request, { params }) {
   await dbConnect();
   await createParticipantsModel(eventID);
   await createVerificationsModel(eventID);
-  await createMatchesModel(eventID, round);
-  await createClasamentModel(eventID);
   const Participants = mongoose.models[`Participanti_live_${eventID}`];
   const Verifications = mongoose.models[`Verificari_live_${eventID}`];
-  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
-  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
   const participantsNumber = await Participants.countDocuments();
   if (participantsNumber < 4) {
@@ -43,6 +39,11 @@ export async function POST(request, { params }) {
   await Verifications.insertMany(participants);
 
   const randomParticipants = participants.sort(() => Math.random() - 0.5);
+
+  await createMatchesModel(eventID, round);
+  await createClasamentModel(eventID);
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
   await createMatches(
     type,
