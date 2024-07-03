@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -26,6 +28,7 @@ export default function EventPage({ params }) {
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const isAdmin = session?.user.role === "admin";
+  const router = useRouter();
 
   const saveData = async (data, tab) => {
     try {
@@ -155,6 +158,12 @@ export default function EventPage({ params }) {
     const getRound = async () => {
       const response = await fetch(`/api/events/round/${type}/${id}`);
       const data = await response.json();
+
+      // If the event is finished, redirect to homepage
+      if (data.eventFinished) {
+        router.push("/");
+      }
+
       setRound(data.round);
       setIsFinalRound(data.isFinalRound);
       setIsFinished(data.isFinished);

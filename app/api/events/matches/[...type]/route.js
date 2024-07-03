@@ -102,7 +102,7 @@ export async function PUT(request, { params }) {
   const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
   const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
-  if (isAdmin !== "true" || isOrganizer !== "true") {
+  if (isAdmin !== "true" && isOrganizer !== "true") {
     const eventFinished = await Verifications.findOne({ stop: false });
     if (eventFinished) {
       return NextResponse.json({

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { emailFooter } from "@/utils/emailFooter";
 
+import Event from "/models/Event";
 import mongoose from "mongoose";
 import {
   createParticipantsModel,
@@ -16,8 +17,14 @@ import { createMatches } from "@/utils/createMatches";
 export async function GET(request, { params }) {
   const [type, eventID] = params.type;
 
-  // Create models
   await dbConnect();
+  const event = await Event.findOne({ _id: eventID });
+
+  if (!event) {
+    return NextResponse.json({ eventFinished: true });
+  }
+
+  // Create models
   await createParticipantsModel(eventID);
   await createVerificationsModel(eventID);
   const Participants = mongoose.models[`Participanti_live_${eventID}`];
