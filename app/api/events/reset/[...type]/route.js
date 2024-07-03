@@ -54,12 +54,14 @@ export async function DELETE(request, { params }) {
       });
     }
     const participants = await Clasament.find().sort(sortOrder(type));
+
     // Create old event
+    const event = await Event.findOne({ _id: eventID }).select("title");
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    const oldEventName = `clasament_live_${type}_${day}.${month}.${year}`;
+    const oldEventName = `${event.title}_${day}.${month}.${year}`;
     const oldEvent = {
       name: oldEventName,
       data: participants.map((participant) => ({
@@ -81,7 +83,6 @@ export async function DELETE(request, { params }) {
         punctejoctotal: participant.scorjocuri || null,
         punctejocuri: participant.scortotal || null,
         procent: participant.procent || null,
-        licitari: participant.licitari || null,
       })),
     };
     await OldEvents.create(oldEvent);

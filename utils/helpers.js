@@ -8,26 +8,8 @@ export const sortOrder = (type, round) => {
   return { punctetotal: -1, scorjocuri: -1, procent: -1 };
 };
 
-const findGame = (item) => {
-  const games = {
-    catan: "Catan",
-    whist: "Whist",
-    rentz: "Rentz",
-    cavaleri: "Catan - Orașe și Cavaleri",
-  };
-  for (let key in games) {
-    if (item.includes(key)) {
-      return games[key]; // Return the display name directly
-    }
-  }
-  return "Unknown Game"; // Directly handle unknown game case here
-};
-
-export const gameName = (event) => {
-  const isOnline = event.name.includes("online");
-  const isLive = event.name.includes("live");
-  const mode = isOnline ? "online" : isLive ? "live" : "Campionat Național";
-  const game = findGame(event.name);
-
-  return `${game} - ${mode}`;
+export const gameName = (eventName) => {
+  // Split the string into two parts, using the last underscore as the separator
+  let parts = eventName.split(/_(?=[^_]+$)/);
+  return parts[0];
 };

@@ -44,10 +44,13 @@ const columnGroupingModel = [
 const OldEventTable = async ({ params }) => {
   await dbConnect();
 
+  // Decode the params
+  const name = decodeURIComponent(params.name[0]);
+
   const oldevent = await OldEvents.aggregate([
     {
       $match: {
-        name: params.name[0],
+        name,
       },
     },
     {

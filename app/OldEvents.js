@@ -47,7 +47,7 @@ const OldEventsTable = () => {
     }
 
     return {
-      name: gameName(event),
+      name: gameName(event.name),
       link: `/oldevents/${event.name}`,
       cost: isCurrentMonth ? cost : null,
       total: isCurrentMonth ? total : null,
@@ -62,13 +62,13 @@ const OldEventsTable = () => {
     },
     {
       field: "name",
-      headerName: "Nume Joc",
+      headerName: "Eveniment",
       minWidth: 250,
       flex: 1,
     },
     {
       field: "link",
-      headerName: "Clasament",
+      headerName: "Data",
       width: 150,
     },
   ];

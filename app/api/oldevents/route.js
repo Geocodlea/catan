@@ -4,11 +4,11 @@ import { NextResponse } from "next/server";
 
 // Define a reusable aggregation pipeline for all events
 const allEventsPipeline = [
-  {
-    $match: {
-      name: { $regex: /^clasament_/ }, // Filter documents that start with 'clasament_'
-    },
-  },
+  // {
+  //   $match: {
+  //     name: { $regex: /^clasament_/ }, // Filter documents that start with 'clasament_'
+  //   },
+  // },
   {
     $addFields: {
       nameSplit: { $split: ["$name", "_"] }, // Split the 'name' field by '_'

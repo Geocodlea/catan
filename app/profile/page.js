@@ -29,7 +29,7 @@ export default async function Profile() {
   }).select("name");
 
   const filteredParticipations = participations.map((event) => ({
-    name: gameName(event),
+    name: gameName(event.name),
     link: `/oldevents/${event.name}`,
   }));
 
@@ -41,13 +41,13 @@ export default async function Profile() {
     },
     {
       field: "name",
-      headerName: "Nume Joc",
+      headerName: "Eveniment",
       minWidth: 250,
       flex: 1,
     },
     {
       field: "link",
-      headerName: "Clasament",
+      headerName: "Data",
       width: 150,
     },
   ];
