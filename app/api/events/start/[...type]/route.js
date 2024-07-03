@@ -7,11 +7,13 @@ import * as Participants from "@/models/Participants";
 import * as Verifications from "@/models/Verifications";
 import * as Matches from "@/models/Matches";
 import * as Clasament from "@/models/Clasament";
+import Event from "@/models/Event";
+import OldParticipants from "@/models/OldParticipants";
 
 import { createMatches } from "@/utils/createMatches";
 
 export async function POST(request, { params }) {
-  const [type, playersPerTable, round] = params.type;
+  const [type, playersPerTable, round, eventID] = params.type;
 
   const ParticipantType = Participants[`Participanti_live_${type}`];
   const VerificationsType = Verifications[`Verificari_live_${type}`];
@@ -24,13 +26,6 @@ export async function POST(request, { params }) {
     return NextResponse.json({
       success: false,
       message: "Nu sunt minim 4 înscriși",
-    });
-  }
-
-  if (participantsNumber === 7 && (type === "whist" || type === "rentz")) {
-    return NextResponse.json({
-      success: false,
-      message: "Nu este posibil start cu 7 participanți",
     });
   }
 
@@ -75,6 +70,19 @@ export async function POST(request, { params }) {
         text: `Start runda ${round} ${emailFooter}`,
       });
     });
+
+  // Save participants in old_participants
+  const event = await Event.findById(eventID).select("title");
+
+  const oldEvent = {
+    name: event.title,
+    data: participants.map((participant) => ({
+      name: participant.name,
+      tel: participant.tel,
+      email: participant.email,
+    })),
+  };
+  await OldParticipants.create(oldEvent);
 
   return NextResponse.json({ success: true });
 }

@@ -19,7 +19,7 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
     setLoadingStart(true);
     try {
       const response = await fetch(
-        `/api/events/start/${type}/${players}/${round + 1}`,
+        `/api/events/start/${type}/${players}/${round + 1}/${eventID}`,
         {
           method: "POST",
           headers: {
