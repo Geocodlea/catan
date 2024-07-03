@@ -123,6 +123,7 @@ export default function EventPage({ params }) {
             host={session?.user.name}
             isAdmin={isAdmin}
             isOrganizer={isOrganizer}
+            eventID={id}
           />
         ),
       }

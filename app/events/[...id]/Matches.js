@@ -4,13 +4,22 @@ import EditableDataGrid from "@/components/EditableDataGrid";
 import CountdownTimer from "@/components/CountdownTimer";
 import { Box, Stack } from "@mui/material";
 
-export default function Matches({ type, round, host, isAdmin, isOrganizer }) {
+export default function Matches({
+  type,
+  round,
+  host,
+  isAdmin,
+  isOrganizer,
+  eventID,
+}) {
   const [matches, setMatches] = useState([]);
   const [timer, setTimer] = useState("");
 
   useEffect(() => {
     const getMatches = async () => {
-      const data = await fetch(`/api/events/matches/${type}/${round}`);
+      const data = await fetch(
+        `/api/events/matches/${type}/${round}/${eventID}`
+      );
       const result = await data.json();
       setMatches(result.allMatches);
       setTimer(result.timer);
@@ -86,7 +95,7 @@ export default function Matches({ type, round, host, isAdmin, isOrganizer }) {
                   columnsData={columnsData}
                   rowsData={match.participants}
                   pageSize={10}
-                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}`}
+                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}`}
                   alertText={"player"}
                   showAddRecord={isAdmin || isOrganizer}
                   showActions={isAdmin || isOrganizer}

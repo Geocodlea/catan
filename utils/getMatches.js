@@ -1,11 +1,14 @@
 import dbConnect from "/utils/dbConnect";
-import * as Matches from "/models/Matches";
+import mongoose from "mongoose";
+import { createMatchesModel } from "@/utils/createModels";
 
-export const getMatches = async (type, round) => {
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-
+export const getMatches = async (type, round, eventID) => {
+  // Create models
   await dbConnect();
-  const matches = await MatchesType.aggregate([
+  await createMatchesModel(eventID, round);
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+
+  const matches = await Matches.aggregate([
     {
       $group: {
         _id: "$table",

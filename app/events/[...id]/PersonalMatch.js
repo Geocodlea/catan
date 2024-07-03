@@ -38,6 +38,7 @@ export default function PersonalMatch({
   round,
   host,
   isAdmin,
+  isOrganizer,
   userID,
   eventID,
 }) {
@@ -130,7 +131,7 @@ export default function PersonalMatch({
             columnsData={columnsData}
             rowsData={participants}
             pageSize={10}
-            apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}`}
+            apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}`}
             alertText={"score"}
             disableColumnMenu={true}
             hideSearch={true}

@@ -1,42 +1,49 @@
 import { NextResponse } from "next/server";
 import dbConnect from "/utils/dbConnect";
-import * as Matches from "/models/Matches";
-import * as Verifications from "/models/Verifications";
-import * as Clasament from "/models/Clasament";
-import * as Participants from "/models/Participants";
+
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+  createMatchesModel,
+  createClasamentModel,
+} from "@/utils/createModels";
 
 import { calculateScores } from "@/utils/calculateScores";
 import { getMatches } from "@/utils/getMatches";
 
 export async function GET(request, { params }) {
-  const [type, round] = params.type;
+  const [type, round, eventID] = params.type;
 
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
+  // Create models
+  await dbConnect();
+  await createVerificationsModel(eventID);
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
 
-  const matches = await getMatches(type, round);
+  const matches = await getMatches(type, round, eventID);
   const allMatches = [matches];
 
   // Get past rounds matches
   let matches1, matches2;
   if (round === "2") {
-    matches1 = await getMatches(type, 1);
+    matches1 = await getMatches(type, 1, eventID);
     allMatches.push(matches1);
   }
   if (round === "3") {
-    matches1 = await getMatches(type, 1);
-    matches2 = await getMatches(type, 2);
+    matches1 = await getMatches(type, 1, eventID);
+    matches2 = await getMatches(type, 2, eventID);
     allMatches.push(matches2, matches1);
   }
 
-  await dbConnect();
-  const verification = await VerificationsType.findOne().select("timer");
+  const verification = await Verifications.findOne().select("timer");
   const timer = verification.timer;
 
   return NextResponse.json({ allMatches, timer });
 }
 
 export async function POST(request, { params }) {
-  const [type, round] = params.type;
+  const [type, round, , , , eventID] = params.type;
+
   const data = await request.json();
 
   if (!data.name) {
@@ -46,26 +53,31 @@ export async function POST(request, { params }) {
     });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  const ClasamentType = Clasament[`Clasament_live_${type}`];
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const participant = new ParticipantType(data);
+  await createParticipantsModel(eventID);
+  await createVerificationsModel(eventID);
+  await createMatchesModel(eventID, round);
+  await createClasamentModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
+
+  const participant = new Participants(data);
   await participant.save();
-  const participantMatch = new MatchesType(data);
+  const participantMatch = new Matches(data);
   await participantMatch.save();
-  const participantClasament = new ClasamentType(data);
+  const participantClasament = new Clasament(data);
   await participantClasament.save();
-  const participantVerification = new VerificationsType({ id: data.id });
+  const participantVerification = new Verifications({ id: data.id });
   await participantVerification.save();
 
   return NextResponse.json({ success: true });
 }
 
 export async function PUT(request, { params }) {
-  const [type, round, host, isAdmin, isOrganizer, id] = params.type;
+  const [type, round, host, isAdmin, isOrganizer, eventID, id] = params.type;
   const data = await request.json();
   const table = data.table;
   const name = data.name;
@@ -77,19 +89,21 @@ export async function PUT(request, { params }) {
     });
   }
 
-  // Only for Whist Final
-  const licitari = data.licitari;
-
   const score = Number(data.score);
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-  const VerificationsType = Verifications[`Verificari_live_${type}`];
-  const ClasamentType = Clasament[`Clasament_live_${type}`];
 
+  // Create models
   await dbConnect();
+  await createParticipantsModel(eventID);
+  await createVerificationsModel(eventID);
+  await createMatchesModel(eventID, round);
+  await createClasamentModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
   if (isAdmin !== "true" || isOrganizer !== "true") {
-    const eventFinished = await VerificationsType.findOne({ stop: false });
+    const eventFinished = await Verifications.findOne({ stop: false });
     if (eventFinished) {
       return NextResponse.json({
         success: false,
@@ -99,9 +113,9 @@ export async function PUT(request, { params }) {
   }
 
   // Update the score and find if all scores are filled
-  await ParticipantType.updateOne({ id }, { name });
-  await MatchesType.updateOne({ id }, { table, name, score, host, licitari });
-  const tableScores = await MatchesType.find({
+  await Participants.updateOne({ id }, { name });
+  await Matches.updateOne({ id }, { table, name, score, host });
+  const tableScores = await Matches.find({
     table,
     score: null,
   });
@@ -110,10 +124,10 @@ export async function PUT(request, { params }) {
   }
 
   // Find all players in the table
-  const players = await MatchesType.find({
+  const players = await Matches.find({
     table,
   })
-    .select("id name score licitari")
+    .select("id name score")
     .sort({ score: -1 });
 
   const ids = players.map((player) => player.id);
@@ -121,15 +135,12 @@ export async function PUT(request, { params }) {
   const scores = players.map((player) => player.score);
   const totalScore = scores.reduce((a, b) => a + b, 0);
 
-  // Only for Whist Final
-  const licitariAll = players.map((player) => player.licitari);
-
   const points = calculateScores(type, scores);
 
   // Update verifications only for catan and cavaleri
   const reducedTable = players.length === 3;
   if (type === "catan" || type === "cavaleri") {
-    await VerificationsType.updateMany({ id: { $in: ids } }, [
+    await Verifications.updateMany({ id: { $in: ids } }, [
       {
         $set: {
           [`meci${round}`]: table,
@@ -139,7 +150,7 @@ export async function PUT(request, { params }) {
     ]);
   }
 
-  await ClasamentType.updateMany({ id: { $in: ids } }, [
+  await Clasament.updateMany({ id: { $in: ids } }, [
     {
       $set: {
         name: {
@@ -157,61 +168,7 @@ export async function PUT(request, { params }) {
     },
   ]);
 
-  // Whist - different ranking
-  if (type === "whist") {
-    let maxScore;
-    switch (players.length) {
-      case 4:
-        maxScore = 242;
-        break;
-      case 5:
-        maxScore = 274;
-        break;
-      case 6:
-        maxScore = 306;
-        break;
-    }
-
-    await ClasamentType.updateMany({ id: { $in: ids } }, [
-      {
-        $set: {
-          punctetotal: {
-            $add: [
-              { $ifNull: ["$puncter1", 0] },
-              { $ifNull: ["$puncter2", 0] },
-            ],
-          },
-          scorjocuri: {
-            $add: [
-              { $ifNull: ["$scorjocr1", 0] },
-              { $ifNull: ["$scorjocr2", 0] },
-            ],
-          },
-          scortotal: maxScore,
-          procent: {
-            $trunc: [
-              {
-                $multiply: [
-                  {
-                    $divide: ["$scorjocr1", maxScore],
-                  },
-                  100, // Multiply by 100
-                ],
-              },
-              2, // Number of decimal places
-            ],
-          },
-          licitari: {
-            $arrayElemAt: [licitariAll, { $indexOfArray: [ids, "$id"] }],
-          },
-        },
-      },
-    ]);
-
-    return NextResponse.json({ success: true });
-  }
-
-  await ClasamentType.updateMany({ id: { $in: ids } }, [
+  await Clasament.updateMany({ id: { $in: ids } }, [
     {
       $set: {
         punctetotal: {
@@ -275,14 +232,17 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const [type, round, , , , id] = params.type;
+  const [type, round, , , , eventID, id] = params.type;
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-
+  // Create models
   await dbConnect();
-  await ParticipantType.deleteOne({ id });
-  await MatchesType.deleteOne({ id });
+  await createParticipantsModel(eventID);
+  await createMatchesModel(eventID, round);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+
+  await Participants.deleteOne({ id });
+  await Matches.deleteOne({ id });
 
   return NextResponse.json({ success: true });
 }
