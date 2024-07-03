@@ -83,7 +83,7 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
 
   const timer = async (timerMinutes) => {
     try {
-      const response = await fetch(`/api/events/timer/${type}/`, {
+      const response = await fetch(`/api/events/timer/${type}/${eventID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
