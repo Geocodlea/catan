@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 
-export default function Participanti({ type, round, isAdmin, isOrganizer }) {
+export default function Participanti({
+  type,
+  round,
+  isAdmin,
+  isOrganizer,
+  eventID,
+}) {
   const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch(`/api/events/participants/${type}`);
+      const data = await fetch(`/api/events/participants/${type}/${eventID}`);
       setParticipants(await data.json());
     };
 
@@ -68,7 +74,7 @@ export default function Participanti({ type, round, isAdmin, isOrganizer }) {
         density={"compact"}
         showActions={isAdmin || isOrganizer}
         showAddRecord={isAdmin || isOrganizer}
-        apiURL={`/events/participants/${type}/${round}`}
+        apiURL={`/events/participants/${type}/${round}/${eventID}`}
         alertText={"participant"}
         disableColumnMenu={true}
       />

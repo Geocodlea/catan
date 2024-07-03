@@ -91,6 +91,7 @@ export default function EventPage({ params }) {
             round={round}
             isAdmin={isAdmin}
             isOrganizer={isOrganizer}
+            eventID={id}
           />
         </Stack>
       ),

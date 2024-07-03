@@ -1,16 +1,23 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
-import * as Participants from "@/models/Participants";
-import * as Matches from "/models/Matches";
-import * as Clasament from "/models/Clasament";
-import * as Verifications from "@/models/Verifications";
+
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+  createMatchesModel,
+  createClasamentModel,
+} from "@/utils/createModels";
 
 export async function GET(request, { params }) {
-  const [type] = params.type;
-  const ParticipantType = Participants[`Participanti_live_${type}`];
+  const [type, eventID] = params.type;
 
+  // Create models
   await dbConnect();
-  const participants = await ParticipantType.find()
+  await createParticipantsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+
+  const participants = await Participants.find()
     .select("id name tel email obs rude")
     .sort("_id");
 
@@ -18,7 +25,7 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-  const [type, round] = params.type;
+  const [type, round, eventID] = params.type;
   const data = await request.json();
 
   if (!data.name) {
@@ -28,22 +35,27 @@ export async function POST(request, { params }) {
     });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const participant = new ParticipantType(data);
+  await createParticipantsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+
+  const participant = new Participants(data);
   await participant.save();
 
   if (round !== "0") {
-    const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-    const ClasamentType = Clasament[`Clasament_live_${type}`];
-    const VerificationsType = Verifications[`Verificari_live_${type}`];
+    await createVerificationsModel(eventID);
+    await createMatchesModel(eventID);
+    await createClasamentModel(eventID);
+    const Verifications = mongoose.models[`Verificari_live_${eventID}`];
+    const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+    const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
-    const participantMatch = new MatchesType(data);
+    const participantMatch = new Matches(data);
     await participantMatch.save();
-    const participantClasament = new ClasamentType(data);
+    const participantClasament = new Clasament(data);
     await participantClasament.save();
-    const participantVerification = new VerificationsType({ id: data.id });
+    const participantVerification = new Verifications({ id: data.id });
     await participantVerification.save();
   }
 
@@ -51,7 +63,7 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const [type, round, id] = params.type;
+  const [type, round, eventID, id] = params.type;
   const data = await request.json();
 
   if (!data.name) {
@@ -61,32 +73,41 @@ export async function PUT(request, { params }) {
     });
   }
 
-  const ParticipantType = Participants[`Participanti_live_${type}`];
-
+  // Create models
   await dbConnect();
-  await ParticipantType.updateOne({ id }, data);
+  await createParticipantsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+
+  await Participants.updateOne({ id }, data);
 
   if (round !== "0") {
-    const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-    const ClasamentType = Clasament[`Clasament_live_${type}`];
+    await createMatchesModel(eventID);
+    await createClasamentModel(eventID);
+    const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+    const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
-    await MatchesType.updateOne({ id }, data);
-    await ClasamentType.updateOne({ id }, data);
+    await Matches.updateOne({ id }, data);
+    await Clasament.updateOne({ id }, data);
   }
 
   return NextResponse.json({ success: true });
 }
 
 export async function DELETE(request, { params }) {
-  const [type, round, id] = params.type;
-  const ParticipantType = Participants[`Participanti_live_${type}`];
+  const [type, round, eventID, id] = params.type;
 
+  // Create models
   await dbConnect();
-  await ParticipantType.deleteOne({ id });
+  await createParticipantsModel(eventID);
+  const Participants = mongoose.models[`Participanti_live_${eventID}`];
+
+  await Participants.deleteOne({ id });
 
   if (round !== "0") {
-    const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-    await MatchesType.deleteOne({ id });
+    await createMatchesModel(eventID);
+    const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+
+    await Matches.deleteOne({ id });
   }
 
   return NextResponse.json({ success: true });
