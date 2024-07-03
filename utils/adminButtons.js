@@ -10,7 +10,7 @@ const StartButtons = ({ type, loading, round, start, timer }) => {
     if (round === 0) {
       return (
         <Box>
-          <Typography gutterBottom>Generare meciuri 4 juc.</Typography>
+          <Typography gutterBottom>Generare meciuri</Typography>
           <LoadingButton
             loading={loading}
             loadingIndicator="Generare..."

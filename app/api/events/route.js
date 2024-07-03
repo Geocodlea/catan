@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { Storage } from "@google-cloud/storage";
 import { NextResponse } from "next/server";
 
+import mongoose from "mongoose";
+import { createVerificationsModel } from "@/utils/createModels";
+
 // Set up Google Cloud Storage client
 const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
@@ -49,6 +52,12 @@ export async function POST(request) {
   event.image = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
 
   await event.save();
+
+  // Create model
+  await createVerificationsModel(event._id);
+  const Verifications = mongoose.models[`Verificari_live_${event._id}`];
+
+  await Verifications.create({ round: 0, stop: false });
 
   return NextResponse.json({ success: true });
 }

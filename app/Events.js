@@ -81,6 +81,7 @@ const Events = async ({ searchParams }) => {
     }
 
     await Participants.collection.drop();
+    await Verifications.collection.drop();
     revalidatePath("/");
     redirect(`/?text=Event deleted successfully&severity=success`);
   };
@@ -142,28 +143,24 @@ const Events = async ({ searchParams }) => {
                 day: "numeric",
               })}
             </Typography>
-            <Typography variant="overline" gutterBottom>
-              {event.type}
-            </Typography>
 
-            {isAdmin ||
-              (session?.user.id === event.organizer && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    padding: "1rem",
-                  }}
-                >
-                  <Link href={`/admin/${event.id}`}>
-                    <Button variant="contained" className="btn btn-primary">
-                      Edit Event
-                    </Button>
-                  </Link>
+            {(isAdmin || session?.user.id === event.organizer) && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  padding: "1rem",
+                }}
+              >
+                <Link href={`/admin/${event.id}`}>
+                  <Button variant="contained" className="btn btn-primary">
+                    Edit Event
+                  </Button>
+                </Link>
 
-                  <DeleteEvent handleDelete={handleDelete} id={event.id} />
-                </Box>
-              ))}
+                <DeleteEvent handleDelete={handleDelete} id={event.id} />
+              </Box>
+            )}
           </Paper>
         ))}
       </Box>
