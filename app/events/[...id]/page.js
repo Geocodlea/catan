@@ -159,8 +159,8 @@ export default function EventPage({ params }) {
       const response = await fetch(`/api/events/round/${type}/${id}`);
       const data = await response.json();
 
-      // If the event is finished, redirect to homepage
-      if (data.eventFinished) {
+      // If the event is resetted, redirect to homepage
+      if (data.eventResetted) {
         router.push("/");
       }
 

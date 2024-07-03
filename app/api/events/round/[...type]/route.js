@@ -20,8 +20,9 @@ export async function GET(request, { params }) {
   await dbConnect();
   const event = await Event.findOne({ _id: eventID });
 
+  // If the event is resetted, redirect to homepage
   if (!event) {
-    return NextResponse.json({ eventFinished: true });
+    return NextResponse.json({ eventResetted: true });
   }
 
   // Create models
