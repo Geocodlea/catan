@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "/utils/dbConnect";
-import * as Matches from "/models/Matches";
+
+import mongoose from "mongoose";
+import { createMatchesModel } from "@/utils/createModels";
 
 import { v4 as uuidv4 } from "uuid";
 import { Storage } from "@google-cloud/storage";
@@ -19,20 +21,22 @@ const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
 export async function GET(request, { params }) {
-  const [type, round, userID] = params.type;
+  const [type, round, userID, eventID] = params.type;
 
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
-
+  // Create models
   await dbConnect();
+  await createMatchesModel(eventID, round);
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+
   // Find the table value associated with the given userID
-  const user = await MatchesType.findOne({
+  const user = await Matches.findOne({
     id: userID,
   }).select("table");
 
   if (!user) return NextResponse.json({});
 
   // Find all entries with the same "table" value
-  const personalMatch = await MatchesType.find({ table: user.table }).select(
+  const personalMatch = await Matches.find({ table: user.table }).select(
     "id table name score"
   );
 
@@ -45,7 +49,10 @@ export async function PATCH(request, { params }) {
   const formData = await request.formData();
   const image = formData.get("image");
 
-  const MatchesType = Matches[`Meciuri_live_${type}_${round}`];
+  // Create models
+  await dbConnect();
+  await createMatchesModel(eventID, round);
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
 
   const bytes = await image.arrayBuffer();
   const buffer = Buffer.from(bytes);
@@ -67,11 +74,10 @@ export async function PATCH(request, { params }) {
   // Update the data with the Google Cloud Storage URL
   const imageURL = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
 
-  await dbConnect();
-  const user = await MatchesType.findOne({
+  const user = await Matches.findOne({
     id: userID,
   }).select("table");
-  await MatchesType.updateMany({ table: user.table }, { img: imageURL });
+  await Matches.updateMany({ table: user.table }, { img: imageURL });
 
   return NextResponse.json({ success: true });
 }

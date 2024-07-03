@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -47,7 +47,7 @@ export default function PersonalMatch({
   useEffect(() => {
     const getPersonalMatch = async () => {
       const data = await fetch(
-        `/api/events/personalMatch/${type}/${round}/${userID}`
+        `/api/events/personalMatch/${type}/${round}/${userID}/${eventID}`
       );
       setParticipants(await data.json());
     };
@@ -188,8 +188,7 @@ export default function PersonalMatch({
       ) : (
         <p>
           Salutare, în prezent este deja activ un eveniment. Îi poți urmări
-          desfășurarea la celelalte secțiuni ale acestui meniu :) Înscrierile
-          pentru următorul eveniment vor fi disponibile în maxim 2 zile.
+          desfășurarea la celelalte secțiuni ale acestui meniu :)
         </p>
       )}
     </Box>
