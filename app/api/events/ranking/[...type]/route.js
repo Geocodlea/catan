@@ -1,16 +1,20 @@
 import dbConnect from "/utils/dbConnect";
-import * as Clasament from "/models/Clasament";
 import { NextResponse } from "next/server";
+
+import mongoose from "mongoose";
+import { createClasamentModel } from "@/utils/createModels";
 
 import { sortOrder } from "@/utils/helpers";
 
 export async function GET(request, { params }) {
-  const [type, round] = params.type;
+  const [type, round, eventID] = params.type;
 
-  const ClasamentType = Clasament[`Clasament_live_${type}`];
-
+  // Create models
   await dbConnect();
-  const clasament = await ClasamentType.find().sort(sortOrder(type, round));
+  await createClasamentModel(eventID);
+  const Clasament = mongoose.models[`Clasament_live_${eventID}`];
+
+  const clasament = await Clasament.find().sort(sortOrder(type, round));
 
   return NextResponse.json(clasament);
 }

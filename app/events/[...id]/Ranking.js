@@ -39,12 +39,14 @@ const columnGroupingModel = [
   },
 ];
 
-export default function Ranking({ type, round }) {
+export default function Ranking({ type, round, eventID }) {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     const getRanking = async () => {
-      const data = await fetch(`/api/events/ranking/${type}/${round}/`);
+      const data = await fetch(
+        `/api/events/ranking/${type}/${round}/${eventID}`
+      );
       setPlayers(await data.json());
     };
 

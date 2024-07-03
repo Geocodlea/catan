@@ -133,7 +133,7 @@ export default function EventPage({ params }) {
   if (eventStarted && (isAdmin || isOrganizer || isFinished)) {
     tabs.push({
       label: "Clasament",
-      content: <Ranking type={type} round={round} />,
+      content: <Ranking type={type} round={round} eventID={id} />,
     });
   }
 
