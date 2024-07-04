@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import DiscordProvider from "next-auth/providers/discord";
-import TwitterProvider from "next-auth/providers/twitter";
+// import GithubProvider from "next-auth/providers/github";
+// import DiscordProvider from "next-auth/providers/discord";
+// import TwitterProvider from "next-auth/providers/twitter";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "/utils/dbMongoClient";
@@ -19,22 +19,22 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      allowDangerousEmailAccountLinking: true,
-    }),
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
-    }),
-    TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
-      version: "2.0", // opt-in to Twitter OAuth 2.0
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    //   allowDangerousEmailAccountLinking: true,
+    // }),
+    // DiscordProvider({
+    //   clientId: process.env.DISCORD_CLIENT_ID,
+    //   clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    //   allowDangerousEmailAccountLinking: true,
+    // }),
+    // TwitterProvider({
+    //   clientId: process.env.TWITTER_CLIENT_ID,
+    //   clientSecret: process.env.TWITTER_CLIENT_SECRET,
+    //   allowDangerousEmailAccountLinking: true,
+    //   version: "2.0", // opt-in to Twitter OAuth 2.0
+    // }),
     EmailProvider({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,

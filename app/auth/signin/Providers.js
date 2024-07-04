@@ -12,9 +12,9 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { CustomTextField } from "@/utils/formsHelper";
 
 import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
-import TwitterIcon from "@mui/icons-material/Twitter";
+// import GitHubIcon from "@mui/icons-material/GitHub";
+// import SmartToyIcon from "@mui/icons-material/SmartToy";
+// import TwitterIcon from "@mui/icons-material/Twitter";
 import EmailIcon from "@mui/icons-material/Email";
 
 const initialValues = {
@@ -92,9 +92,9 @@ const Providers = ({ providers }) => {
               onClick={() => signIn(provider.id)}
             >
               {provider.id === "google" && <GoogleIcon fontSize="small" />}
-              {provider.id === "github" && <GitHubIcon fontSize="small" />}
+              {/* {provider.id === "github" && <GitHubIcon fontSize="small" />}
               {provider.id === "discord" && <SmartToyIcon fontSize="small" />}
-              {provider.id === "twitter" && <TwitterIcon fontSize="small" />}
+              {provider.id === "twitter" && <TwitterIcon fontSize="small" />} */}
               Sign in with {provider.name}
             </Button>
           )}
