@@ -18,6 +18,8 @@ import PersonalMatch from "./PersonalMatch";
 import Matches from "./Matches";
 import Ranking from "./Ranking";
 
+import Loading from "./loading";
+
 export default function EventPage({ params }) {
   const [type, id] = params.id;
   const { data: session } = useSession();
@@ -28,9 +30,57 @@ export default function EventPage({ params }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [noEvent, setNoEvent] = useState(false);
+  const [loading, setLoading] = useState(true);
   const isAdmin = session?.user.role === "admin";
   const router = useRouter();
+
+  useEffect(() => {
+    const getRound = async () => {
+      const response = await fetch(`/api/events/round/${type}/${id}`);
+      const data = await response.json();
+
+      // If event not exists, redirect to homepage
+      if (data.noEvent) {
+        revalidate();
+        router.push("/");
+      }
+
+      setRound(data.round);
+      setIsFinalRound(data.isFinalRound);
+      setIsFinished(data.isFinished);
+    };
+
+    getRound();
+    const interval = setInterval(getRound, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const getEvent = async () => {
+      const response = await fetch(`/api/events/${id}`);
+      const event = await response.json();
+
+      if (session?.user.id === event?.organizer) {
+        setIsOrganizer(true);
+      }
+
+      setEvent(event);
+      if (event) {
+        setLoading(false);
+      }
+    };
+
+    getEvent();
+  }, [session]);
+
+  useEffect(() => {
+    round === 0 ? setEventStarted(false) : setEventStarted(true);
+  }, [round, event, isAdmin, isOrganizer]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const saveData = async (data, tab) => {
     try {
@@ -154,55 +204,6 @@ export default function EventPage({ params }) {
         />
       ),
     });
-  }
-
-  useEffect(() => {
-    const getRound = async () => {
-      const response = await fetch(`/api/events/round/${type}/${id}`);
-      const data = await response.json();
-
-      // If the event does not exist, redirect to homepage
-      if (data.noEvent) {
-        revalidate();
-        setNoEvent(true);
-        router.push("/");
-      }
-
-      setRound(data.round);
-      setIsFinalRound(data.isFinalRound);
-      setIsFinished(data.isFinished);
-    };
-
-    getRound();
-    const interval = setInterval(getRound, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const getEvent = async () => {
-      const response = await fetch(`/api/events/${id}`);
-      const event = await response.json();
-
-      if (session?.user.id === event?.organizer) {
-        setIsOrganizer(true);
-      }
-
-      setEvent(event);
-    };
-
-    getEvent();
-  }, [session]);
-
-  useEffect(() => {
-    round === 0 ? setEventStarted(false) : setEventStarted(true);
-  }, [round, event, isAdmin, isOrganizer]);
-
-  // If the event does not exist, redirect to homepage
-  if (noEvent) {
-    revalidate();
-    router.push("/");
-    return null;
   }
 
   return (

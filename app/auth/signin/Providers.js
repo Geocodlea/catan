@@ -64,7 +64,7 @@ const Providers = ({ providers }) => {
                     name="email"
                     component={CustomTextField}
                     label="Email"
-                    type="text"
+                    type="email"
                   />
 
                   <LoadingButton
