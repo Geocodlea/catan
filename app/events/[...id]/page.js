@@ -200,6 +200,7 @@ export default function EventPage({ params }) {
 
   // If the event does not exist, redirect to homepage
   if (noEvent) {
+    revalidate();
     router.push("/");
     return null;
   }
