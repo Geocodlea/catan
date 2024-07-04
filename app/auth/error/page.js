@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 
-import styles from "app/page.module.css";
+import styles from "/app/page.module.css";
 
 import { Typography } from "@mui/material";
 
