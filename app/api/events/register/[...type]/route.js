@@ -17,6 +17,13 @@ export async function POST(request, { params }) {
     return NextResponse.json({ success: false, message: "Nu ești logat" });
   }
 
+  if (!session.user.name) {
+    return NextResponse.json({
+      success: false,
+      message: "Numele este obligatoriu",
+    });
+  }
+
   // Create models
   await dbConnect();
   await createParticipantsModel(eventID);

@@ -73,8 +73,8 @@ export default function Register({ session, type, eventID }) {
     <Box className={styles.grid}>
       <Box>
         <Typography gutterBottom>
-          Pentru a te înscrie la Seara de Catan trebuie ca mai întâi să fii{" "}
-          <Link href="/api/auth/signin">logat</Link>
+          Pentru a te înscrie la Campionatul de Catan trebuie ca mai întâi să
+          fii <Link href="/api/auth/signin">logat</Link>
         </Typography>
         <LoadingButton
           loading={loading}
