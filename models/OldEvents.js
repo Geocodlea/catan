@@ -7,7 +7,7 @@ const OldEventsSchema = new mongoose.Schema(
     name: { type: String },
     data: { type: Array },
   },
-  { collection: "oldevents" }
+  { collection: "old_events" }
 );
 
 // Check if the model already exists in global.models, if not, create it

@@ -80,58 +80,59 @@ export default function Matches({
   return (
     <>
       {timer && <CountdownTimer targetDate={new Date(timer)} />}
-      {matches.map((match, index) => (
-        <Box
-          sx={{
-            margin: "0 auto 4rem",
-            maxWidth: "800px",
-          }}
-          key={index}
-        >
-          <h3>Meciuri - Runda {round - index}</h3>
-          <Stack spacing={6}>
-            {match.map((match, index) => (
-              <Box key={index}>
-                <EditableDataGrid
-                  columnsData={columnsData}
-                  rowsData={match.participants}
-                  pageSize={10}
-                  apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}`}
-                  alertText={"player"}
-                  showAddRecord={isAdmin || isOrganizer}
-                  showActions={isAdmin || isOrganizer}
-                  disableColumnMenu={true}
-                  hideSearch={true}
-                  hideFooter={true}
-                  hiddenColumn={"nr"}
-                />
-                {match.participants[0].host && (
-                  <Box
-                    p={2}
-                    textAlign={"center"}
-                    border={"1px solid rgb(224, 224, 224)"}
-                    borderRadius={"4px"}
-                  >
-                    Rezultat trimis de: {match.participants[0].host}
-                  </Box>
-                )}
-                {match.participants[0].img && (
-                  <Box
-                    p={2}
-                    textAlign={"center"}
-                    border={"1px solid rgb(224, 224, 224)"}
-                    borderRadius={"4px"}
-                  >
-                    <Link href={match.participants[0].img} target="_blank">
-                      Imagine Rezultat
-                    </Link>
-                  </Box>
-                )}
-              </Box>
-            ))}
-          </Stack>
-        </Box>
-      ))}
+      {matches &&
+        matches.map((match, index) => (
+          <Box
+            sx={{
+              margin: "0 auto 4rem",
+              maxWidth: "800px",
+            }}
+            key={index}
+          >
+            <h3>Meciuri - Runda {round - index}</h3>
+            <Stack spacing={6}>
+              {match.map((match, index) => (
+                <Box key={index}>
+                  <EditableDataGrid
+                    columnsData={columnsData}
+                    rowsData={match.participants}
+                    pageSize={10}
+                    apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}`}
+                    alertText={"player"}
+                    showAddRecord={isAdmin || isOrganizer}
+                    showActions={isAdmin || isOrganizer}
+                    disableColumnMenu={true}
+                    hideSearch={true}
+                    hideFooter={true}
+                    hiddenColumn={"nr"}
+                  />
+                  {match.participants[0].host && (
+                    <Box
+                      p={2}
+                      textAlign={"center"}
+                      border={"1px solid rgb(224, 224, 224)"}
+                      borderRadius={"4px"}
+                    >
+                      Rezultat trimis de: {match.participants[0].host}
+                    </Box>
+                  )}
+                  {match.participants[0].img && (
+                    <Box
+                      p={2}
+                      textAlign={"center"}
+                      border={"1px solid rgb(224, 224, 224)"}
+                      borderRadius={"4px"}
+                    >
+                      <Link href={match.participants[0].img} target="_blank">
+                        Imagine Rezultat
+                      </Link>
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+        ))}
     </>
   );
 }

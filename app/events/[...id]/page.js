@@ -180,7 +180,7 @@ export default function EventPage({ params }) {
       const response = await fetch(`/api/events/${id}`);
       const event = await response.json();
 
-      if (session?.user.id === event.organizer) {
+      if (session?.user.id === event?.organizer) {
         setIsOrganizer(true);
       }
 
