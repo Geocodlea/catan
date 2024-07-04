@@ -58,7 +58,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 100px;
   width: 100%;
 }
@@ -255,13 +255,5 @@
   }
   to {
     transform: rotate(0deg);
-  }
-}
-
-/* Large Desktops */
-@media (min-width: 1500px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 50px;
   }
 }
