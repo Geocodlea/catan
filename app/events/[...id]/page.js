@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import revalidate from "/utils/revalidate";
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -27,6 +28,7 @@ export default function EventPage({ params }) {
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [noEvent, setNoEvent] = useState(false);
   const isAdmin = session?.user.role === "admin";
   const router = useRouter();
 
@@ -159,8 +161,10 @@ export default function EventPage({ params }) {
       const response = await fetch(`/api/events/round/${type}/${id}`);
       const data = await response.json();
 
-      // If the event is resetted, redirect to homepage
-      if (data.eventResetted) {
+      // If the event does not exist, redirect to homepage
+      if (data.noEvent) {
+        revalidate();
+        setNoEvent(true);
         router.push("/");
       }
 
@@ -193,6 +197,12 @@ export default function EventPage({ params }) {
   useEffect(() => {
     round === 0 ? setEventStarted(false) : setEventStarted(true);
   }, [round, event, isAdmin, isOrganizer]);
+
+  // If the event does not exist, redirect to homepage
+  if (noEvent) {
+    router.push("/");
+    return null;
+  }
 
   return (
     <div className="editorContent">

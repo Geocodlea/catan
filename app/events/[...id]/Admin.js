@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import revalidate from "/utils/revalidate";
 
 import { useState } from "react";
 import styles from "@/app/page.module.css";
@@ -73,6 +74,7 @@ export default function Admin({ type, round, isFinalRound, eventID }) {
       });
 
       if (isFinalRound) {
+        revalidate();
         router.push("/");
       }
     } catch (error) {

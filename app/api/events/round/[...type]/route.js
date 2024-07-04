@@ -1,5 +1,6 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
+
 import nodemailer from "nodemailer";
 import { emailFooter } from "@/utils/emailFooter";
 
@@ -20,9 +21,9 @@ export async function GET(request, { params }) {
   await dbConnect();
   const event = await Event.findOne({ _id: eventID });
 
-  // If the event is resetted, redirect to homepage
+  // If the event does not exist, redirect to homepage
   if (!event) {
-    return NextResponse.json({ eventResetted: true });
+    return NextResponse.json({ noEvent: true });
   }
 
   // Create models
