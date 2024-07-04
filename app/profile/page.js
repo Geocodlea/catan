@@ -57,9 +57,9 @@ export default async function Profile() {
       elevation={24}
       sx={{
         width: "100%",
-        maxWidth: "600px",
+        maxWidth: "750px",
         marginBottom: "3rem",
-        textAlign: "center",
+
         padding: ["1rem 2rem", "2rem 4rem"],
       }}
     >
