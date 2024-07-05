@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
-import { Box } from "@mui/material";
+import { Box, Stack, Skeleton } from "@mui/material";
 
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -44,6 +44,7 @@ export default function PersonalMatch({
 }) {
   const [participants, setParticipants] = useState([]);
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getPersonalMatch = async () => {
@@ -53,10 +54,21 @@ export default function PersonalMatch({
       const result = await data.json();
 
       setParticipants(result);
+      setLoading(false);
     };
 
     getPersonalMatch();
   }, [round]);
+
+  if (loading) {
+    return (
+      <Stack spacing={4} sx={{ margin: "auto", maxWidth: "800px" }}>
+        <Skeleton variant="rounded" width="40%" height={50} />
+        <Skeleton variant="rounded" width="100%" height={250} />
+        <Skeleton variant="rounded" width="100%" height={50} />
+      </Stack>
+    );
+  }
 
   const columnsData = [
     {

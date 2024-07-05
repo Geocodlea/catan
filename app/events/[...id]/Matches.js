@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import CountdownTimer from "@/components/CountdownTimer";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Skeleton } from "@mui/material";
 
 export default function Matches({
   type,
@@ -14,6 +14,7 @@ export default function Matches({
 }) {
   const [matches, setMatches] = useState([]);
   const [timer, setTimer] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getMatches = async () => {
@@ -24,6 +25,7 @@ export default function Matches({
 
       setMatches(result.allMatches);
       setTimer(result.timer);
+      setLoading(false);
     };
 
     getMatches();
@@ -32,6 +34,16 @@ export default function Matches({
 
     return () => clearInterval(intervalId);
   }, [round]);
+
+  if (loading) {
+    return (
+      <Stack spacing={6} sx={{ margin: "auto", maxWidth: "800px" }}>
+        <Skeleton variant="rounded" width="60%" height={50} />
+        <Skeleton variant="rounded" width="100%" height={250} />
+        <Skeleton variant="rounded" width="100%" height={250} />
+      </Stack>
+    );
+  }
 
   const columnsData = [
     {
