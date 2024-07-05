@@ -84,7 +84,7 @@ export async function PUT(request, { params }) {
   const table = data.table;
   const name = data.name;
 
-  if (isNaN(data.score) || !data.score) {
+  if (typeof data.score !== "number") {
     return NextResponse.json({
       success: false,
       message: "Scorul trebuie să fie un număr",
