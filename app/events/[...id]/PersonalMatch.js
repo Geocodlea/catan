@@ -145,7 +145,7 @@ export default function PersonalMatch({
             columnsData={columnsData}
             rowsData={participants}
             pageSize={10}
-            apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}`}
+            apiURL={`/events/matches/${type}/${round}/${host}/${isAdmin}/${isOrganizer}/${eventID}/${null}`}
             alertText={"score"}
             disableColumnMenu={true}
             hideSearch={true}

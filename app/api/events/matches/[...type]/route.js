@@ -79,10 +79,13 @@ export async function POST(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const [type, round, host, isAdmin, isOrganizer, eventID, id] = params.type;
+  const [type, round, host, isAdmin, isOrganizer, eventID, targetRound, id] =
+    params.type;
   const data = await request.json();
   const table = data.table;
   const name = data.name;
+
+  const matchRound = isNaN(targetRound) ? round : targetRound;
 
   if (typeof data.score !== "number") {
     return NextResponse.json({
@@ -97,11 +100,11 @@ export async function PUT(request, { params }) {
   await dbConnect();
   await createParticipantsModel(eventID);
   await createVerificationsModel(eventID);
-  await createMatchesModel(eventID, round);
+  await createMatchesModel(eventID, matchRound);
   await createClasamentModel(eventID);
   const Participants = mongoose.models[`Participanti_live_${eventID}`];
   const Verifications = mongoose.models[`Verificari_live_${eventID}`];
-  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${matchRound}`];
   const Clasament = mongoose.models[`Clasament_live_${eventID}`];
 
   if (isAdmin !== "true" && isOrganizer !== "true") {
@@ -145,7 +148,7 @@ export async function PUT(request, { params }) {
     await Verifications.updateMany({ id: { $in: ids } }, [
       {
         $set: {
-          [`meci${round}`]: table,
+          [`meci${matchRound}`]: table,
           masa_redusa: reducedTable,
         },
       },
@@ -158,14 +161,14 @@ export async function PUT(request, { params }) {
         name: {
           $arrayElemAt: [names, { $indexOfArray: [ids, "$id"] }],
         },
-        [`masar${round}`]: table,
-        [`puncter${round}`]: {
+        [`masar${matchRound}`]: table,
+        [`puncter${matchRound}`]: {
           $arrayElemAt: [points, { $indexOfArray: [ids, "$id"] }],
         },
-        [`scorjocr${round}`]: {
+        [`scorjocr${matchRound}`]: {
           $arrayElemAt: [scores, { $indexOfArray: [ids, "$id"] }],
         },
-        [`scortotalr${round}`]: totalScore,
+        [`scortotalr${matchRound}`]: totalScore,
       },
     },
   ]);
@@ -234,14 +237,16 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const [type, round, , , , eventID, id] = params.type;
+  const [type, round, , , , eventID, targetRound, id] = params.type;
+
+  const matchRound = isNaN(targetRound) ? round : targetRound;
 
   // Create models
   await dbConnect();
   await createParticipantsModel(eventID);
-  await createMatchesModel(eventID, round);
+  await createMatchesModel(eventID, matchRound);
   const Participants = mongoose.models[`Participanti_live_${eventID}`];
-  const Matches = mongoose.models[`Meciuri_live_${eventID}_${round}`];
+  const Matches = mongoose.models[`Meciuri_live_${eventID}_${matchRound}`];
 
   await Participants.deleteOne({ id });
   await Matches.deleteOne({ id });
