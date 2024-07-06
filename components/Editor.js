@@ -1,7 +1,7 @@
 "use client";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { ClassicEditor } from "ckeditor5";
 
 const Editor = ({ saveData, initialData, tab }) => {
   // const handleReady = (editor) => {
