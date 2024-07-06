@@ -1,7 +1,19 @@
 "use client";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { ClassicEditor } from "ckeditor5";
+import {
+  ClassicEditor,
+  Essentials,
+  Bold,
+  Italic,
+  Heading,
+  Link,
+  List,
+  PasteFromOffice,
+  Table,
+  Undo,
+} from "ckeditor5";
+import "ckeditor5/ckeditor5.css";
 
 const Editor = ({ saveData, initialData, tab }) => {
   // const handleReady = (editor) => {
@@ -28,10 +40,9 @@ const Editor = ({ saveData, initialData, tab }) => {
         "|",
         "bold",
         "italic",
-        "|",
         "link",
-        "imageUpload",
-        "mediaEmbed",
+        "bulletedList",
+        "numberedList",
         "insertTable",
         "|",
         "undo",
@@ -40,6 +51,17 @@ const Editor = ({ saveData, initialData, tab }) => {
 
       shouldNotGroupWhenFull: true,
     },
+    plugins: [
+      Heading,
+      Essentials,
+      Bold,
+      Italic,
+      Link,
+      List,
+      PasteFromOffice,
+      Table,
+      Undo,
+    ],
   };
 
   return (
