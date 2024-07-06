@@ -18,11 +18,13 @@ const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const initialValues = {
   name: "",
+  tel: "",
   image: "",
 };
 
 const validationSchema = Yup.object().shape({
   name: Yup.string("Name must be a text"),
+  tel: Yup.string("Must be a valid telephone number"),
   image: Yup.mixed()
     .test("fileFormat", "Unsupported file type", (value) => {
       if (!value) return true;
@@ -44,6 +46,7 @@ const ProfileForm = () => {
       let formData = new FormData();
 
       formData.append("name", values.name);
+      formData.append("tel", values.tel);
       formData.append("image", values.image);
 
       const response = await fetch(`/api/users/${session.user.id}`, {
@@ -77,6 +80,17 @@ const ProfileForm = () => {
             label="Name"
             type="text"
             placeholder={session?.user.name}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+
+          <Field
+            name="tel"
+            component={CustomTextField}
+            label="Telephone"
+            type="text"
+            placeholder={session?.user.tel}
             InputLabelProps={{
               shrink: true,
             }}
