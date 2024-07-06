@@ -42,13 +42,13 @@ export default function Participanti({
       field: "tel",
       headerName: "Telefon",
       editable: isAdmin || isOrganizer,
-      minWidth: 150,
+      width: 100,
     },
     {
       field: "email",
       headerName: "Email",
       editable: isAdmin || isOrganizer,
-      width: 150,
+      width: 200,
     },
     {
       field: "obs",
