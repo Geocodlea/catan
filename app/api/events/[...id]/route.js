@@ -4,6 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { Storage } from "@google-cloud/storage";
 import { NextResponse } from "next/server";
 
+import mongoose from "mongoose";
+import {
+  createParticipantsModel,
+  createVerificationsModel,
+} from "@/utils/createModels";
+
 // Set up Google Cloud Storage client
 const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
@@ -81,6 +87,45 @@ export async function PATCH(request, { params }) {
   }
 
   await Event.updateOne({ _id: params.id }, data);
+
+  return NextResponse.json({ success: true });
+}
+
+export async function DELETE(request, { params }) {
+  const [id] = params.id;
+
+  // Create models
+  await dbConnect();
+  await createParticipantsModel(id);
+  await createVerificationsModel(id);
+  const Participants = mongoose.models[`Participanti_live_${id}`];
+  const Verifications = mongoose.models[`Verificari_live_${id}`];
+  console.log(Verifications, Participants);
+  const eventStarted = await Verifications.findOne({
+    round: { $gt: 0 },
+  });
+  if (eventStarted) {
+    return NextResponse.json({
+      success: false,
+      message: "Evenimentul este început",
+    });
+  }
+
+  // List all files for deleted event
+  const [files] = await bucket.getFiles({
+    prefix: `uploads/events/${id}/`,
+  });
+
+  // Delete each file
+  await Promise.all(
+    files.map(async (file) => {
+      await file.delete();
+    })
+  );
+
+  await Event.deleteOne({ _id: id });
+  await Participants.collection.drop();
+  await Verifications.collection.drop();
 
   return NextResponse.json({ success: true });
 }

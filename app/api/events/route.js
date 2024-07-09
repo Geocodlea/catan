@@ -20,6 +20,13 @@ const storage = new Storage({
 const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
+export async function GET(request) {
+  await dbConnect();
+  const events = await Event.find({});
+
+  return NextResponse.json(events);
+}
+
 export async function POST(request) {
   const formData = await request.formData();
   const data = {};
