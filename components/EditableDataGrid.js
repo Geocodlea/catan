@@ -24,6 +24,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import Skeleton from "@mui/material/Skeleton";
 
 import AlertMsg from "./AlertMsg";
 import ReactNodeCell from "./ReactNodeCell";
@@ -73,6 +74,7 @@ const EditableDataGrid = ({
   const [alert, setAlert] = useState({ text: "", severity: "" });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [idDelete, setIdDelete] = useState();
+  const [loadData, setLoadData] = useState(true);
 
   // Generate the columns array based on columnsData
   const columns = columnsData.map((item) => ({
@@ -107,6 +109,7 @@ const EditableDataGrid = ({
     });
 
     setRows(initialRows);
+    setLoadData(false);
   }, [rowsData]);
 
   if (showActions) {
@@ -280,6 +283,26 @@ const EditableDataGrid = ({
       [params.id]: { mode: GridRowModes.Edit },
     }));
   }, []);
+
+  if (loadData) {
+    return (
+      <Paper
+        elevation={24}
+        sx={{
+          height: "auto",
+          width: "100%",
+          marginTop: "1rem",
+        }}
+      >
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height="50vh"
+          width="100%"
+        />
+      </Paper>
+    );
+  }
 
   return (
     <Paper
