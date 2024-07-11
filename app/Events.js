@@ -148,9 +148,6 @@ const Events = () => {
                 day: "numeric",
               })}
             </Typography>
-            <Typography variant="overline" gutterBottom>
-              {event.type}
-            </Typography>
 
             {isAdmin && (
               <Box
