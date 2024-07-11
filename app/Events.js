@@ -81,10 +81,6 @@ const Events = () => {
               variant="text"
               sx={{ fontSize: "2rem", margin: "10px 20%" }}
             />
-            <Skeleton
-              variant="text"
-              sx={{ fontSize: "2rem", marginLeft: "30%", marginRight: "30%" }}
-            />
           </Paper>
         ))}
       </Box>
