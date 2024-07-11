@@ -11,7 +11,7 @@ import {
   createClasamentModel,
 } from "@/utils/createModels";
 
-import { sortOrder } from "@/utils/helpers";
+import { sortOrder, oldEventsDate } from "@/utils/helpers";
 
 import { Storage } from "@google-cloud/storage";
 
@@ -57,11 +57,8 @@ export async function DELETE(request, { params }) {
 
     // Create old event
     const event = await Event.findOne({ _id: eventID }).select("title");
-    const date = new Date();
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const oldEventName = `${event.title}_${day}.${month}.${year}`;
+    const oldEventName = `${event.title}_${oldEventsDate()}`;
+
     const oldEvent = {
       name: oldEventName,
       data: participants.map((participant) => ({
