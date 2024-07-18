@@ -72,10 +72,24 @@ export default function Register({ session, type, eventID }) {
   return (
     <Box className={styles.grid}>
       <Box>
-        <Typography gutterBottom>
-          Pentru a te înscrie la Campionatul de Catan trebuie ca mai întâi să
-          fii <Link href="/api/auth/signin">logat</Link>
-        </Typography>
+        {session ? (
+          session?.user.name ? (
+            <Typography variant="body1" gutterBottom>
+              Înscrie-te la Campionatul de Catan, folosind butonul de mai jos:
+            </Typography>
+          ) : (
+            <Typography variant="body1" gutterBottom>
+              Pentru a te înscrie la Campionatul de Catan trebuie să ai definit
+              un nume în secțiunea <Link href="/profile">profil</Link>
+            </Typography>
+          )
+        ) : (
+          <Typography variant="body1" gutterBottom>
+            Pentru a te înscrie la Seara de Campionatul de Catan trebuie ca mai
+            întâi să fii <Link href="/api/auth/signin">logat</Link>
+          </Typography>
+        )}
+
         <LoadingButton
           loading={loading}
           loadingIndicator="Înscriere..."
@@ -90,7 +104,7 @@ export default function Register({ session, type, eventID }) {
       <Box>
         <Typography gutterBottom>
           Te rugăm să folosești această opțiune atunci când dorești să îți
-          anulezi participarea
+          anulezi participarea:
         </Typography>
         <Button
           variant="contained"
