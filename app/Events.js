@@ -137,7 +137,7 @@ const Events = () => {
                 </Button>
               </Link>
             </Box>
-            <Typography className={styles.code}>
+            <Typography className={styles.code} align="center">
               {new Date(event.date).toLocaleString("ro-RO", {
                 year: "numeric",
                 month: "long",
