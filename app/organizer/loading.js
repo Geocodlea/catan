@@ -11,7 +11,12 @@ export default function Loading() {
         <Skeleton variant="rounded" swidth="100%" height={148} />
         <Skeleton variant="rounded" width="100%" height={56} />
         <Skeleton variant="rounded" width="100%" height={56} />
-        <Skeleton variant="rounded" width={135} height={36} />
+        <Skeleton
+          variant="rounded"
+          width={135}
+          height={36}
+          sx={{ alignSelf: "center" }}
+        />
       </Stack>
     </Paper>
   );
