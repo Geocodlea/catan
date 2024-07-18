@@ -51,6 +51,7 @@ export const authOptions = {
       session.user.role = user.role;
       session.user.id = user.id;
       session.user.tel = user.tel;
+      session.user.unsubscribed = user.unsubscribed;
 
       return session;
     },

@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-import { Box } from "@mui/material";
+import { Box, Stack, Skeleton } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import { CustomTextField, CustomFileUpload } from "@/utils/formsHelper";
+import {
+  CustomTextField,
+  CustomFileUpload,
+  CustomSwitch,
+} from "@/utils/formsHelper";
 import AlertMsg from "/components/AlertMsg";
 
 import { useSession } from "next-auth/react";
@@ -34,12 +38,27 @@ const validationSchema = Yup.object().shape({
       if (!value) return true;
       return value.size <= FILE_SIZE;
     }),
+  subscribed: Yup.boolean(),
 });
 
 const ProfileForm = () => {
   const [alert, setAlert] = useState({ text: "", severity: "" });
+  const { data: session, status, update } = useSession();
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    tel: "",
+    image: "",
+    subscribed: false,
+  });
 
-  const { data: session, update } = useSession();
+  useEffect(() => {
+    setInitialValues({
+      name: "",
+      tel: "",
+      image: "",
+      subscribed: !session?.user.unsubscribed || false,
+    });
+  }, [session]);
 
   const onSubmit = async (values) => {
     try {
@@ -48,6 +67,7 @@ const ProfileForm = () => {
       formData.append("name", values.name);
       formData.append("tel", values.tel);
       formData.append("image", values.image);
+      formData.append("unsubscribed", !values.subscribed);
 
       const response = await fetch(`/api/users/${session.user.id}`, {
         method: "PATCH",
@@ -66,13 +86,31 @@ const ProfileForm = () => {
     }
   };
 
+  if (status === "loading") {
+    return (
+      <Stack spacing={2}>
+        <Skeleton variant="rounded" height={56} />
+        <Skeleton variant="rounded" height={56} />
+        <Skeleton variant="rounded" height={56} />
+        <Skeleton variant="rounded" width={250} height={41} />
+        <Skeleton
+          variant="rounded"
+          width={175}
+          height={44}
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+        />
+      </Stack>
+    );
+  }
+
   return (
     <Formik
+      enableReinitialize
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting }) => (
+      {({ values, isSubmitting }) => (
         <Form>
           <Field
             name="name"
@@ -105,6 +143,17 @@ const ProfileForm = () => {
             InputLabelProps={{
               shrink: true,
             }}
+          />
+
+          <Field
+            name="subscribed"
+            component={CustomSwitch}
+            type="checkbox"
+            label={
+              values.subscribed
+                ? "I want to receive emails"
+                : "I don't want to receive emails"
+            }
           />
 
           <Box

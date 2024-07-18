@@ -5,6 +5,7 @@ import {
   FormHelperText,
   Checkbox,
   MenuItem,
+  Switch,
 } from "@mui/material";
 
 const CustomTextField = ({ field, form, ...props }) => (
@@ -59,6 +60,20 @@ const CustomCheckbox = ({ field, form, label, ...props }) => (
   </FormControl>
 );
 
+const CustomSwitch = ({ field, form, label, ...props }) => (
+  <FormControl>
+    <FormControlLabel
+      control={<Switch {...field} {...props} checked={field.value} />}
+      label={label}
+    />
+    <FormHelperText error>
+      {form.errors[field.name] && form.touched[field.name]
+        ? form.errors[field.name]
+        : ""}
+    </FormHelperText>
+  </FormControl>
+);
+
 const CustomFileUpload = ({ field, form, ...props }) => (
   <TextField
     onChange={(e) => form.setFieldValue(field.name, e.currentTarget.files[0])}
@@ -74,4 +89,10 @@ const CustomFileUpload = ({ field, form, ...props }) => (
   />
 );
 
-export { CustomTextField, CustomSelect, CustomCheckbox, CustomFileUpload };
+export {
+  CustomTextField,
+  CustomSelect,
+  CustomCheckbox,
+  CustomSwitch,
+  CustomFileUpload,
+};
