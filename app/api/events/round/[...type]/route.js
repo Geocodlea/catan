@@ -1,8 +1,12 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
 
-import nodemailer from "nodemailer";
-import { emailFooter } from "@/utils/emailFooter";
+import {
+  isSubscribed,
+  transporter,
+  footerText,
+  footerHtml,
+} from "/utils/emailHelpers";
 
 import Event from "/models/Event";
 import mongoose from "mongoose";
@@ -113,24 +117,21 @@ export async function GET(request, { params }) {
     eventID
   );
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
   // Send emails to all participants
   participants
     .filter((participant) => participant.email)
     .forEach(async (participant) => {
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: participant.email,
-        subject: `Concurs Catan`,
-        text: `Start runda ${round} ${emailFooter}`,
-      });
+      if (await isSubscribed(participant.email)) {
+        await transporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: participant.email,
+          subject: `Concurs Catan`,
+          text: `Start runda ${round} ${footerText(participant.email)}`,
+          html: `<h1>Start runda ${round}</h1> ${footerHtml(
+            participant.email
+          )}`,
+        });
+      }
     });
 
   return NextResponse.json({ round, isFinalRound });

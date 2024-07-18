@@ -1,7 +1,12 @@
 import dbConnect from "/utils/dbConnect";
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-import { emailFooter } from "@/utils/emailFooter";
+
+import {
+  isSubscribed,
+  transporter,
+  footerText,
+  footerHtml,
+} from "/utils/emailHelpers";
 
 import mongoose from "mongoose";
 import {
@@ -52,29 +57,34 @@ export async function POST(request, { params }) {
   const participant = new Participants(session.user);
   await participant.save();
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  if (await isSubscribed(session.user.email)) {
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM,
+        to: session.user.email,
+        subject: `Înscriere Catan - Etapă Locală`,
+        text: `Salutare ${
+          session.user.name
+        }, ne bucură înscrierea ta la etapa locală de Catan. \r\n\r\n În cazul în care nu vei mai putea ajunge, te rugăm să ne anunți sau să îți anulezi înscrierea pe site: https://catan-romania.netlify.app/ \r\n\r\n Mulțumim, o zi frumoasă în continuare 😊 ${footerText(
+          session.user.email
+        )}`,
+        html: `<p>Salutare ${session.user.name},</p>
+               <p>Ne bucură înscrierea ta la etapa locală de Catan.</p>
+               <p>În cazul în care nu vei mai putea ajunge, te rugăm să ne anunți sau să îți anulezi înscrierea pe <a href="https://catan-romania.netlify.app/">website</a></p>
+               <p>Mulțumim, o zi frumoasă în continuare 😊</p>
+               <p>${footerHtml(session.user.email)}</p>`,
+      });
 
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: session.user.email,
-      subject: `Înscriere Catan - Etapă Locală`,
-      text: `Salutare ${session.user.name}, ne bucură înscrierea ta la etapa locală de Catan. \r\n\r\n În cazul în care nu vei mai putea ajunge, te rugăm să ne anunți sau să îți anulezi înscrierea pe site. \r\n\r\n Mulțumim, o zi frumoasă în continuare 😊 ${emailFooter}`,
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "Failed to send email",
-    });
+      return NextResponse.json({ success: true });
+    } catch (error) {
+      return NextResponse.json({
+        success: false,
+        message: "Failed to send email",
+      });
+    }
   }
+
+  return NextResponse.json({ success: true });
 }
 
 export async function DELETE(request, { params }) {

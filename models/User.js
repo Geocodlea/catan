@@ -11,6 +11,7 @@ global.models.User =
     emailVerified: { type: Date },
     role: { type: String },
     tel: { type: String },
+    unsubscribed: { type: Boolean },
   });
 
 export default global.models.User;

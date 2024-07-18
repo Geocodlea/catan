@@ -145,7 +145,7 @@ const Events = () => {
               })}
             </Typography>
 
-            {isAdmin && (
+            {(isAdmin || session?.user.id === event.organizer) && (
               <Box
                 sx={{
                   display: "flex",
