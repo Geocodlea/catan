@@ -175,3 +175,10 @@ h3 {
     font-size: 2.5rem;
   }
 }
+
+.form-paper {
+  width: 100%;
+  max-width: 750px;
+  margin-bottom: 3rem;
+  padding: 1rem 2rem;
+}

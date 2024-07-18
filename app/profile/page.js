@@ -53,15 +53,7 @@ export default async function Profile() {
   ];
 
   return (
-    <Paper
-      elevation={24}
-      sx={{
-        width: "100%",
-        maxWidth: "750px",
-        marginBottom: "3rem",
-        padding: ["1rem 2rem", "2rem 4rem"],
-      }}
-    >
+    <Paper elevation={24} className="form-paper">
       <Box
         sx={{
           display: "flex",

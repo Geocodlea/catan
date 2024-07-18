@@ -3,15 +3,7 @@ import { Paper, Skeleton, Stack, Typography } from "@mui/material";
 export default function Loading() {
   return (
     <>
-      <Paper
-        elevation={24}
-        sx={{
-          width: "100%",
-          maxWidth: "750px",
-          marginBottom: "3rem",
-          padding: ["1rem 2rem", "2rem 4rem"],
-        }}
-      >
+      <Paper elevation={24} className="form-paper">
         <Stack spacing={2}>
           <Skeleton>
             <Typography variant="h2">Create Event</Typography>

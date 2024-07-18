@@ -2,7 +2,6 @@ import { authOptions } from "/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-import styles from "/app/page.module.css";
 import { Paper, Typography } from "@mui/material";
 
 import CreateEventForm from "/app/admin/CreateEventForm";
@@ -12,7 +11,7 @@ export default async function Organizer() {
   if (session?.user.role !== "organizer") redirect(`/`);
 
   return (
-    <Paper elevation={24} className={styles.card} sx={{ maxWidth: "600px" }}>
+    <Paper elevation={24} className="form-paper">
       <Typography variant="h2">Create Event</Typography>
       <CreateEventForm userID={session.user.id} />
     </Paper>
