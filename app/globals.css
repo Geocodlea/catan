@@ -146,29 +146,11 @@ h2 {
 }
 
 .btn-error {
-  background: var(--error);
+  background: var(--error) !important;
 }
 
 .btn-error:hover {
-  background: var(--error-hover);
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(-10px);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-}
-
-.bounce {
-  animation: bounce 2s infinite;
-}
-
-.rotate-90 {
-  transform: rotate(90deg);
+  background: var(--error-hover) !important;
 }
 
 .editorContent {

@@ -1,5 +1,6 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "/context/theme";
 import styles from "./page.module.css";
 
 import React from "react";
@@ -12,28 +13,32 @@ import Footer from "@/components/Footer";
 
 import { Paper, Box } from "@mui/material";
 
-const inter = Inter({ subsets: ["latin"] });
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 export const metadata = {
-  title: "AGames",
-  description: "Board Games Romania",
+  title: "Catan Romania",
+  description: "Campionat National Catan Romania",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>
-          <AppBar />
-          <Banner>
-            <Box className={styles.main}>
-              <Paper elevation={24} className={styles.content}>
-                {children}
-              </Paper>
-            </Box>
-          </Banner>
-          <Footer />
-        </AuthProvider>
+      <body>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <AuthProvider>
+              <AppBar />
+              <Banner>
+                <Box className={styles.main}>
+                  <Paper elevation={24} className={styles.content}>
+                    {children}
+                  </Paper>
+                </Box>
+              </Banner>
+              <Footer />
+            </AuthProvider>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
