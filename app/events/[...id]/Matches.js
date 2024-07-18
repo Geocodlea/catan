@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 import CountdownTimer from "@/components/CountdownTimer";
-import { Box, Stack, Skeleton } from "@mui/material";
+import { Box, Stack, Skeleton, Typography } from "@mui/material";
 
 export default function Matches({
   type,
@@ -37,10 +37,15 @@ export default function Matches({
 
   if (loading) {
     return (
-      <Stack spacing={6} sx={{ margin: "auto", maxWidth: "800px" }}>
-        <Skeleton variant="rounded" width="60%" height={50} />
-        <Skeleton variant="rounded" width="100%" height={250} />
-        <Skeleton variant="rounded" width="100%" height={250} />
+      <Stack spacing={2} sx={{ margin: "auto", maxWidth: "800px" }}>
+        <Skeleton>
+          <Typography variant="h2">Meciuri - Runda 1</Typography>
+        </Skeleton>
+        <Stack spacing={6}>
+          <Skeleton variant="rounded" width="100%" height={250} />
+          <Skeleton variant="rounded" width="100%" height={250} />
+          <Skeleton variant="rounded" width="100%" height={250} />
+        </Stack>
       </Stack>
     );
   }
@@ -101,7 +106,9 @@ export default function Matches({
             }}
             key={index}
           >
-            <h3>Meciuri - Runda {round - index}</h3>
+            <Typography variant="h2">
+              Meciuri - Runda {round - index}
+            </Typography>
             <Stack spacing={6}>
               {match.map((match, i) => (
                 <Box key={i}>

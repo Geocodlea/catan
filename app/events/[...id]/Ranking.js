@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
 
+import { Typography } from "@mui/material";
+
 const columnGroupingModel = [
   {
     groupId: "Masa",
@@ -160,7 +162,7 @@ export default function Ranking({ type, round, eventID }) {
 
   return (
     <>
-      <h3>Clasament</h3>
+      <Typography variant="h2">Clasament</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={players}

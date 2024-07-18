@@ -1,16 +1,14 @@
-import styles from "/app/page.module.css";
-
 import { Box, Paper, Skeleton, Typography, Stack } from "@mui/material";
 
 export default function Loading() {
   return (
     <Paper
       elevation={24}
-      className={styles.card}
       sx={{
         width: "100%",
-        maxWidth: "600px",
-        marginBottom: "13rem",
+        maxWidth: "750px",
+        marginBottom: "3rem",
+        padding: ["1rem 2rem", "2rem 4rem"],
       }}
     >
       <Box
@@ -25,45 +23,39 @@ export default function Loading() {
           animation="wave"
           width={250}
           height={250}
-          sx={{ backgroundColor: "grey.200" }}
+          sx={{ backgroundColor: "grey.200", margin: "0 auto" }}
         />
       </Box>
-      <Typography variant="h2">
-        <Skeleton width="40%" />
-      </Typography>
 
-      <Stack spacing={2} alignItems="center">
-        <Skeleton variant="rounded" width="100%" height={60} />
-        <Skeleton variant="rounded" width="100%" height={60} />
-
+      <Stack spacing={2}>
+        <Skeleton>
+          <Typography variant="h2">Profile</Typography>
+        </Skeleton>
+        <Skeleton variant="rounded" width="100%" height={56} />
+        <Skeleton variant="rounded" width="100%" height={56} />
+        <Skeleton variant="rounded" width="100%" height={56} />
+        <Skeleton variant="rounded" width={"60%"} height={41} />
         <Skeleton
           variant="rounded"
-          width="30%"
-          height={40}
-          style={{
-            marginLeft: "35%",
-            marginRight: "35%",
-            marginBottom: "3rem",
-          }}
+          width={160}
+          height={36}
+          style={{ margin: "1rem auto 3rem" }}
         />
 
+        <Skeleton>
+          <Typography variant="h2">Istoric Participări</Typography>
+        </Skeleton>
         <Skeleton variant="rounded" width="100%" height="50vh" />
 
-        <Skeleton
-          variant="rounded"
-          width="100%"
-          height="10vh"
-          style={{ margin: "3rem 0 1rem" }}
-        />
-        <Skeleton
-          variant="rounded"
-          width="30%"
-          height={40}
-          style={{
-            marginLeft: "35%",
-            marginRight: "35%",
-          }}
-        />
+        <Box pt={8}>
+          <Skeleton variant="rounded" width="100%" height="10vh" />
+          <Skeleton
+            variant="rounded"
+            width={160}
+            height={36}
+            style={{ margin: "1rem auto" }}
+          />
+        </Box>
       </Stack>
     </Paper>
   );

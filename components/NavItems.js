@@ -48,7 +48,6 @@ const NavItems = ({
       name = item;
       break;
     case "login":
-      if (status === "loading") return "Login";
       link = !session ? "/api/auth/signin" : null;
       name = !session ? item : null;
       break;

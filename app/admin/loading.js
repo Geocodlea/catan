@@ -1,55 +1,42 @@
-import styles from "/app/page.module.css";
-
-import { Box, Paper, Skeleton, Stack } from "@mui/material";
+import { Paper, Skeleton, Stack, Typography } from "@mui/material";
 
 export default function Loading() {
   return (
     <>
       <Paper
         elevation={24}
-        className={styles.card}
         sx={{
           width: "100%",
-          maxWidth: "600px",
+          maxWidth: "750px",
           marginBottom: "3rem",
+          padding: ["1rem 2rem", "2rem 4rem"],
         }}
       >
         <Stack spacing={2}>
-          <Skeleton
-            variant="rounded"
-            width="80%"
-            height={68}
-            style={{ marginBottom: "2rem", alignSelf: "center" }}
-          />
+          <Skeleton>
+            <Typography variant="h2">Create Event</Typography>
+          </Skeleton>
           <Skeleton variant="rounded" width="100%" height={56} />
           <Skeleton variant="rounded" swidth="100%" height={148} />
           <Skeleton variant="rounded" width="100%" height={56} />
           <Skeleton variant="rounded" width="100%" height={56} />
           <Skeleton variant="rounded" width="100%" height={56} />
-          <Stack spacing={2} direction="row" sx={{ justifyContent: "center" }}>
-            <Skeleton variant="rounded" width={24} height={24} />
-            <Skeleton variant="text" width={51} />
-          </Stack>
-          <Box sx={{ textAlign: "center" }}>
-            <Skeleton variant="rounded" width={111} height={36} />
-          </Box>
+
+          <Skeleton
+            variant="rounded"
+            width={134}
+            height={36}
+            sx={{ alignSelf: "center" }}
+          />
         </Stack>
       </Paper>
 
-      <Paper elevation={24} className={styles.card} sx={{ width: "100%" }}>
-        <Stack spacing={2}>
-          <Skeleton
-            variant="rounded"
-            width={250}
-            height={68}
-            style={{
-              marginBottom: "2rem",
-              alignSelf: "center",
-            }}
-          />
-          <Skeleton variant="rounded" width="100%" height={500} />
-        </Stack>
-      </Paper>
+      <Stack spacing={2} width="100%">
+        <Skeleton sx={{ alignSelf: "center" }}>
+          <Typography variant="h2">Users</Typography>
+        </Skeleton>
+        <Skeleton variant="rounded" width="100%" height="50vh" />
+      </Stack>
     </>
   );
 }

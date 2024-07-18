@@ -1,87 +1,105 @@
-import styles from "/app/page.module.css";
-
-import { Box, Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 const Terms = () => {
   return (
     <>
-      <h1 className={styles.title}>Terms of Service</h1>
+      <Typography variant="h1" gutterBottom>
+        Terms of Service
+      </Typography>
 
       <Stack spacing={4}>
-        <Box>
-          <h2>1. Acceptance of Terms</h2>
-          <p className={styles.description}>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            1. Acceptance of Terms
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             By accessing or using this website, you agree to be bound by these
             Terms of Service. If you do not agree with any part of these terms,
             you may not access the website.
-          </p>
-        </Box>
-        <Box>
-          <h2>2. Use of the Website</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            2. Use of the Website
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             You agree to use the website in accordance with all applicable laws
             and regulations. Any unauthorized use or violation of these terms
             may result in the termination of your access to the website.
-          </p>
-        </Box>
-        <Box>
-          <h2>3. Intellectual Property</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            3. Intellectual Property
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             All content on this website, including but not limited to text,
             graphics, logos, and images, is the property of AGames and is
             protected by intellectual property laws. You may not reproduce,
             modify, or distribute any content from this website without our
             prior written consent.
-          </p>
-        </Box>
-        <Box>
-          <h2>4. User Accounts</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            4. User Accounts
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             If the website requires account creation, you are responsible for
             maintaining the confidentiality of your account information and for
             all activities that occur under your account. You agree to notify us
             immediately of any unauthorized use of your account.
-          </p>
-        </Box>
-        <Box>
-          <h2>5. Privacy Policy</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            5. Privacy Policy
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             Your use of this website is also governed by our Privacy Policy. By
             using the website, you consent to the terms of the Privacy Policy.
-          </p>
-        </Box>
-        <Box>
-          <h2>6. Limitation of Liability</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            6. Limitation of Liability
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             We are not liable for any direct, indirect, incidental,
             consequential, or punitive damages arising out of your use of the
             website. The website is provided "as is" and without warranties of
             any kind.
-          </p>
-        </Box>
-        <Box>
-          <h2>7. Governing Law</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            7. Governing Law
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             These terms are governed by the laws of Romania. Any legal action or
             proceeding relating to your access to, or use of, the website shall
             be instituted in a competent court in Romania.
-          </p>
-        </Box>
-        <Box>
-          <h2>8. Changes to Terms</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            8. Changes to Terms
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             We reserve the right to modify or replace these terms at any time.
             Your continued use of the website after any changes constitutes
             acceptance of the new terms.
-          </p>
-        </Box>
-        <Box>
-          <h2>9. Contact Information</h2>
-          <p className={styles.description}>
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="h3" gutterBottom>
+            9. Contact Information
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             If you have any questions about these terms, please contact us using
             the contact form.
-          </p>
-        </Box>
+          </Typography>
+        </div>
       </Stack>
     </>
   );

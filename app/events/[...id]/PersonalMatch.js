@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
-import { Box, Stack, Skeleton } from "@mui/material";
+import { Box, Stack, Skeleton, Typography } from "@mui/material";
 
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -62,10 +62,20 @@ export default function PersonalMatch({
 
   if (loading) {
     return (
-      <Stack spacing={4} sx={{ margin: "auto", maxWidth: "800px" }}>
-        <Skeleton variant="rounded" width="40%" height={50} />
-        <Skeleton variant="rounded" width="100%" height={250} />
-        <Skeleton variant="rounded" width="100%" height={50} />
+      <Stack spacing={2} sx={{ margin: "auto", maxWidth: "800px" }}>
+        <Skeleton>
+          <Typography variant="h2">Masa 1</Typography>
+        </Skeleton>
+        <Stack spacing={4}>
+          <Skeleton variant="rounded" width="100%" height={250} />
+          <Skeleton variant="rounded" width="100%" height={56} />
+          <Skeleton
+            variant="rounded"
+            width={136}
+            height={36}
+            sx={{ alignSelf: "center" }}
+          />
+        </Stack>
       </Stack>
     );
   }
@@ -140,7 +150,7 @@ export default function PersonalMatch({
     <Box sx={{ margin: "auto", maxWidth: "800px" }}>
       {participants.length ? (
         <>
-          <h3>Masa {participants[0]?.table}</h3>
+          <Typography variant="h2">Masa {participants[0]?.table}</Typography>
           <EditableDataGrid
             columnsData={columnsData}
             rowsData={participants}

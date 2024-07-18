@@ -1,4 +1,5 @@
 import EditableDataGrid from "@/components/EditableDataGrid";
+import { Typography } from "@mui/material";
 
 import dbConnect from "/utils/dbConnect";
 import OldEvents from "/models/OldEvents";
@@ -231,7 +232,7 @@ const OldEventTable = async ({ params }) => {
 
   return (
     <>
-      <h3>Clasament</h3>
+      <Typography variant="h2">Clasament</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvent}

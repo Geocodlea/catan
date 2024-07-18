@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import { gameName } from "@/utils/helpers";
 import EditableDataGrid from "@/components/EditableDataGrid";
@@ -90,7 +90,7 @@ const OldEventsTable = () => {
 
   return (
     <Box mt={8} sx={{ width: "100%", maxWidth: "800px" }}>
-      <h3>Evenimente Anterioare</h3>
+      <Typography variant="h2">Evenimente Anterioare</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredOldEvents}

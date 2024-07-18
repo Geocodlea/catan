@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import EditableDataGrid from "@/components/EditableDataGrid";
+import { Typography } from "@mui/material";
 
 export default function Participanti({
   type,
@@ -66,7 +67,7 @@ export default function Participanti({
 
   return (
     <div>
-      <h3>Participanți</h3>
+      <Typography variant="h2">Participanți</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={participants}

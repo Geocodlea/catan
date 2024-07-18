@@ -2,7 +2,6 @@ import { authOptions } from "/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-import styles from "/app/page.module.css";
 import { Paper, Typography } from "@mui/material";
 
 import CreateEventForm from "./CreateEventForm";
@@ -60,13 +59,17 @@ export default async function Admin() {
     <>
       <Paper
         elevation={24}
-        className={styles.card}
-        sx={{ maxWidth: "600px", marginBottom: "5rem" }}
+        sx={{
+          width: "100%",
+          maxWidth: "750px",
+          marginBottom: "3rem",
+          padding: ["1rem 2rem", "2rem 4rem"],
+        }}
       >
         <Typography variant="h2">Create Event</Typography>
         <CreateEventForm />
       </Paper>
-      <h3>Users</h3>
+      <Typography variant="h2">Users</Typography>
       <EditableDataGrid
         columnsData={columnsData}
         rowsData={filteredUsers}

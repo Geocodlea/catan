@@ -2,8 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 
-import styles from "/app/page.module.css";
-
 import { Typography } from "@mui/material";
 
 export default function ErrorAuth() {
@@ -12,10 +10,10 @@ export default function ErrorAuth() {
 
   return (
     <>
-      <Typography variant="h1" className={styles.title} color={"error"}>
+      <Typography variant="h1" color={"error"} gutterBottom>
         ERROR
       </Typography>
-      <Typography align="center" sx={{ fontSize: "2rem" }}>
+      <Typography variant="h4" gutterBottom>
         {error}
       </Typography>
     </>
