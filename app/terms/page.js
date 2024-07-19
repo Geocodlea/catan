@@ -34,7 +34,7 @@ const Terms = () => {
           </Typography>
           <Typography variant="body1" gutterBottom>
             All content on this website, including but not limited to text,
-            graphics, logos, and images, is the property of AGames and is
+            graphics, logos, and images, is the property of Catan Romania and is
             protected by intellectual property laws. You may not reproduce,
             modify, or distribute any content from this website without our
             prior written consent.
@@ -89,15 +89,6 @@ const Terms = () => {
             We reserve the right to modify or replace these terms at any time.
             Your continued use of the website after any changes constitutes
             acceptance of the new terms.
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="h3" gutterBottom>
-            9. Contact Information
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            If you have any questions about these terms, please contact us using
-            the contact form.
           </Typography>
         </div>
       </Stack>

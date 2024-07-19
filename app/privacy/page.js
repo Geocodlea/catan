@@ -13,10 +13,10 @@ const Privacy = () => {
             1. Introduction
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Welcome to AGames. This Privacy Policy is designed to inform you
-            about the types of information we collect, how we use and protect
-            that information, and your choices regarding the collection and use
-            of your data.
+            Welcome to Catan Romania. This Privacy Policy is designed to inform
+            you about the types of information we collect, how we use and
+            protect that information, and your choices regarding the collection
+            and use of your data.
           </Typography>
         </Box>
         <Box>
@@ -117,17 +117,8 @@ const Privacy = () => {
             be effective upon posting the revised policy on our Website.
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="h3" gutterBottom>
-            9. Contact Us
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            If you have any questions or concerns about this Privacy Policy,
-            please contact us using the contact form.
-          </Typography>
-        </Box>
         <Typography variant="h6" gutterBottom align="right">
-          Effective Date: 10.11.2024
+          Effective Date: 10.07.2024
         </Typography>
       </Stack>
     </>
