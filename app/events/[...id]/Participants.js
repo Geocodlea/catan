@@ -39,31 +39,36 @@ export default function Participanti({
       minWidth: 150,
       flex: 1,
     },
-    {
-      field: "tel",
-      headerName: "Telefon",
-      editable: isAdmin || isOrganizer,
-      width: 100,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      editable: isAdmin || isOrganizer,
-      width: 200,
-    },
-    {
-      field: "obs",
-      headerName: "Obs",
-      editable: isAdmin || isOrganizer,
-      width: 150,
-    },
-    {
-      field: "rude",
-      headerName: "Rude",
-      editable: isAdmin || isOrganizer,
-      width: 55,
-    },
   ];
+
+  if (isAdmin || isOrganizer) {
+    columnsData.push(
+      {
+        field: "tel",
+        headerName: "Telefon",
+        editable: isAdmin || isOrganizer,
+        width: 100,
+      },
+      {
+        field: "email",
+        headerName: "Email",
+        editable: isAdmin || isOrganizer,
+        width: 200,
+      },
+      {
+        field: "obs",
+        headerName: "Obs",
+        editable: isAdmin || isOrganizer,
+        width: 150,
+      },
+      {
+        field: "rude",
+        headerName: "Rude",
+        editable: isAdmin || isOrganizer,
+        width: 55,
+      }
+    );
+  }
 
   return (
     <div>
