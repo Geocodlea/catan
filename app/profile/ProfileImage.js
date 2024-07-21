@@ -18,7 +18,7 @@ export default function ProfileImage() {
     >
       <Image
         alt="profile image"
-        src={session?.user.image ? session.user.image : "/img/avatar.png"}
+        src={session?.user.image ? session.user.image : "/avatars/avatar.png"}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         priority

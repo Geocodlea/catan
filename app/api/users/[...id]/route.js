@@ -2,22 +2,7 @@ import dbConnect from "/utils/dbConnect";
 import User from "/models/User";
 import Account from "/models/Account";
 
-import { v4 as uuidv4 } from "uuid";
-import { Storage } from "@google-cloud/storage";
 import { NextResponse } from "next/server";
-
-// Set up Google Cloud Storage client
-const storage = new Storage({
-  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-  credentials: {
-    client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, "\n"),
-  },
-});
-
-// Google Cloud Storage bucket name
-const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
-const bucket = storage.bucket(bucketName);
 
 // Update user from profile
 export async function PATCH(request, { params }) {
@@ -27,47 +12,6 @@ export async function PATCH(request, { params }) {
   // Get all keys and values from the FormData object
   for (const [key, value] of formData.entries()) {
     if (value) data[key] = value;
-  }
-
-  if (data.image) {
-    const bytes = await data.image.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Create a unique filename using uuid
-    const filename = `${uuidv4()}-${data.image.name}`;
-
-    // GCS object (path) where the file will be stored
-    const gcsObject = bucket.file(`uploads/users/${params.id}/${filename}`);
-
-    // Create a write stream and upload the file to Google Cloud Storage
-    const writeStream = gcsObject.createWriteStream({
-      metadata: { contentType: data.image.type },
-    });
-
-    // Return a promise that resolves when the file upload is complete
-    const uploadPromise = new Promise((resolve, reject) => {
-      writeStream.on("finish", resolve);
-      writeStream.on("error", reject);
-    });
-
-    // Pipe the buffer into the write stream
-    writeStream.end(buffer);
-
-    // Delete old image
-    const [files] = await bucket.getFiles({
-      prefix: `uploads/users/${params.id}/`,
-    });
-    await Promise.all(
-      files.map(async (file) => {
-        await file.delete();
-      })
-    );
-
-    // Wait for the file upload to complete
-    await uploadPromise;
-
-    // Update the data with the Google Cloud Storage URL
-    data.image = `https://storage.googleapis.com/${bucketName}/${gcsObject.name}`;
   }
 
   await dbConnect();
@@ -114,18 +58,6 @@ export async function DELETE(request, { params }) {
   }
 
   await Account.deleteMany({ userId: params.id });
-
-  // List all files for deleted user
-  const [files] = await bucket.getFiles({
-    prefix: `uploads/users/${params.id}/`,
-  });
-
-  // Delete each file
-  await Promise.all(
-    files.map(async (file) => {
-      await file.delete();
-    })
-  );
 
   return NextResponse.json({ success: true });
 }

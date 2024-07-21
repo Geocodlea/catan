@@ -1,24 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
-import { Box, Stack, Skeleton } from "@mui/material";
+import { Box, Stack, Skeleton, Avatar } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import {
-  CustomTextField,
-  CustomFileUpload,
-  CustomSwitch,
-} from "@/utils/formsHelper";
+import { CustomTextField, CustomSwitch } from "@/utils/formsHelper";
 import AlertMsg from "/components/AlertMsg";
-
 import { useSession } from "next-auth/react";
-
-const FILE_SIZE = 5000000; // 5 MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+import AvatarSelection from "./AvatarSelection";
 
 const initialValues = {
   name: "",
@@ -29,15 +20,7 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   name: Yup.string("Name must be a text"),
   tel: Yup.string("Must be a valid telephone number"),
-  image: Yup.mixed()
-    .test("fileFormat", "Unsupported file type", (value) => {
-      if (!value) return true;
-      return SUPPORTED_FORMATS.includes(value.type);
-    })
-    .test("fileSize", "File size is too large", (value) => {
-      if (!value) return true;
-      return value.size <= FILE_SIZE;
-    }),
+  image: Yup.string(),
   subscribed: Yup.boolean(),
 });
 
@@ -88,16 +71,16 @@ const ProfileForm = () => {
 
   if (status === "loading") {
     return (
-      <Stack spacing={2}>
+      <Stack spacing={3} sx={{ mt: 2 }}>
         <Skeleton variant="rounded" height={56} />
         <Skeleton variant="rounded" height={56} />
-        <Skeleton variant="rounded" height={56} />
-        <Skeleton variant="rounded" width={250} height={41} />
+        <Skeleton variant="rounded" width={147} height={36} />
+        <Skeleton variant="rounded" width={250} height={30} />
         <Skeleton
           variant="rounded"
-          width={175}
-          height={44}
-          style={{ marginLeft: "auto", marginRight: "auto" }}
+          width={160}
+          height={36}
+          sx={{ alignSelf: "center" }}
         />
       </Stack>
     );
@@ -110,7 +93,7 @@ const ProfileForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ values, isSubmitting }) => (
+      {({ values, isSubmitting, setFieldValue }) => (
         <Form>
           <Field
             name="name"
@@ -134,16 +117,14 @@ const ProfileForm = () => {
             }}
           />
 
-          <Field
-            name="image"
-            component={CustomFileUpload}
-            label="Image"
-            type="file"
-            accept="image/*"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+          <Box display="flex" alignItems="center" mt={2} mb={2}>
+            <AvatarSelection
+              onSelect={(avatar) => setFieldValue("image", avatar)}
+            />
+            {values.image && (
+              <Avatar src={values.image} alt="Selected Avatar" sx={{ ml: 4 }} />
+            )}
+          </Box>
 
           <Field
             name="subscribed"

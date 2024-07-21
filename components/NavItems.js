@@ -68,7 +68,9 @@ const NavItems = ({
         >
           <Avatar
             alt="avatar"
-            src={session?.user.image ? session.user.image : "/img/avatar.png"}
+            src={
+              session?.user.image ? session.user.image : "/avatars/avatar.png"
+            }
           />
         </ListItemButton>
         <Menu

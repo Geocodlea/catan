@@ -23,15 +23,15 @@ export default function Loading() {
         <Skeleton>
           <Typography variant="h2">Profile</Typography>
         </Skeleton>
-        <Skeleton variant="rounded" width="100%" height={56} />
-        <Skeleton variant="rounded" width="100%" height={56} />
-        <Skeleton variant="rounded" width="100%" height={56} />
-        <Skeleton variant="rounded" width={"60%"} height={41} />
+        <Skeleton variant="rounded" height={56} />
+        <Skeleton variant="rounded" height={56} />
+        <Skeleton variant="rounded" width={147} height={36} />
+        <Skeleton variant="rounded" width={250} height={30} />
         <Skeleton
           variant="rounded"
           width={160}
           height={36}
-          style={{ margin: "1rem auto 3rem" }}
+          sx={{ alignSelf: "center" }}
         />
 
         <Skeleton>
