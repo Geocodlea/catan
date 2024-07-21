@@ -8,9 +8,12 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import { CustomTextField, CustomFileUpload } from "@/utils/formsHelper";
 import AlertMsg from "/components/AlertMsg";
-
-const FILE_SIZE = 5000000; // 5 MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+import {
+  FILE_SIZE,
+  FILE_SIZE_TEXT,
+  SUPPORTED_FORMATS,
+  SUPPORTED_FORMATS_TEXT,
+} from "@/utils/helpers";
 
 const initialValues = {
   title: "",
@@ -26,12 +29,12 @@ const validationSchema = Yup.object().shape({
     .required("Image is Required")
     .test(
       "fileSize",
-      "File size is too large",
+      `${FILE_SIZE_TEXT}`,
       (value) => value && value.size <= FILE_SIZE
     )
     .test(
       "fileFormat",
-      "Unsupported file type",
+      `${SUPPORTED_FORMATS_TEXT}`,
       (value) =>
         value === null || (value && SUPPORTED_FORMATS.includes(value.type))
     ),

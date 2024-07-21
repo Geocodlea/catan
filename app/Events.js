@@ -101,7 +101,7 @@ const Events = () => {
           >
             <Box sx={{ position: "relative", height: "300px" }}>
               <Image
-                alt="bg"
+                alt="Event image"
                 src={event.image}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -11,9 +11,12 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import { CustomTextField, CustomFileUpload } from "@/utils/formsHelper";
 import AlertMsg from "/components/AlertMsg";
-
-const FILE_SIZE = 5000000; // 5 MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+import {
+  FILE_SIZE,
+  FILE_SIZE_TEXT,
+  SUPPORTED_FORMATS,
+  SUPPORTED_FORMATS_TEXT,
+} from "@/utils/helpers";
 
 const initialValues = {
   title: "",
@@ -26,13 +29,13 @@ const validationSchema = Yup.object().shape({
   title: Yup.string("Title must be a text"),
   description: Yup.string("Description must be a text"),
   image: Yup.mixed()
-    .test("fileFormat", "Unsupported file type", (value) => {
-      if (!value) return true;
-      return SUPPORTED_FORMATS.includes(value.type);
-    })
-    .test("fileSize", "File size is too large", (value) => {
+    .test("fileSize", `${FILE_SIZE_TEXT}`, (value) => {
       if (!value) return true;
       return value.size <= FILE_SIZE;
+    })
+    .test("fileFormat", `${SUPPORTED_FORMATS_TEXT}`, (value) => {
+      if (!value) return true;
+      return SUPPORTED_FORMATS.includes(value.type);
     }),
   date: Yup.date("Event date must be a date"),
 });
