@@ -1,1 +1,1 @@
-# Agames Website with NextJS
+# Catan Romania National Championship Website
